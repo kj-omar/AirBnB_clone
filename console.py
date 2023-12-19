@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """ Console Module """
 import cmd
+import re
 import sys
 from models.base_model import BaseModel
 from models.__init__ import storage
@@ -29,6 +30,11 @@ class HBNBCommand(cmd.Cmd):
              'max_guest': int, 'price_by_night': int,
              'latitude': float, 'longitude': float
             }
+    my_dict = {"Place" : ['city_id', 'user_id', 'name', 'number_rooms',
+        'max_guest', 'price_by_night', 'latitude', 'longitude'],
+        "State" : ['name'],
+        "User" : ['email', 'password', 'first_name', 'last_name'],
+        "City" : ['state_id', 'name']}
 
     def preloop(self):
         """Prints if isatty is false"""
@@ -115,15 +121,28 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, args):
         """ Create an object of any class"""
+        lis = []
         if not args:
             print("** class name missing **")
             return
-        elif args not in HBNBCommand.classes:
+        lis = args.split(" ", 1)
+
+        if lis[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
-        new_instance = HBNBCommand.classes[args]()
+        inst = HBNBCommand.classes[lis[0]]()
+
+        for atr in self.my_dict[lis[0]]:
+            res = re.compile(rf'{atr}="*([0-9.a-zA-Z_\-]*)')
+            match = re.search(res, lis[1])
+            if match:
+                try:
+                    setattr(inst, atr, eval(match.group(1)))
+                except:
+                    setattr(inst, atr, match.group(1).replace('_', ' '))
+        
         storage.save()
-        print(new_instance.id)
+        print(inst.id)
         storage.save()
 
     def help_create(self):
