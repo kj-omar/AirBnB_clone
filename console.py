@@ -30,11 +30,15 @@ class HBNBCommand(cmd.Cmd):
              'max_guest': int, 'price_by_night': int,
              'latitude': float, 'longitude': float
             }
-    my_dict = {"Place" : ['city_id', 'user_id', 'name', 'number_rooms',
-        'max_guest', 'price_by_night', 'latitude', 'longitude'],
-        "State" : ['name'],
-        "User" : ['email', 'password', 'first_name', 'last_name'],
-        "City" : ['state_id', 'name']}
+    my_dict = {
+            "Place": [
+                'city_id', 'user_id', 'name', 'number_rooms',
+                'max_guest', 'price_by_night', 'latitude', 'longitude'
+                ],
+            "State": ['name'],
+            "User": ['email', 'password', 'first_name', 'last_name'],
+            "City": ['state_id', 'name']
+            }
 
     def preloop(self):
         """Prints if isatty is false"""
@@ -79,7 +83,7 @@ class HBNBCommand(cmd.Cmd):
                 pline = pline[2].strip()  # pline is now str
                 if pline:
                     # check for *args or **kwargs
-                    if pline[0] is '{' and pline[-1] is'}'\
+                    if pline[0] is '{' and pline[-1] is '}' \
                             and type(eval(pline)) is dict:
                         _args = pline
                     else:
@@ -138,9 +142,8 @@ class HBNBCommand(cmd.Cmd):
             if match:
                 try:
                     setattr(inst, atr, eval(match.group(1)))
-                except:
+                except Exception:
                     setattr(inst, atr, match.group(1).replace('_', ' '))
-        
         storage.save()
         print(inst.id)
         storage.save()
@@ -338,6 +341,7 @@ class HBNBCommand(cmd.Cmd):
         """ Help information for the update class """
         print("Updates an object with new information")
         print("Usage: update <className> <id> <attName> <attVal>\n")
+
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
