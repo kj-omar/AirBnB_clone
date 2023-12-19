@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """ Test delete feature
 """
+from models.place import Place
 from models.engine.file_storage import FileStorage
 from models.state import State
 
@@ -31,6 +32,12 @@ another_state.name = "Nevada"
 fs.new(another_state)
 fs.save()
 print("Another State: {}".format(another_state))
+
+new_place = Place()
+new_place.name = 'ayoub'
+fs.new(new_place)
+fs.save()
+print("Another State: {}".format(new_place))
 
 # All States
 all_states = fs.all(State)
