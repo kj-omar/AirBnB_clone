@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 """ Console Module """
 import cmd
-import re
 import sys
 from models.base_model import BaseModel
 from models.__init__ import storage
@@ -29,15 +28,6 @@ class HBNBCommand(cmd.Cmd):
              'number_rooms': int, 'number_bathrooms': int,
              'max_guest': int, 'price_by_night': int,
              'latitude': float, 'longitude': float
-            }
-    my_dict = {
-            "Place": [
-                'city_id', 'user_id', 'name', 'number_rooms',
-                'max_guest', 'price_by_night', 'latitude', 'longitude'
-                ],
-            "State": ['name'],
-            "User": ['email', 'password', 'first_name', 'last_name'],
-            "City": ['state_id', 'name']
             }
 
     def preloop(self):
@@ -83,7 +73,8 @@ class HBNBCommand(cmd.Cmd):
                 pline = pline[2].strip()  # pline is now str
                 if pline:
                     # check for *args or **kwargs
-                    if pline[0] == '{' and pline[-1] == '}' and type(eval(pline)) is dict:
+                    if pline[0] == '{' and pline[-1] == '}'\
+                            and type(eval(pline)) is dict:
                         _args = pline
                     else:
                         _args = pline.replace(',', '')
@@ -124,28 +115,24 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, args):
         """ Create an object of any class"""
-        lis = []
-        if not args:
+        try:
+            if not args:
+                raise SyntaxError()
+            arg_list = args.split(" ")
+            kw = {}
+            for arg in arg_list[1:]:
+                arg_splited = arg.split("=")
+                arg_splited[1] = eval(arg_splited[1])
+                if type(arg_splited[1]) is str:
+                    arg_splited[1] = arg_splited[1].replace("_", " ").replace('"', '\\"')
+                kw[arg_splited[0]] = arg_splited[1]
+        except SyntaxError:
             print("** class name missing **")
-            return
-        lis = args.split(" ", 1)
-
-        if lis[0] not in HBNBCommand.classes:
+        except NameError:
             print("** class doesn't exist **")
-            return
-        inst = HBNBCommand.classes[lis[0]]()
-
-        for atr in self.my_dict[lis[0]]:
-            res = re.compile(rf'{atr}="*([0-9.a-zA-Z_\-]*)')
-            match = re.search(res, lis[1])
-            if match:
-                try:
-                    setattr(inst, atr, eval(match.group(1)))
-                except Exception:
-                    setattr(inst, atr, match.group(1).replace('_', ' '))
-        storage.save()
-        print(inst.id)
-        storage.save()
+        new_instance = HBNBCommand.classes[arg_list[0]](**kw)
+        new_instance.save()
+        print(new_instance.id)
 
     def help_create(self):
         """ Help information for the create method """
@@ -227,13 +214,11 @@ class HBNBCommand(cmd.Cmd):
             if args not in HBNBCommand.classes:
                 print("** class doesn't exist **")
                 return
-            for k, v in storage._FileStorage__objects.items():
-                if k.split('.')[0] == args:
-                    print_list.append(str(v))
-        else:
-            for k, v in storage._FileStorage__objects.items():
+            for k, v in storage.all(HBNBCommand.classes[args]).items():
                 print_list.append(str(v))
-
+        else:
+            for k, v in storage.all().items():
+                print_list.append(str(v))
         print(print_list)
 
     def help_all(self):
@@ -340,7 +325,6 @@ class HBNBCommand(cmd.Cmd):
         """ Help information for the update class """
         print("Updates an object with new information")
         print("Usage: update <className> <id> <attName> <attVal>\n")
-
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
