@@ -3,11 +3,11 @@
 
 sudo apt-get -y update
 sudo apt-get -y install nginx
+sudo service nginx start
 mkdir /data/web_static/releases/test/ -p
 mkdir /data/web_static/shared/ -p
-sudo service nginx start
 echo "Holberton School" > /data/web_static/releases/test/index.html
 sudo ln -sf /data/web_static/releases/test/ /data/web_static/current
-sudo chown -Rh ubuntu:ubuntu /data/
-sudo sed -i 's#server_name _;#server_name _;\n\n\tlocation /hbnb_static {\n\t\talias /data/web_static/current/;\n\t}#g' /etc/nginx/site_enabled/default
-sudo service nginx restart
+sudo chown -Rh ubuntu /data/
+sudo sed -i -E 's#server_name _;#server_name _;\n\n\tlocation /hbnb_static {\n\t\talias /data/web_static/current/;\n\t}#' /etc/nginx/sites-enabled/default
+service nginx restart
