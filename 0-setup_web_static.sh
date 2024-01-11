@@ -5,6 +5,7 @@ sudo apt-get -y update
 sudo apt-get -y install nginx
 mkdir /data/web_static/releases/test/ -p
 mkdir /data/web_static/shared/ -p
+sudo service nginx start
 echo "Holberton School" > /data/web_static/releases/test/index.html
 sudo ln -sf /data/web_static/releases/test/ /data/web_static/current
 sudo chown -Rh ubuntu:ubuntu /data/
