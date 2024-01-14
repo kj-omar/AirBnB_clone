@@ -44,12 +44,12 @@ def do_deploy(archive_path):
         archive_filename = os.path.basename(archive_path)
         archive_name_no_ext = archive_filename.split('.')[0]
         release_folder = '/data/web_static/releases/{}'.format(archive_name_no_ext)
-        run('mkdir -p {}'.format(release_folder))
-        run('tar -xzf /tmp/{} -C {}'.format(archive_filename, release_folder))
-        run('rm /tmp/{}'.format(archive_filename))
+        run('sudo mkdir -p {}'.format(release_folder))
+        run('sudo tar -xzf /tmp/{} -C {}'.format(archive_filename, release_folder))
+        run('sudo rm /tmp/{}'.format(archive_filename))
         current_link = '/data/web_static/current'
-        run('rm -f {}'.format(current_link))
-        run('ln -s {} {}'.format(release_folder, current_link))
+        run('sudo rm -f {}'.format(current_link))
+        run('sudo ln -s {} {}'.format(release_folder, current_link))
         print('New version deployed!')
         return True
     except Exception as e:
