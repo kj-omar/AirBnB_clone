@@ -22,7 +22,7 @@ def do_deploy(archive_path):
     if not os.path.exists(archive_path):
         return False
     try:
-        ext = os.path.splitext("archive_path")[-1]
+        ext = os.path.splitext(archive_path)[-1]
         noext = ext.split('.')[0]
         path = "/data/web_static/releases/"
 
