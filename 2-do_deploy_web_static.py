@@ -2,7 +2,7 @@
 '''Fabric script that generates a .tgz archive'''
 from fabric.api import local, put, run, env
 from datetime import datetime
-from os.path import exists
+import os
 
 
 def do_pack():
@@ -19,7 +19,7 @@ def do_pack():
 
 def do_deploy(archive_path):
     '''distributes an archive to your web servers'''
-    if  exists(archive_path):
+    '''if  exists(archive_path):
         ext = os.path.splitext(archive_path)[-1]
         noext = ext.split('.')[0]
         path = "/data/web_static/releases/"
@@ -34,4 +34,24 @@ def do_deploy(archive_path):
         run("ln -s {}{} /data/web_static/current".format(path, noext))
         print("New version deployed!")
         return True
-    return False
+    return False'''
+
+    if not os.path.exists(archive_path):
+        return False
+
+    try:
+        put(archive_path, '/tmp/')
+        archive_filename = os.path.basename(archive_path)
+        archive_name_no_ext = archive_filename.split('.')[0]
+        release_folder = '/data/web_static/releases/{}'.format(archive_name_no_ext)
+        run('mkdir -p {}'.format(release_folder))
+        run('tar -xzf /tmp/{} -C {}'.format(archive_filename, release_folder))
+        run('rm /tmp/{}'.format(archive_filename))
+        current_link = '/data/web_static/current'
+        run('rm -f {}'.format(current_link))
+        run('ln -s {} {}'.format(release_folder, current_link))
+        print('New version deployed!')
+        return True
+    except Exception as e:
+        print(e)
+        return False
