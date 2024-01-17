@@ -10,16 +10,16 @@ db_connection = MySQLdb.connect(
 cursor_obj = db_connection.cursor()
 
 # Create the database if it doesn't exist
-cursor_obj.execute("CREATE DATABASE IF NOT EXISTS my_test_db")
+cursor_obj.execute("CREATE DATABASE IF NOT EXISTS hbnb_test_db")
 
 # Create the user if it doesn't exist and set the password
-cursor_obj.execute("CREATE USER IF NOT EXISTS 'my_test_user'@'localhost' IDENTIFIED BY 'my_test_password'")
+cursor_obj.execute("CREATE USER IF NOT EXISTS 'hbnb_test'@'localhost' IDENTIFIED BY 'hbnb_test_pwd'")
 
-# Grant all privileges on my_test_db to my_test_user
-cursor_obj.execute("GRANT ALL PRIVILEGES ON my_test_db.* TO 'my_test_user'@'localhost'")
+# Grant all privileges on hbnb_test_db to hbnb_test
+cursor_obj.execute("GRANT ALL PRIVILEGES ON hbnb_test_db.* TO 'hbnb_test'@'localhost'")
 
-# Grant SELECT privilege on performance_schema to my_test_user
-cursor_obj.execute("GRANT SELECT ON performance_schema.* TO 'my_test_user'@'localhost'")
+# Grant SELECT privilege on performance_schema to hbnb_test
+cursor_obj.execute("GRANT SELECT ON performance_schema.* TO 'hbnb_test'@'localhost'")
 
 # Flush privileges to apply the changes
 cursor_obj.execute("FLUSH PRIVILEGES")
