@@ -52,7 +52,7 @@ def check_number(n):
         'number': n,
         'result': result
     }
-    return render_template('number_odd_even.html', **data)
+    return render_template('6-number_odd_or_even.html', **data)
 
 
 if __name__ == '__main__':
