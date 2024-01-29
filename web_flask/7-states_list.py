@@ -3,7 +3,6 @@
 
 from flask import Flask, render_template
 from models import storage
-from models.state import State
 
 app = Flask(__name__)
 
@@ -12,7 +11,9 @@ app = Flask(__name__)
 def list():
     '''/states_list: display a HTML page: (inside the tag BODY)'''
     states = storage.all("State").values()
-    return render_template("7-states_list.html", states=states)
+    sorted_states = sorted(states, key=lambda state: state.name)
+
+    return render_template("7-states_list.html", states=sorted_states)
 
 
 @app.teardown_appcontext
