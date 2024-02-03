@@ -2,6 +2,7 @@
 """Script that runs a Flask web application"""
 
 from flask import Flask, render_template
+from models.city import City
 from models import storage
 from models.state import State
 
@@ -12,12 +13,11 @@ app = Flask(__name__)
 def teardown_appcontext(exception):
     storage.close()
 
-
-@app.route('/states_list', strict_slashes=False)
-def states():
-    """List all states"""
-    states = sorted(storage.all("State").values(), key=attrgetter('name'))
-    return render_template('7-states_list.html', states=states)
+@app.route('/cities_by_states', strict_slashes=False)
+def Cities():
+    """ list of City objects linked to the State sorted by name"""
+    state = storage.all("State").value
+    return render_template('8-cities_by_states.html', state=state)
 
 
 if __name__ == '__main__':
