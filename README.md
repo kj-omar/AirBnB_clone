@@ -3,8 +3,8 @@
 This is an updated version of the AirBnB_clone repository, with modifications and improvements made by Hafssa Elkoi and Mohamed Bel-assal.
 
 ## Initial Authors:
-- John Doe
-- Jane Smith
+- Ezra Nobrega
+- Justin Majetich
 
 <center> <h1>HBNB - The Console</h1> </center>
 
