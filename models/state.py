@@ -1,30 +1,32 @@
 #!/usr/bin/python3
 """ State Module for HBNB project """
-from models.base_model import BaseModel
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship
-from sqlalchemy import Column, String
-from os import getenv
-import models
+from models.base_model import BaseModel, Base
+from models import storage_type
 from models.city import City
+from sqlalchemy import Column, String
+from sqlalchemy.orm import relationship
 
-Base = declarative_base()
 
 class State(BaseModel, Base):
-    """ State class """
+    """ State class / table model"""
     __tablename__ = 'states'
-    
-    name = Column(String(128), nullable=False)
-    
-    if getenv('HBNB_TYPE_STORAGE') == 'db':
-        cities = relationship('City', backref='state', cascade='all, delete-orphan')
+    if storage_type == 'db':
+        name = Column(String(128), nullable=False)
+        cities = relationship('City', backref='state',
+                              cascade='all, delete, delete-orphan')
     else:
+        name = ''
+
         @property
         def cities(self):
-            """Getter attribute in case of file storage"""
-            cities = models.storage.all(City)
-            cities_in_state = []
+            '''returns the list of City instances with state_id
+                equals the current State.id
+                FileStorage relationship between State and City
+            '''
+            from models import storage
+            related_cities = []
+            cities = storage.all(City)
             for city in cities.values():
                 if city.state_id == self.id:
-                    cities_in_state.append(city)
-            return cities_in_state
+                    related_cities.append(city)
+            return related_cities
