@@ -1,19 +1,12 @@
 #!/usr/bin/python3
-"""This is the amenity class"""
+"""This module instantiates an object of class FileStorage"""
+from models.engine.file_storage import FileStorage
+from models.engine.db_storage import DBStorage
 from os import getenv
-from models.base_model import BaseModel, Base
-from sqlalchemy.orm import relationship
-from sqlalchemy import Column, String
 
 
-class Amenity(BaseModel, Base):
-    """This is the class for Amenity
-    Attributes:
-        name: input name
-    """
-    __tablename__ = 'amenities'
-    name = Column(String(128), nullable=False)
-    if getenv("HBNB_TYPE_STORAGE") == "db":
-        place_amenities = relationship('Place',
-                                       secondary='place_amenity',
-                                       back_populates='amenities')
+if getenv("HBNB_TYPE_STORAGE") == "db":
+    storage = DBStorage()
+else:
+    storage = FileStorage()
+storage.reload()
