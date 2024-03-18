@@ -115,16 +115,70 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, args):
         """ Create an object of any class"""
+
+        # check if class name is provided
         if not args:
             print("** class name missing **")
             return
-        elif args not in HBNBCommand.classes:
+
+        # split the input argument into class name and parameters
+        args = arg.split()
+        class_name = args[0]
+
+        # check if the provided class exists
+        if class_name not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
-        new_instance = HBNBCommand.classes[args]()
-        storage.save()
+
+        # initialize a dictionary to store parsed parameters
+        params = {}
+
+        # join the parameters into a string and handle escaped quotes
+        param_str = ' '.join(args[1:])
+        param_str = re.sub(r'\\\"', r'@#@', param_str)
+        param_str = re.sub(r'"([^"]"', lambda x: x.group(0).replace(' ', '@@'), param_str)
+        param_str = re.sub(r'@@', ' ', param_str)
+        param_str = re.sub(r'@#@', '"', param_str)
+
+        # split the parameter string using shlex for correct parsing
+        param_list = shlex.split(param_str)
+
+        for param in param_list:
+            # check if parameter has the key=value syntax
+            if '=' not in param:
+                print("** invalid parameter syntax **")
+                return
+
+            # split parameter into key and value
+            key, value = param.split('=', 1)
+            key = key.replace(' ', ' ')
+
+            # parse value based on its type
+            if value.startswith('"') and value.endswith('"'):
+                value = value[1:-1]
+                value = value.replace('@', ' ')
+            elif '.' in value:
+                try:
+                    value = float(value)
+                except ValueError:
+                    print("** invalid float value **")
+                    return
+            else:
+                try:
+                    value = int(value)
+                except ValueError:
+                    print("** invalid integer value **")
+                    return
+
+            # store the parsed key-value pair in the params dictionary
+            params[key] = value
+
+        # create a new instance of the specified class with the parsed parameters
+        new_instance = HBNBCommand.classes[class_name](**params)
+
+        # save the new instance to storage
+        new_instance.save()
         print(new_instance.id)
-        storage.save()
 
     def help_create(self):
         """ Help information for the create method """
