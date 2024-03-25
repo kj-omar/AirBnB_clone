@@ -1,34 +1,22 @@
 {
-  "State.053418f2-babb-4180-81c3-ebf901fecdca": {
-    "id": "053418f2-babb-4180-81c3-ebf901fecdca",
-    "created_at": "2024-03-25T17:19:10.580262",
-    "updated_at": "2024-03-25T17:19:10.580346",
-    "__class__": "State"
-  },
-  "State.d0dce3a5-018d-4524-85cf-9dbf0eca907f": {
-    "id": "d0dce3a5-018d-4524-85cf-9dbf0eca907f",
-    "created_at": "2024-03-25T18:26:21.541508",
-    "updated_at": "2024-03-25T18:26:21.541532",
-    "__class__": "State"
-  },
-  "State.85c9f1ba-fc9d-4846-9aed-010885d89518": {
-    "id": "85c9f1ba-fc9d-4846-9aed-010885d89518",
-    "created_at": "2024-03-25T18:30:39.488709",
-    "updated_at": "2024-03-25T18:30:39.488715",
+  "State.b05cc892-e3c1-4cd3-baea-0db02c9deaa1": {
+    "id": "b05cc892-e3c1-4cd3-baea-0db02c9deaa1",
+    "created_at": "2024-03-25T19:08:57.196489",
+    "updated_at": "2024-03-25T19:08:57.196494",
     "name": "California",
     "__class__": "State"
   },
-  "State.067d0f73-52a2-4063-91fb-0568ea9e820e": {
-    "id": "067d0f73-52a2-4063-91fb-0568ea9e820e",
-    "created_at": "2024-03-25T18:31:03.866004",
-    "updated_at": "2024-03-25T18:31:03.866008",
+  "State.d22ed70d-c4e4-4df1-9ccb-a0d222dd03c3": {
+    "id": "d22ed70d-c4e4-4df1-9ccb-a0d222dd03c3",
+    "created_at": "2024-03-25T19:08:57.197657",
+    "updated_at": "2024-03-25T19:08:57.197662",
     "name": "Arizona",
     "__class__": "State"
   },
-  "Place.86481599-e8b7-4414-8661-975b7ecceade": {
-    "id": "86481599-e8b7-4414-8661-975b7ecceade",
-    "created_at": "2024-03-25T18:31:19.746311",
-    "updated_at": "2024-03-25T18:31:19.746315",
+  "Place.c243d226-4e8c-409e-a8c0-dae95354cfbe": {
+    "id": "c243d226-4e8c-409e-a8c0-dae95354cfbe",
+    "created_at": "2024-03-25T19:08:57.199758",
+    "updated_at": "2024-03-25T19:08:57.199762",
     "city_id": "0001",
     "user_id": "0001",
     "name": "My little house",
