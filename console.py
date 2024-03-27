@@ -129,8 +129,7 @@ class HBNBCommand(cmd.Cmd):
                 key = i.split("=")
                 if len(key) == 1:
                     print( "** create <Class name> <param 1> \
-                        <param 2> <param 3>... **"
-                    )
+                        <param 2> <param 3>... **")
                     return
                 else:
                     value = key[1].strip('"').replace("_", " ")
