@@ -115,42 +115,28 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, args):
         """ Create an object of any class"""
-        try:
-            class_name = args.split(" ")[0]
-            if len(class_name) == 0:
-                print("** class name missing **")
-                return
-            if class_name and class_name not in self.valid_classes:
-                print("** class doesn't exist **")
-                return
-
-            kwargs = {}
-            commands = args.split(" ")
-            for i in range(1, len(commands)):
-                
-                key = commands[i].split("=")[0]
-                value = commands[i].split("=")[1]
-                #key, value = tuple(commands[i].split("="))
-                if value.startswith('"'):
-                    value = value.strip('"').replace("_", " ")
-                else:
-                    try:
-                        value = eval(value)
-                    except (SyntaxError, NameError):
-                        continue
-                kwargs[key] = value
-
-            if kwargs == {}:
-                new_instance = eval(class_name)()
-            else:
-                new_instance = eval(class_name)(**kwargs)
-            storage.new(new_instance)
-            print(new_instance.id)
-            storage.save()
-        except ValueError:
-            print(ValueError)
+        class_name = args.split()
+        if not args:
+            print("** class name missing **")
             return
-
+        elif class_name[0] not in HBNBCommand.classes:
+            print("** class doesn't exist **")
+            return
+        elif len(class_name) >= 1:
+            new_instance = HBNBCommand.classes[class_name[0]]()
+        if len(class_name) > 1:
+            for i in class_name[1:]:
+                key = i.split("=")
+                if len(key) == 1:
+                    print( "** create <Class name> <param 1> \
+                        <param 2> <param 3>... **"
+                    )
+                    return
+                else:
+                    value = key[1].strip('"').replace("_", " ")
+                setattr(new_instance, key[0], value)
+        print(new_instance.id)
+        storage.save()
 
     def help_create(self):
         """ Help information for the create method """
