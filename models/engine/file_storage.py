@@ -21,6 +21,8 @@ class FileStorage:
             for key , value in FileStorage.__objects.items():
                 if isinstance(value, cls):
                     obj[key] = value
+            return obj
+
         return FileStorage.__objects
 
     def new(self, obj):
