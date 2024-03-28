@@ -3,13 +3,14 @@
 import cmd
 import sys
 from models.base_model import BaseModel
-from models.__init__ import storage
+from models import storage
 from models.user import User
 from models.place import Place
 from models.state import State
 from models.city import City
 from models.amenity import Amenity
 from models.review import Review
+import os
 
 
 class HBNBCommand(cmd.Cmd):
@@ -118,7 +119,6 @@ class HBNBCommand(cmd.Cmd):
         args_lst = args.split()
         class_name = args_lst[0]
         dict_params = {}
-        print(dict_params)
         if not class_name:
             print("** class name missing **")
             return
@@ -136,9 +136,9 @@ class HBNBCommand(cmd.Cmd):
         
         new_instance = HBNBCommand.classes[class_name]()
         new_instance.__dict__.update(dict_params)
+        storage.new(new_instance)
         storage.save()
         print(new_instance.id)
-        storage.save()
 
     def help_create(self):
         """ Help information for the create method """
@@ -214,7 +214,15 @@ class HBNBCommand(cmd.Cmd):
     def do_all(self, args):
         """ Shows all objects, or all objects of a class"""
         print_list = []
-
+        if os.getenv('HBNB_TYPE_STORAGE') == 'db':
+            if args:
+                args = args.split(' ')[0]
+                if args not in HBNBCommand.classes:
+                    print("** class doesn't exist **")
+                    return
+                for k, v in storage.all(HBNBCommand.classes[args]).items():
+                    print_list.append(str(v))
+            
         if args:
             args = args.split(' ')[0]  # remove possible trailing args
             if args not in HBNBCommand.classes:

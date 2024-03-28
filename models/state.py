@@ -5,7 +5,6 @@ from sqlalchemy import Column, String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, backref
 from models.city import City
-from models import storage
 
 
 Base = declarative_base()
@@ -17,6 +16,7 @@ class State(BaseModel, Base):
     cities = relationship("City", cascade="all, delete", backref=backref("state", cascade="all, delete"))
     @property
     def cities(self):
+        from models import storage
         """Getter attribute cities that returns the list of City instances
         with state_id equals to the current State.id"""
         city_instances = []

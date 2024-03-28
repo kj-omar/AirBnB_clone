@@ -20,14 +20,14 @@ class DBStorage:
     def __init__(self) -> None:
         """Creates a new FileStorage instance"""
 
-        if os.getenv('HBNB_ENV') == 'test':
-            self.__engine = create_engine('mysql+mysqldb://{}:{}@{}/{}'
-                          .format(os.getenv('HBNB_MYSQL_USER'),
-                              os.getenv('HBNB_MYSQL_PWD'),
-                              os.getenv('HBNB_MYSQL_HOST'),
-                              os.getenv('HBNB_MYSQL_DB')),
-                          pool_pre_ping=True)
-            Base.metadata.drop_all(self.__engine)
+        self.__engine = create_engine('mysql+mysqldb://{}:{}@{}/{}'
+                      .format(os.getenv('HBNB_MYSQL_USER'),
+                          os.getenv('HBNB_MYSQL_PWD'),
+                          os.getenv('HBNB_MYSQL_HOST'),
+                          os.getenv('HBNB_MYSQL_DB')),
+                      pool_pre_ping=True)
+        if os.getenv('HBNB_ENV') != 'test':
+            Base.metadata.create_all(self.__engine)
 
     def all(self, cls=None):
         """Returns a dictionary of models currently in storage"""
@@ -51,7 +51,6 @@ class DBStorage:
     def new(self, obj):
         """Adds new object to storage"""
         self.__session.add(obj)
-        self.save()
 
     def save(self):
         """Saves storage to file"""
@@ -61,7 +60,6 @@ class DBStorage:
         """Deletes obj from storage"""
         if obj:
             self.__session.delete(obj)
-            self.save()
 
     def reload(self):
         """Loads storage from file"""
