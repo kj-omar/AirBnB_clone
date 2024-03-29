@@ -18,30 +18,11 @@ class test_City(test_basemodel):
 
     def setUp(self):
         """ Test set up """
-        if os.getenv('HBNB_ENV') == 'test' and os.getenv(
-                'HBNB_TYPE_STORAGE') == 'db':
-            self.db = MySQLdb.connect(host="localhost",
-                                      user="hbnb_test",
-                                      passwd="hbnb_test_pwd",
-                                      database="hbnb_test_db")
-            self.cursor = self.db.cursor()
-        else:
-            try:
-                os.remove('file.json')
-            except Exception:
-                pass
+        pass
 
     def tearDown(self):
         """Test removing json file or closing database connection"""
-        if os.getenv('HBNB_ENV') == 'test' and os.getenv(
-                'HBNB_TYPE_STORAGE') == 'db':
-            self.cursor.close()
-            self.db.close()
-        else:
-            try:
-                os.remove('file.json')
-            except Exception:
-                pass
+        pass
 
     def test_state_id(self):
         """ Test state id type"""

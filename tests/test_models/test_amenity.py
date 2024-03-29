@@ -14,25 +14,12 @@ class test_Amenity(test_basemodel):
     """ Test class amenity"""
 
     def setUp(self):
-        if os.getenv('HBNB_ENV') == 'test' and os.getenv(
-                'HBNB_TYPE_STORAGE') == 'db':
-            self.db = MySQLdb.connect(host="localhost",
-                                      user="hbnb_test",
-                                      passwd="hbnb_test_pwd",
-                                      database="hbnb_test_db")
-            self.cursor = self.db.cursor()
+        """ """
+        pass
 
     def tearDown(self):
         """Test removing json file or closing database connection"""
-        if os.getenv('HBNB_ENV') == 'test' and os.getenv(
-                'HBNB_TYPE_STORAGE') == 'db':
-            self.cursor.close()
-            self.db.close()
-        else:
-            try:
-                os.remove('file.json')
-            except Exception:
-                pass
+        pass
 
     def test_instantiation(self, *args, **kwargs):
         """ Test the amenity instantiation"""
@@ -64,12 +51,12 @@ class test_Amenity(test_basemodel):
         if os.getenv('HBNB_TYPE_STORAGE') == 'db':
             self.assertIsNotNone(
                 models.storage.all().get(
-                f"Amenity.{amenity.id}")
+                    f"Amenity.{amenity.id}")
             )
         else:
             self.assertIsNotNone(
                 models.storage.all().get(
-                f"Amenity.{amenity.id}")
+                    f"Amenity.{amenity.id}")
             )
 
     def test_amenity_to_dict(self):
