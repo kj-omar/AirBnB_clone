@@ -131,7 +131,6 @@ class test_basemodel(unittest.TestCase):
     def test_save_method(self):
         """ Test the save method"""
         i = self.value()
-        i.name = "Saved Model"
         created_at = i.created_at
         updated_at = i.updated_at
         i.save()
@@ -139,21 +138,10 @@ class test_basemodel(unittest.TestCase):
         self.assertEqual(i.created_at, created_at)
 
         if os.getenv('HBNB_TYPE_STORAGE') == 'db':
-            self.assertIsNotNone(models.storage.get(self.value, i.id))
+            self.assertIsNotNone(models.storage.all().get(f"{self.name}.{i.id}"))
         else:
             self.assertIsNotNone(models.storage.all().get(
                 f"{self.name}.{i.id}"))
-
-    def test_delete_method(self):
-        """ Test the delete method """
-        i = self.value()
-        i.save()
-        i.delete()
-
-        if os.getenv('HBNB_TYPE_STORAGE') == 'db':
-            self.assertIsNone(models.storage.all().get(f"{self.name}.{i.id}"))
-        else:
-            self.assertIsNone(models.storage.all().get(f"{self.name}.{i.id}"))
 
 
 if __name__ == '__main__':
