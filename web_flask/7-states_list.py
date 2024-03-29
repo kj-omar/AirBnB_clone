@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 """ A script that starts a Flask web application """
 from flask import Flask, render_template
+from models import *
 from models import storage
-from models.state import State
 
 
 app = Flask(__name__)
@@ -22,6 +22,7 @@ def display_html():
     return render_template('7-states_list.html',
                            Table="States",
                            items=dict_to_html)
+
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000)
