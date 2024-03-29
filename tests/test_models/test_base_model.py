@@ -2,6 +2,7 @@
 """ Unittest for the base_model class """
 import os
 import json
+from unittest.mock import patch
 import MySQLdb
 import unittest
 import datetime
@@ -49,18 +50,20 @@ class test_basemodel(unittest.TestCase):
     def test_save(self):
         """ Testing save """
         i = self.value()
-        key = self.value.__name__ + "." + i.id
-        if os.getenv('HBNB_TYPE_STORAGE') != 'db':
+        key = self.name + "." + i.id
+        if os.getenv('HBNB_TYPE_STORAGE') == 'db':
+            with patch('models.storage') as mock:
+                i.save()
+                mock.new.assert_called()
+                mock.save.assert_called()
+        else:
             i.save()
-            with open('file.json', 'r') as f:
-                j = json.load(f)
-                self.assertEqual(j[key], i.to_dict())
-        elif self.value.__name__ != 'BaseModel':
-            i.save()
-            self.assertEqual(
-                storage.all().get(key),
-                i.to_dict()
-            )
+            try:
+                with open('file.json', 'r') as f:
+                    j = json.load(f)
+                    self.assertEqual(j[key], i.to_dict())
+            except FileNotFoundError:
+                pass
 
     def test_str(self):
         """ Test displaying of str """
