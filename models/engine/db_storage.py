@@ -26,8 +26,8 @@ class DBStorage:
                           os.getenv('HBNB_MYSQL_HOST'),
                           os.getenv('HBNB_MYSQL_DB')),
                       pool_pre_ping=True)
-        if os.getenv('HBNB_ENV') != 'test':
-            Base.metadata.create_all(self.__engine)
+        if os.getenv('HBNB_ENV') == 'test':
+            Base.metadata.drop_all(self.__engine)
 
     def all(self, cls=None):
         """Returns a dictionary of models currently in storage"""
