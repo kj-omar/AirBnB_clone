@@ -88,9 +88,10 @@ class test_basemodel(unittest.TestCase):
 
     def test_kwargs_one(self):
         """ Test with one key-value argument"""
-        n = {'Name': 'test'}
-        with self.assertRaises(KeyError):
-            new = self.value(**n)
+        n = {'name': 'Test Object'}
+        new = self.value(**n)
+        self.assertIsInstance(new, self.value)
+        self.assertEqual(new.name, 'Test Object')
 
     def test_id(self):
         """ Test id type """
