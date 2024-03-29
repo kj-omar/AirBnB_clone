@@ -76,9 +76,10 @@ class test_fileStorage(test_basemodel):
 
     def test_save(self):
         """ FileStorage save method """
-        new = self.value()
-        models.storage.save()
-        self.assertTrue(os.path.exists('file.json'))
+        if os.getenv('HBNB_TYPE_STORAGE') != 'db':
+            new = self.value()
+            models.storage.save()
+            self.assertTrue(os.path.exists('file.json'))
 
     def test_reload(self):
         """ Storage file is successfully loaded to __objects """

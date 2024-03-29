@@ -7,6 +7,7 @@ import MySQLdb
 import unittest
 import datetime
 from uuid import UUID
+from models import storage
 from models.base_model import BaseModel
 
 
@@ -69,11 +70,18 @@ class test_basemodel(unittest.TestCase):
     def test_save(self):
         """ Testing save """
         i = self.value()
-        i.save()
         key = self.name + "." + i.id
-        with open('file.json', 'r') as f:
-            j = json.load(f)
-            self.assertEqual(j[key], i.to_dict())
+        if os.getenv('HBNB_TYPE_STORAGE') != 'db':
+            i.save()
+            with open('file.json', 'r') as f:
+                j = json.load(f)
+                self.assertEqual(j[key], i.to_dict())
+        else:
+            i.save()
+            self.assertEqual(
+                storage.all().get(key),
+                i.to_dict()
+            )
 
     def test_str(self):
         """ Test displaying of str """
@@ -138,7 +146,8 @@ class test_basemodel(unittest.TestCase):
         self.assertEqual(i.created_at, created_at)
 
         if os.getenv('HBNB_TYPE_STORAGE') == 'db':
-            self.assertIsNotNone(models.storage.all().get(f"{self.name}.{i.id}"))
+            self.assertIsNotNone(models.storage.all().get(
+                f"{self.name}.{i.id}"))
         else:
             self.assertIsNotNone(models.storage.all().get(
                 f"{self.name}.{i.id}"))
