@@ -1,15 +1,36 @@
 #!/usr/bin/python3
 """ Unittests for amenity class """
+import os
 import models
+import MySQLdb
 import unittest
-from os import getenv
+from models import DBStorage
 from datetime import datetime
 from models.amenity import Amenity
 from tests.test_models.test_base_model import test_basemodel
 
 
-class test_Amenity(unittest.TestCase):
+class test_Amenity(test_basemodel):
     """ Test class amenity"""
+
+    def setUp(self):
+        if os.getenv('HBNB_TYPE_STORAGE') == 'db':
+            self.db = MySQLdb.connect(host="localhost",
+                                      user="hbnb_test",
+                                      passwd="hbnb_test_pwd",
+                                      database="hbnb_test_db")
+            self.cursor = self.db.cursor()
+
+    def tearDown(self):
+        """Test removing json file or closing database connection"""
+        if os.getenv('HBNB_TYPE_STORAGE') == 'db':
+            self.cursor.close()
+            self.db.close()
+        else:
+            try:
+                os.remove('file.json')
+            except Exception:
+                pass
 
     def test_instantiation(self, *args, **kwargs):
         """ Test the amenity instantiation"""
@@ -25,7 +46,7 @@ class test_Amenity(unittest.TestCase):
         new_amenity.name = "Spa"
         self.assertEqual(new_amenity.name, "Spa")
 
-        if getenv('HBNB_TYPE_STORAGE') == 'db':
+        if os.getenv('HBNB_TYPE_STORAGE') == 'db':
             self.assertIsInstance(new_amenity.place_amenities, list)
 
     def test_amenity_save_and_update(self):
@@ -38,7 +59,7 @@ class test_Amenity(unittest.TestCase):
         self.assertNotEqual(amenity.updated_at, updated_at)
         self.assertEqual(amenity.created_at, created_at)
 
-        if getenv('HBNB_TYPE_STORAGE') == 'db':
+        if os.getenv('HBNB_TYPE_STORAGE') == 'db':
             self.assertIsNotNone(models.storage.get(Amenity, amenity.id))
         else:
             self.assertIsNotNone(models.storage.all().get(
@@ -54,6 +75,14 @@ class test_Amenity(unittest.TestCase):
         self.assertEqual(amenity_dict["name"], "Wifi")
         self.assertIsInstance(amenity_dict["created_at"], str)
         self.assertIsInstance(amenity_dict["updated_at"], str)
+
+    def get_amenity_count(self):
+        """Helper method to get the current number of Amenity objects"""
+        if isinstance(models.storage, DBStorage):
+            self.cursor.execute("SELECT COUNT(*) FROM amenities")
+            return self.cursor.fetchone()[0]
+        else:
+            return len(models.storage.all(Amenity))
 
 
 if __name__ == '__main__':
