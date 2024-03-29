@@ -2,11 +2,9 @@
 """ Unittest for the base_model class """
 import os
 import json
-import models
 import MySQLdb
 import unittest
 import datetime
-from uuid import UUID
 from models import storage
 from models.base_model import BaseModel
 
@@ -22,30 +20,11 @@ class test_basemodel(unittest.TestCase):
 
     def setUp(self):
         """ Test set up """
-        if os.getenv('HBNB_ENV') == 'test' and os.getenv(
-                'HBNB_TYPE_STORAGE') == 'db':
-            self.db = MySQLdb.connect(host="localhost",
-                                      user="hbnb_test",
-                                      passwd="hbnb_test_pwd",
-                                      database="hbnb_test_db")
-            self.cursor = self.db.cursor()
-        else:
-            try:
-                os.remove('file.json')
-            except Exception:
-                pass
+        pass
 
     def tearDown(self):
         """Test removing json file or closing database connection"""
-        if os.getenv('HBNB_ENV') == 'test' and os.getenv(
-                'HBNB_TYPE_STORAGE') == 'db':
-            self.cursor.close()
-            self.db.close()
-        else:
-            try:
-                os.remove('file.json')
-            except Exception:
-                pass
+        pass
 
     def test_default(self):
         """ Test default value type """
@@ -135,22 +114,6 @@ class test_basemodel(unittest.TestCase):
             self.assertEqual(type(new.updated_at), datetime.datetime)
             n = new.to_dict()
             new = self.value(**n)
-
-    # def test_save_method(self):
-    #     """ Test the save method"""
-    #     i = self.value()
-    #     created_at = i.created_at
-    #     updated_at = i.updated_at
-    #     i.save()
-    #     self.assertNotEqual(i.updated_at, created_at)
-    #     self.assertEqual(i.created_at, created_at)
-
-    #     if os.getenv('HBNB_TYPE_STORAGE') == 'db':
-    #         self.assertIsNotNone(models.storage.all().get(
-    #             f"{self.name}.{i.id}"))
-    #     else:
-    #         self.assertIsNotNone(models.storage.all().get(
-    #             f"{self.name}.{i.id}"))
 
 
 if __name__ == '__main__':
