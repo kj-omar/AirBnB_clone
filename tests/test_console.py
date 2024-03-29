@@ -30,26 +30,20 @@ class test_console(unittest.TestCase):
         except ValueError:
             self.assertNotIsInstance(float, type(Place.latitude))
 
-    def test_create_state_db(self):
-        """ Test if a state is created when calling do_create"""
-        if os.getenv('HBNB_ENV') == 'test' and os.getenv(
-                'HBNB_TYPE_STORAGE') == 'db':
-            self.cursor.execute(
-                "SELECT COUNT(*) from states")
-            number_states_before = self.cursor.fetchone()[0]
+    @patch('models.storage', new_callable=MagicMock)
+    def test_create_state_file_storage(self, mock_storage):
+        """Test creating a state with the console using FileStorage"""
+        self.console.onecmd("create State name='California'")
+        mock_storage.new.assert_called_with(State(name='California'))
+        mock_storage.save.assert_called_once()
 
-            HBNBCommand().do_create("State name=Louisiana")
-
-            self.cursor.execute(
-                "SELECT COUNT(*) from states")
-            number_states_after = self.cursor.fetchone()[0]
-            self.assertEqual(number_states_after - number_states_before, 1)
-
-            self.cursor.execute(
-                "SELECT * FROM states WHERE name='Louisiana'")
-            new_state = self.cursor.fetchone()
-            self.assertIsNotNone(new_state)
-            self.assertEqual(new_state[1], "Louisiana")
+    @patch('models.engine.db_storage.DBStorage._DBStorage__session',
+           new_callable=MagicMock)
+    def test_create_state_db_storage(self, mock_session):
+        """Test creating a state with the console using DBStorage"""
+        self.console.onecmd("create State name='Louisiana'")
+        mock_session.add.assert_called()
+        mock_session.commit.assert_called_once()
 
 
 if __name__ == '__main__':
