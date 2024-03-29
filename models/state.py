@@ -24,4 +24,3 @@ class State(BaseModel, Base):
             if city.state_id == self.id:
                 city_instances.append(city)
         return city_instances
-    name = ""
