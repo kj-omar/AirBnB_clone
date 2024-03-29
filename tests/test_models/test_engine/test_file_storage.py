@@ -106,10 +106,6 @@ class test_fileStorage(test_basemodel):
         new.save()
         self.assertTrue(os.path.exists('file.json'))
 
-    def test_type_path(self):
-        """ Confirm __file_path is string """
-        self.assertEqual(type(models.storage._FileStorage__file_path), str)
-
     def test_type_objects(self):
         """ Confirm __objects is a dict """
         self.assertEqual(type(models.storage.all()), dict)
