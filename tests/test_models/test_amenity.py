@@ -17,14 +17,14 @@ class test_Amenity(unittest.TestCase):
         self.assertIsInstance(new_amenity, Amenity)
         self.assertIsNotNone(new_amenity.id)
         self.assertIsInstance(new_amenity.created_at, datetime)
-        self.assertIsInstance(new_amenity.updated_at, datetime)     
+        self.assertIsInstance(new_amenity.updated_at, datetime)
 
     def test_attributes(self):
         """ Test amenities attributes """
         new_amenity = Amenity()
         new_amenity.name = "Spa"
         self.assertEqual(new_amenity.name, "Spa")
-        
+
         if getenv('HBNB_TYPE_STORAGE') == 'db':
             self.assertIsInstance(new_amenity.place_amenities, list)
 
@@ -41,7 +41,8 @@ class test_Amenity(unittest.TestCase):
         if getenv('HBNB_TYPE_STORAGE') == 'db':
             self.assertIsNotNone(models.storage.get(Amenity, amenity.id))
         else:
-            self.assertIsNotNone(models.storage.all().get(f"Amenity.{amenity.id}"))
+            self.assertIsNotNone(models.storage.all().get(
+                f"Amenity.{amenity.id}"))
 
     def test_amenity_to_dict(self):
         amenity = Amenity()
