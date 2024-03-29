@@ -2,21 +2,20 @@
 """ Module for testing file storage"""
 import os
 import unittest
-from models import storage
-from models.user import User
-from models.city import City
 from models.place import Place
 from models.state import State
 from console import HBNBCommand
-from unittest.mock import patch
-from models.review import Review
-from models.amenity import Amenity
-from models.base_model import BaseModel
+from unittest.mock import MagicMock, patch
+from models.engine.file_storage import FileStorage
 from tests.test_models.test_base_model import test_basemodel
 
 
 class test_console(test_basemodel):
     """ Class to test the file storage method """
+
+    def setUp(self):
+        self.console = HBNBCommand()
+
     @patch('builtins.print')
     def test_do_create_int(self, mock_print):
         try:
@@ -31,7 +30,7 @@ class test_console(test_basemodel):
         except ValueError:
             self.assertNotIsInstance(float, type(Place.latitude))
 
-    def test_create_state(self):
+    def test_create_state_db(self):
         """ Test if a state is created when calling do_create"""
         if os.getenv('HBNB_ENV') == 'test' and os.getenv(
                 'HBNB_TYPE_STORAGE') == 'db':

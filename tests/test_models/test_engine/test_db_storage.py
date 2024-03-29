@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 """ Module for testing file storage"""
 import os
-import models
 import MySQLdb
 import unittest
 from models.city import City
@@ -16,7 +15,7 @@ class TestDBStorage(test_basemodel, unittest.TestCase):
 
     def setUp(self):
         """ Test set up """
-        super().setUp()
+        super().setUp()        
         if os.getenv('HBNB_ENV') == 'test' and os.getenv(
                 'HBNB_TYPE_STORAGE') == 'db':
             self.db = MySQLdb.connect(host="localhost",

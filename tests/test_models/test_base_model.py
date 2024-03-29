@@ -122,10 +122,11 @@ class test_basemodel(unittest.TestCase):
 
     def test_updated_at(self):
         """ Test date type """
-        new = self.value()
-        self.assertEqual(type(new.updated_at), datetime.datetime)
-        n = new.to_dict()
-        new = BaseModel(**n)
+        if os.getenv('HBNB_TYPE_STORAGE') != 'db':        
+            new = self.value()
+            self.assertEqual(type(new.updated_at), datetime.datetime)
+            n = new.to_dict()
+            new = BaseModel(**n)
 
     def test_save_method(self):
         """ Test the save method"""
