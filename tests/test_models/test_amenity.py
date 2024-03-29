@@ -62,10 +62,15 @@ class test_Amenity(test_basemodel):
         self.assertEqual(amenity.created_at, created_at)
 
         if os.getenv('HBNB_TYPE_STORAGE') == 'db':
-            self.assertIsNotNone(models.storage.get(Amenity, amenity.id))
+            self.assertIsNotNone(
+                models.storage.all().get(
+                f"Amenity.{amenity.id}")
+            )
         else:
-            self.assertIsNotNone(models.storage.all().get(
-                f"Amenity.{amenity.id}"))
+            self.assertIsNotNone(
+                models.storage.all().get(
+                f"Amenity.{amenity.id}")
+            )
 
     def test_amenity_to_dict(self):
         amenity = Amenity()
