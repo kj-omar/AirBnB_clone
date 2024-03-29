@@ -16,7 +16,8 @@ class test_fileStorage(test_basemodel):
     """ Class to test the file storage method """
     def setUp(self):
         """ Test set up """
-        if os.getenv('HBNB_TYPE_STORAGE') == 'db':
+        if os.getenv('HBNB_ENV') == 'test' and os.getenv(
+                'HBNB_TYPE_STORAGE') == 'db':
             self.db = MySQLdb.connect(host="localhost",
                                       user="hbnb_test",
                                       passwd="hbnb_test_pwd",
@@ -30,7 +31,8 @@ class test_fileStorage(test_basemodel):
 
     def tearDown(self):
         """Test removing json file or closing database connection"""
-        if os.getenv('HBNB_TYPE_STORAGE') == 'db':
+        if os.getenv('HBNB_ENV') == 'test' and os.getenv(
+                'HBNB_TYPE_STORAGE') == 'db':
             self.cursor.close()
             self.db.close()
         else:
@@ -135,7 +137,8 @@ class test_fileStorage(test_basemodel):
 
     def test_number_states_created(self):
         """ Test if a state is created when calling do_create"""
-        if os.getenv('HBNB_TYPE_STORAGE') == 'db':
+        if os.getenv('HBNB_ENV') == 'test' and os.getenv(
+                'HBNB_TYPE_STORAGE') == 'db':
             self.cursor.execute(
                 "SELECT COUNT(*) from states")
             number_states_before = self.cursor.fetchone()[0]
