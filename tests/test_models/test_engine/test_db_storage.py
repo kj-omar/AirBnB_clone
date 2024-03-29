@@ -16,7 +16,8 @@ class TestDBStorage(test_basemodel, unittest.TestCase):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        if os.getenv('HBNB_ENV') == 'test' and os.getenv('HBNB_TYPE_STORAGE') == 'db':
+        if os.getenv('HBNB_ENV') == 'test' and os.getenv(
+                'HBNB_TYPE_STORAGE') == 'db':
             self.db = MySQLdb.connect(host="localhost",
                                       user="hbnb_test",
                                       passwd="hbnb_test_pwd",
@@ -30,7 +31,8 @@ class TestDBStorage(test_basemodel, unittest.TestCase):
     def tearDown(self):
         """Test removing json file or closing database connection"""
         super().tearDown()
-        if os.getenv('HBNB_ENV') == 'test' and os.getenv('HBNB_TYPE_STORAGE') == 'db':
+        if os.getenv('HBNB_ENV') == 'test' and os.getenv(
+                'HBNB_TYPE_STORAGE') == 'db':
             self.cursor.close()
             self.db.close()
 
