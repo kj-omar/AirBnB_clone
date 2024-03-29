@@ -14,32 +14,17 @@ from tests.test_models.test_base_model import test_basemodel
 
 class test_fileStorage(test_basemodel):
     """ Class to test the file storage method """
-    def setUp(self):
-        """ Test set up """
-        if os.getenv('HBNB_ENV') == 'test' and os.getenv(
-                'HBNB_TYPE_STORAGE') == 'db':
-            self.db = MySQLdb.connect(host="localhost",
-                                      user="hbnb_test",
-                                      passwd="hbnb_test_pwd",
-                                      database="hbnb_test_db")
-            self.cursor = self.db.cursor()
-        else:
-            try:
-                os.remove('file.json')
-            except Exception:
-                pass
 
+    def setUp(self):
+        """ Set up test environment """
+        pass
+    
     def tearDown(self):
-        """Test removing json file or closing database connection"""
-        if os.getenv('HBNB_ENV') == 'test' and os.getenv(
-                'HBNB_TYPE_STORAGE') == 'db':
-            self.cursor.close()
-            self.db.close()
-        else:
-            try:
-                os.remove('file.json')
-            except Exception:
-                pass
+        """ Remove storage file at end of tests """
+        try:
+            os.remove('file.json')
+        except:
+            pass
 
     @patch.object(FileStorage, 'all')
     def test_obj_list_empty(self, mock_all):
