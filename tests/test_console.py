@@ -33,7 +33,8 @@ class test_console(test_basemodel):
 
     def test_create_state(self):
         """ Test if a state is created when calling do_create"""
-        if os.getenv('HBNB_TYPE_STORAGE') == 'db':
+        if os.getenv('HBNB_ENV') == 'test' and os.getenv(
+                'HBNB_TYPE_STORAGE') == 'db':
             self.cursor.execute(
                 "SELECT COUNT(*) from states")
             number_states_before = self.cursor.fetchone()[0]
