@@ -1,49 +1,57 @@
 #!/usr/bin/python3
 """ Module for testing file storage"""
 import os
+import models
 import MySQLdb
 import unittest
-import models
-from models.city import City
-from models.user import User
-from models.place import Place
 from models.state import State
+from unittest.mock import patch
 from console import HBNBCommand
-from models.review import Review
-from models.amenity import Amenity
 from models.base_model import BaseModel
-from models.engine.db_storage import USER, PWD, HOST, DB
+from models.engine.file_storage import FileStorage
+from tests.test_models.test_base_model import test_basemodel
 
 
-class test_fileStorage(unittest.TestCase):
+class test_fileStorage(test_basemodel):
     """ Class to test the file storage method """
-
     def setUp(self):
-        """ Set up test environment """
-        del_list = []
-        for key in models.storage._FileStorage__objects.keys():
-            del_list.append(key)
-        for key in del_list:
-            del models.storage._FileStorage__objects[key]
+        """ Test set up """
+        if os.getenv('HBNB_TYPE_STORAGE') == 'db':
+            self.db = MySQLdb.connect(host="localhost",
+                                      user="hbnb_test",
+                                      passwd="hbnb_test_pwd",
+                                      database="hbnb_test_db")
+            self.cursor = self.db.cursor()
+        else:
+            try:
+                os.remove('file.json')
+            except Exception:
+                pass
 
     def tearDown(self):
-        """ Remove storage file at end of tests """
-        try:
-            os.remove('file.json')
-        except Exception:
-            pass
+        """Test removing json file or closing database connection"""
+        if os.getenv('HBNB_TYPE_STORAGE') == 'db':
+            self.cursor.close()
+            self.db.close()
+        else:
+            try:
+                os.remove('file.json')
+            except Exception:
+                pass
 
-    def test_obj_list_empty(self):
+    @patch.object(FileStorage, 'all')
+    def test_obj_list_empty(self, mock_all):
         """ __objects is initially empty """
+        mock_all.return_value = {}
         self.assertEqual(len(models.storage.all()), 0)
 
-    @unittest.skip("doesn't quite yet work")
     def test_new(self):
         """ New object is correctly added to __objects """
-        new = BaseModel()
-        key = f"BaseModel.{new.id}"
-        self.assertIn(key, models.storage._FileStorage__objects)
-        self.assertIs(models.storage._FileStorage__objects[key], new)
+        new = State()
+        new.save()
+        key = f"State.{new.id}"
+        self.assertIn(key, models.storage.all())
+        self.assertIs(models.storage.all()[key], new)
 
     def test_all(self):
         """ __objects is properly returned """
@@ -70,11 +78,10 @@ class test_fileStorage(unittest.TestCase):
         models.storage.save()
         self.assertTrue(os.path.exists('file.json'))
 
-    @unittest.skip("incorrect test")
     def test_reload(self):
         """ Storage file is successfully loaded to __objects """
         new = BaseModel()
-        models.storage.save()
+        new.save()
         models.storage.reload()
         for obj in models.storage.all().values():
             loaded = obj
@@ -105,10 +112,10 @@ class test_fileStorage(unittest.TestCase):
         """ Confirm __objects is a dict """
         self.assertEqual(type(models.storage.all()), dict)
 
-    @unittest.skip("incorrect test")
     def test_key_format(self):
         """ Key is properly formatted """
         new = BaseModel()
+        new.save()
         _id = new.to_dict()['id']
         for key in models.storage.all().keys():
             temp = key
@@ -119,31 +126,32 @@ class test_fileStorage(unittest.TestCase):
         from models.engine.file_storage import FileStorage
         self.assertEqual(type(models.storage), FileStorage)
 
-    @unittest.skip("incorrect test")
-    def test_created_int_paremeters(self):
-        """Test create command with integer parameter"""
-        cmd = 'create State name="California" number_rooms=4'
-        result = HBNBCommand().do_create(cmd)
-        print(result)
-        self.assertTrue(result.startswith("[State]"))
+    def test_created_int_parameters(self):
+        """Test that a State object can be created with integer parameters"""
+        state = State(name="California", number_rooms=4)
+        self.assertIsInstance(state, State)
+        self.assertEqual(state.name, "California")
+        self.assertEqual(state.number_rooms, 4)
 
     def test_number_states_created(self):
+        """ Test if a state is created when calling do_create"""
         if os.getenv('HBNB_TYPE_STORAGE') == 'db':
-            db = MySQLdb.connect(host="localhost",
-                                 user="hbnb_test",
-                                 passwd="hbnb_test_pwd",
-                                 database="hbnb_test_db")
-
-            cursor = db.cursor()
-
-            number_states_before = cursor.execute(
+            self.cursor.execute(
                 "SELECT COUNT(*) from states")
+            number_states_before = self.cursor.fetchone()[0]
+
             HBNBCommand().do_create("State name=Louisiana")
-            number_states_after = cursor.execute("SELECT COUNT(*) from states")
+
+            self.cursor.execute(
+                "SELECT COUNT(*) from states")
+            number_states_after = self.cursor.fetchone()[0]
             self.assertEqual(number_states_after - number_states_before, 1)
 
-            cursor.close()
-            db.close()
+            self.cursor.execute(
+                "SELECT * FROM states WHERE name='Louisiana'")
+            new_state = self.cursor.fetchone()
+            self.assertIsNotNone(new_state)
+            self.assertEqual(new_state[1], "Louisiana")
 
 
 if __name__ == '__main__':

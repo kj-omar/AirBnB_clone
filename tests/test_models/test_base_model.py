@@ -3,6 +3,7 @@
 import os
 import json
 import models
+import MySQLdb
 import unittest
 import datetime
 from uuid import UUID
@@ -20,14 +21,28 @@ class test_basemodel(unittest.TestCase):
 
     def setUp(self):
         """ Test set up """
-        pass
+        if os.getenv('HBNB_TYPE_STORAGE') == 'db':
+            self.db = MySQLdb.connect(host="localhost",
+                                      user="hbnb_test",
+                                      passwd="hbnb_test_pwd",
+                                      database="hbnb_test_db")
+            self.cursor = self.db.cursor()
+        else:
+            try:
+                os.remove('file.json')
+            except Exception:
+                pass
 
     def tearDown(self):
-        """Test removing json file"""
-        try:
-            os.remove('file.json')
-        except Exception:
-            pass
+        """Test removing json file or closing database connection"""
+        if os.getenv('HBNB_TYPE_STORAGE') == 'db':
+            self.cursor.close()
+            self.db.close()
+        else:
+            try:
+                os.remove('file.json')
+            except Exception:
+                pass
 
     def test_default(self):
         """ Test default value type """
