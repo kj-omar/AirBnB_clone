@@ -27,8 +27,6 @@ class BaseModel:
             self.created_at = datetime.now()
             self.updated_at = datetime.now()
         else:
-            if len(kwargs) == 1:
-                raise KeyError
             if 'id' not in kwargs:
                 self.id = str(uuid.uuid4())
             if 'created_at' not in kwargs:
