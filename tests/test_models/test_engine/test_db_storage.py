@@ -2,22 +2,21 @@
 """ Module for testing file storage"""
 from io import StringIO
 import os
-import MySQLdb
 import unittest
+from console import HBNBCommand
 from models import storage
 from models.city import City
 from models.state import State
 from unittest.mock import patch, MagicMock
-from models.engine.db_storage import DBStorage
 
 
 class TestDBStorage(unittest.TestCase):
     """ Test class for dbstorage """
 
-    # def __init__(self, *args, **kwargs):
-    #     """ Test filestorage instantiation """
-    #     storage = DBStorage()
-    #     storage.reload()
+    def __init__(self, *args, **kwargs):
+        """ Test filestorage instantiation """
+        super().__init__(*args, **kwargs)
+        self.console = HBNBCommand()
 
     def setUp(self):
         """ Test set up """
