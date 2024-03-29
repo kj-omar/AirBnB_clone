@@ -3,12 +3,13 @@
   <HEAD>
     <TITLE>HBNB</TITLE>
   </HEAD>
+
   <BODY>
-    <H1>{{Table}}</H1>
+    <H1>States</H1>
     <UL>
-      {%for id, name in items | dictsort(false, 'value') %}
-      <LI>{{ id }}: <B>{{ name }}</B></LI>
-      {% endfor %}
+    {% for state in states.values()|sort(attribute="name") %}
+      <LI>{{ state.id }}: <B>{{ state.name }}</B></LI>
+    {% endfor %}
     </UL>
   </BODY>
 </HTML>
