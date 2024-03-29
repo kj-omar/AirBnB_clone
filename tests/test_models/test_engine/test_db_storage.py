@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 """ Module for testing file storage"""
 import os
-import models
 import MySQLdb
 import unittest
 from models.city import City
