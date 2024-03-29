@@ -37,13 +37,17 @@ class test_fileStorage(unittest.TestCase):
         """ __objects is initially empty """
         self.assertEqual(len(models.storage.all()), 0)
 
-    @unittest.skip("incorrect test")
+    @unittest.skip("doesn't quite yet work")
     def test_new(self):
         """ New object is correctly added to __objects """
         new = BaseModel()
-        for obj in models.storage.all().values():
-            temp = obj
-        self.assertTrue(temp is obj)
+        key = f"BaseModel.{new.id}"
+        self.assertIn(key, models.storage._FileStorage__objects)
+        self.assertIs(models.storage._FileStorage__objects[key], new)
+
+        # Add debug statements to verify the object creation and __objects contents
+        print(f"New object: {new}")
+        print(f"__objects: {models.storage._FileStorage__objects}")
 
     def test_all(self):
         """ __objects is properly returned """

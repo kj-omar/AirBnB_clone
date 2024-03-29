@@ -2,6 +2,7 @@
 """ Unittest for the base_model class """
 import os
 import json
+import models
 import unittest
 import datetime
 from uuid import UUID
@@ -63,16 +64,32 @@ class test_basemodel(unittest.TestCase):
         self.assertEqual(str(i), '[{}] ({}) {}'.format(self.name, i.id,
                          i.__dict__))
 
-    def test_todict(self):
+    def test_to_dict(self):
         """ Test if same when assigned to variable """
         i = self.value()
         n = i.to_dict()
         self.assertEqual(i.to_dict(), n)
 
+    def test_to_dict_output(self):
+        i = self.value()
+        i.name = "Test Model"
+        d = i.to_dict()
+        self.assertIsInstance(d, dict)
+        self.assertEqual(d["__class__"], self.name)
+        self.assertEqual(d["name"], "Test Model")
+        self.assertIsInstance(d["created_at"], str)
+        self.assertIsInstance(d["updated_at"], str)
+
     def test_kwargs_none(self):
         """ Test with no arguments """
         n = {None: None}
         with self.assertRaises(TypeError):
+            new = self.value(**n)
+
+    def test_kwargs_one(self):
+        """ Test with one key-value argument"""
+        n = {'Name': 'test'}
+        with self.assertRaises(KeyError):
             new = self.value(**n)
 
     def test_id(self):
@@ -91,6 +108,34 @@ class test_basemodel(unittest.TestCase):
         self.assertEqual(type(new.updated_at), datetime.datetime)
         n = new.to_dict()
         new = BaseModel(**n)
+
+    def test_save_method(self):
+        """ Test the save method"""
+        i = self.value()
+        i.name = "Saved Model"
+        created_at = i.created_at
+        updated_at = i.updated_at
+        i.save()
+        self.assertNotEqual(i.updated_at, created_at)
+        self.assertEqual(i.created_at, created_at)
+
+        if os.getenv('HBNB_TYPE_STORAGE') == 'db':
+            self.assertIsNotNone(models.storage.get(self.value, i.id))
+        else:
+            self.assertIsNotNone(models.storage.all().get(f"{self.name}.{i.id}"))
+
+    def test_delete_method(self):
+        """ Test the delete method """
+        i = self.value()
+        i.name = "Deleted Model"
+        i.save()       
+        i.delete()
+
+        if os.getenv('HBNB_TYPE_STORAGE') == 'db':
+            self.assertIsNone(models.storage.get(self.value, i.id))
+        else:
+            self.assertIsNone(models.storage.all().get(f"{self.name}.{i.id}"))
+ 
 
 
 if __name__ == '__main__':
