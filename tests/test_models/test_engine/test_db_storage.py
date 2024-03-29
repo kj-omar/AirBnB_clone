@@ -7,10 +7,9 @@ from models.city import City
 from models.state import State
 from unittest.mock import patch, MagicMock
 from models.engine.db_storage import DBStorage
-from tests.test_models.test_base_model import test_basemodel
 
 
-class TestDBStorage(test_basemodel, unittest.TestCase):
+class TestDBStorage(unittest.TestCase):
     """ Test class for dbstorage """
 
     def setUp(self):
