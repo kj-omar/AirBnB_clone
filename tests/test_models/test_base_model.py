@@ -147,12 +147,11 @@ class test_basemodel(unittest.TestCase):
     def test_delete_method(self):
         """ Test the delete method """
         i = self.value()
-        i.name = "Deleted Model"
         i.save()
         i.delete()
 
         if os.getenv('HBNB_TYPE_STORAGE') == 'db':
-            self.assertIsNone(models.storage.get(self.value, i.id))
+            self.assertIsNone(models.storage.all().get(f"{self.name}.{i.id}"))
         else:
             self.assertIsNone(models.storage.all().get(f"{self.name}.{i.id}"))
 
