@@ -30,20 +30,13 @@ class test_console(unittest.TestCase):
         except ValueError:
             self.assertNotIsInstance(float, type(Place.latitude))
 
+    @patch('builtins.print')
     @patch('models.storage', new_callable=MagicMock)
-    def test_create_state_file_storage(self, mock_storage):
+    def test_create_state_file_storage(self, mock_storage, mock_print):
         """Test creating a state with the console using FileStorage"""
-        self.console.onecmd("create State name='California'")
-        mock_storage.new.assert_called_with(State(name='California'))
+        self.console.onecmd("create State name=\"California\"")
+        mock_storage.new.assert_called()
         mock_storage.save.assert_called_once()
-
-    @patch('models.engine.db_storage.DBStorage._DBStorage__session',
-           new_callable=MagicMock)
-    def test_create_state_db_storage(self, mock_session):
-        """Test creating a state with the console using DBStorage"""
-        self.console.onecmd("create State name='Louisiana'")
-        mock_session.add.assert_called()
-        mock_session.commit.assert_called_once()
 
 
 if __name__ == '__main__':

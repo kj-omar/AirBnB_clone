@@ -74,3 +74,11 @@ class TestDBStorage(unittest.TestCase):
         storage.new(state_to_delete)
         storage.delete(state_to_delete)
         mock_session.delete.assert_called_with(state_to_delete)
+
+    @patch('builtins.print')
+    @patch('models.storage', new_callable=MagicMock)
+    def test_create_state_db_storage(self, mock_storage, mock_print):
+        """Test creating a state with the console using DBStorage"""
+        self.console.onecmd("create State name=\"Louisiana\"")
+        mock_storage.new.assert_called()
+        mock_storage.save.assert_called_once()

@@ -129,15 +129,14 @@ class HBNBCommand(cmd.Cmd):
             key = split_cmd[0]
             value = split_cmd[1]
             try:
-                if value[0] != '\"':
+                if value.startswith('"') and value.endswith('"'):
+                    value = value.replace('"', '')
+                    new_dict[key] = value.replace('_', ' ')
+                else:
                     if '.' in value:
                         new_dict[key] = float(value)
                     else:
                         new_dict[key] = int(value)
-                else:
-                    value = value.replace('\"', '')
-                    value = value.replace('_', ' ')
-                    new_dict[key] = value
             except IndexError:
                 pass
         new_instance = HBNBCommand.classes[cls_name]()
