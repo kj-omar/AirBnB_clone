@@ -2,15 +2,13 @@
 """ Module for testing file storage"""
 import os
 import unittest
+import MySQLdb
 from models.place import Place
-from models.state import State
 from console import HBNBCommand
-from unittest.mock import MagicMock, patch
-from models.engine.file_storage import FileStorage
-from tests.test_models.test_base_model import test_basemodel
+from unittest.mock import patch
 
 
-class test_console(test_basemodel):
+class test_console(unittest.TestCase):
     """ Class to test the file storage method """
 
     def setUp(self):
@@ -34,6 +32,11 @@ class test_console(test_basemodel):
         """ Test if a state is created when calling do_create"""
         if os.getenv('HBNB_ENV') == 'test' and os.getenv(
                 'HBNB_TYPE_STORAGE') == 'db':
+            self.db = MySQLdb.connect(host="localhost",
+                                      user="hbnb_test",
+                                      passwd="hbnb_test_pwd",
+                                      database="hbnb_test_db")
+            self.cursor = self.db.cursor()
             self.cursor.execute(
                 "SELECT COUNT(*) from states")
             number_states_before = self.cursor.fetchone()[0]
