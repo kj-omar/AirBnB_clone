@@ -45,10 +45,6 @@ class test_fileStorage(unittest.TestCase):
         self.assertIn(key, models.storage._FileStorage__objects)
         self.assertIs(models.storage._FileStorage__objects[key], new)
 
-        # Add debug statements to verify the object creation and __objects contents
-        print(f"New object: {new}")
-        print(f"__objects: {models.storage._FileStorage__objects}")
-
     def test_all(self):
         """ __objects is properly returned """
         new = BaseModel()
@@ -133,17 +129,22 @@ class test_fileStorage(unittest.TestCase):
 
     def test_number_states_created(self):
         if os.getenv('HBNB_TYPE_STORAGE') == 'db':
-            db = MySQLdb.connect(host="localhost", user="hbnb_test", passwd="hbnb_test_pwd", database="hbnb_test_db")
+            db = MySQLdb.connect(host="localhost",
+                                 user="hbnb_test",
+                                 passwd="hbnb_test_pwd",
+                                 database="hbnb_test_db")
 
             cursor = db.cursor()
-            
-            number_states_before = cursor.execute("SELECT COUNT(*) from states")
+
+            number_states_before = cursor.execute(
+                "SELECT COUNT(*) from states")
             HBNBCommand().do_create("State name=Louisiana")
             number_states_after = cursor.execute("SELECT COUNT(*) from states")
             self.assertEqual(number_states_after - number_states_before, 1)
-            
+
             cursor.close()
             db.close()
+
 
 if __name__ == '__main__':
     unittest.main()
