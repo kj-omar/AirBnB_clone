@@ -27,6 +27,8 @@ class BaseModel:
             self.created_at = datetime.now()
             self.updated_at = datetime.now()
         else:
+            if len(kwargs) == 1:
+                raise KeyError
             if 'id' not in kwargs:
                 self.id = str(uuid.uuid4())
             if 'created_at' not in kwargs:
@@ -62,10 +64,13 @@ class BaseModel:
         dictionary.update(self.__dict__)
         dictionary.update({'__class__':
                           (str(type(self)).split('.')[-1]).split('\'')[0]})
-        dictionary['created_at'] = self.created_at.isoformat()
-        dictionary['updated_at'] = self.updated_at.isoformat()
+
         if '_sa_instance_state' in dictionary.keys():
             del dictionary['_sa_instance_state']
+
+        for key, value in dictionary.items():
+            if isinstance(value, datetime):
+                dictionary[key] = value.isoformat()
         return dictionary
 
     def delete(self):
