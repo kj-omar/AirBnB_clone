@@ -57,32 +57,32 @@ class test_fileStorage(test_basemodel):
 
     def test_all(self):
         """ __objects is properly returned """
-        new = BaseModel()
+        new = self.value()
         temp = models.storage.all()
         self.assertIsInstance(temp, dict)
 
     def test_base_model_instantiation(self):
         """ File is not created on BaseModel save """
-        new = BaseModel()
+        new = self.value()
         self.assertFalse(os.path.exists('file.json'))
 
     def test_empty(self):
         """ Data is saved to file """
-        new = BaseModel()
+        new = self.value()
         thing = new.to_dict()
         new.save()
-        new2 = BaseModel(**thing)
+        new2 = self.value(**thing)
         self.assertNotEqual(os.path.getsize('file.json'), 0)
 
     def test_save(self):
         """ FileStorage save method """
-        new = BaseModel()
+        new = self.value()
         models.storage.save()
         self.assertTrue(os.path.exists('file.json'))
 
     def test_reload(self):
         """ Storage file is successfully loaded to __objects """
-        new = BaseModel()
+        new = self.value()
         new.save()
         models.storage.reload()
         for obj in models.storage.all().values():
@@ -102,7 +102,7 @@ class test_fileStorage(test_basemodel):
 
     def test_base_model_save(self):
         """ BaseModel save method calls storage save """
-        new = BaseModel()
+        new = self.value()
         new.save()
         self.assertTrue(os.path.exists('file.json'))
 
@@ -112,7 +112,7 @@ class test_fileStorage(test_basemodel):
 
     def test_key_format(self):
         """ Key is properly formatted """
-        new = BaseModel()
+        new = self.value()
         new.save()
         _id = new.to_dict()['id']
         for key in models.storage.all().keys():
