@@ -8,6 +8,7 @@ class BaseModel:
     """A base class for all hbnb models"""
     def __init__(self, *args, **kwargs):
         """Instatntiates a new model"""
+        # if there is no kwargs just creat simple obj
         if not kwargs:
             from models import storage
             self.id = str(uuid.uuid4())
@@ -22,6 +23,7 @@ class BaseModel:
             del kwargs['__class__']
             self.__dict__.update(kwargs)
 
+    # Function that called like print(objBaseModel)
     def __str__(self):
         """Returns a string representation of the instance"""
         cls = (str(type(self)).split('.')[-1]).split('\'')[0]
