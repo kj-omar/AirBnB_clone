@@ -8,6 +8,10 @@ import json
 import os
 
 
+@unittest.skipIf(
+    os.getenv("HBNB_TYPE_STORAGE") == "db",
+    "Test is not relevant for BaseModel"
+)
 class test_basemodel(unittest.TestCase):
     """ """
 
@@ -24,7 +28,7 @@ class test_basemodel(unittest.TestCase):
     def tearDown(self):
         try:
             os.remove('file.json')
-        except:
+        except Exception:
             pass
 
     def test_default(self):
