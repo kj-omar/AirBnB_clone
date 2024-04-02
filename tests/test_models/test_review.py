@@ -1,5 +1,7 @@
 #!/usr/bin/python3
 """ Test """
+
+
 from tests.test_models.test_base_model import test_basemodel
 from models.review import Review
 from models.review import Review
@@ -13,19 +15,21 @@ class test_review(test_basemodel):
         super().__init__(*args, **kwargs)
         self.name = "Review"
         self.value = Review
-        
 
     def test_place_id(self):
         """ Test """
         new = self.value()
+        new.place_id = "some_value"
         self.assertEqual(type(new.place_id), str)
 
     def test_user_id(self):
         """ Test """
         new = self.value()
+        new.user_id = "some_value"
         self.assertEqual(type(new.user_id), str)
 
     def test_text(self):
         """ Test """
         new = self.value()
+        new.text = "some_value"
         self.assertEqual(type(new.text), str)
