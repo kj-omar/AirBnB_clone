@@ -29,12 +29,6 @@ class Place(BaseModel, Base):
     latitude = Column(Float, nullable=True)
     longitude = Column(Float, nullable=True)
     amenity_ids = []
-    # amenities = relationship( # <--- This is the relationship between Place and Amenity
-    #     "Amenity", secondary=place_amenity, viewonly=False,
-    #     primaryjoin="Place.id == place_amenity.c.place_id",
-    #     secondaryjoin="Amenity.id == place_amenity.c.amenity_id",
-    #     backref="places"
-    # )
     if getenv('HBNB_TYPE_STORAGE') == 'db': # <--- This is the relationship between Place and Review
         reviews = relationship("Review", cascade="all, delete", backref="place") 
     else:
@@ -48,7 +42,7 @@ class Place(BaseModel, Base):
                 if review.place_id == self.id:
                     review_instances.append(review)
             return review_instances
-    if getenv("HBNB_TYPE_STORAGE") == "db": # <--- This is the relationship between Place and User
+    if getenv("HBNB_TYPE_STORAGE") == "db": # <--- This is the relationship between Place and Amenity
         amenities = relationship("Amenity", secondary="place_amenity", viewonly=False)
     else:
         @property
