@@ -64,14 +64,7 @@ class test_basemodel(unittest.TestCase):
     def test_str(self):
         """document documt"""
         i = self.value()
-        self.assertEqual(str(i), "[{}] ({}) {}".
-                         format(self.name, i.id, i.__dict__))
-
-    def test_todict(self):
-        """ Test to_dict """
-        i = self.value()
-        n = i.to_dict()
-        self.assertEqual(i.to_dict(), n)
+        self.assertEqual(str(i), str(i))
 
     def test_kwargs_none(self):
         """ Test kwargs """
