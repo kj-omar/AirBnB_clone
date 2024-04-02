@@ -125,15 +125,15 @@ class HBNBCommand(cmd.Cmd):
         elif class_name not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
-        
-        params = args_lst[1:] # <name="California"> <param 2> <param 3>
+
+        params = args_lst[1:]
         for i in range(len(params)):
             key = params[i].partition('=')[0]
             value = params[i].partition('=')[2]\
-            .replace('\"', '')\
-            .replace('_', ' ')
+                .replace('\"', '')\
+                .replace('_', ' ')
             dict_params[key] = value
-        
+
         new_instance = HBNBCommand.classes[class_name]()
         new_instance.__dict__.update(dict_params)
         storage.new(new_instance)
@@ -201,7 +201,7 @@ class HBNBCommand(cmd.Cmd):
         key = c_name + "." + c_id
 
         try:
-            del(storage.all()[key])
+            del storage.all()[key]
             storage.save()
         except KeyError:
             print("** no instance found **")
@@ -213,8 +213,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_all(self, args):
         """ Shows all objects, or all objects of a class"""
-        print_list = []    
-            
+        print_list = []
         if args:
             args = args.split(' ')[0]  # remove possible trailing args
             if args not in HBNBCommand.classes:
@@ -333,6 +332,7 @@ class HBNBCommand(cmd.Cmd):
         """ Help information for the update class """
         print("Updates an object with new information")
         print("Usage: update <className> <id> <attName> <attVal>\n")
+
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
