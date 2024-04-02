@@ -8,13 +8,13 @@ from sqlalchemy.orm import relationship, backref
 from models.city import City
 
 
-
-
 class State(BaseModel, Base):
     """ State class """
     __tablename__ = "states"
     name = Column(String(128), nullable=False)
-    cities = relationship("City", cascade="all, delete", backref=backref("state", cascade="all, delete"))
+    cities = relationship("City", cascade="all, delete",
+                          backref=backref("state", cascade="all, delete"))
+
     @property
     def cities(self):
         from models import storage
