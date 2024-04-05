@@ -1,51 +1,35 @@
 #!/usr/bin/python3
-"""Distributes an archive to web servers using the do_deploy function."""
-from fabric.contrib import files
-from fabric.api import env, put, run
+"""
+Fabric script for distributing an archive to web servers
+"""
+from fabric.api import *
 import os
 
-# Define the host servers
 env.hosts = ['18.209.152.50', '34.229.136.68']
 
-
 def do_deploy(archive_path):
-    """Deploy the archive to the web servers."""
-    # Check if the archive exists
-    if not os.path.exists(archive_path):
+    """
+    Distributes an archive to web servers using Fabric
+    """
+    if os.path.isfile(archive_path) is False:
         return False
-
-    # Define the destination path on the server
-    data_path = '/data/web_static/releases/'
-    tmp = archive_path.split('.')[0]
-    name = tmp.split('/')[1]
-    dest = data_path + name
-
     try:
-        # Upload the archive to the /tmp directory on the server
-        put(archive_path, '/tmp')
-
-        # Create the necessary directories on the server
-        run('mkdir -p {}'.format(dest))
-
-        # Extract the archive to the destination directory
-        run('tar -xzf /tmp/{}.tgz -C {}'.format(name, dest))
-
-        # Remove the uploaded archive from the server
-        run('rm -f /tmp/{}.tgz'.format(name))
-
-        # Move the contents of the extracted archive to the destination directory
-        run('mv {}/web_static/* {}/'.format(dest, dest))
-
-        # Remove the web_static directory from the destination directory
-        run('rm -rf {}/web_static'.format(dest))
-
-        # Remove the current symlink if it exists
-        run('rm -rf /data/web_static/current')
-
-        # Create a new symlink to the deployed version
-        run('ln -s {} /data/web_static/current'.format(dest))
-
+        archive = archive_path.split("/")[-1]
+        path = "/data/web_static/releases"
+        put("{}".format(archive_path), "/tmp/{}".format(archive))
+        folder = archive.split(".")
+        run("mkdir -p {}/{}/".format(path, folder[0]))
+        new_archive = '.'.join(folder)
+        run("tar -xzf /tmp/{} -C {}/{}/"
+            .format(new_archive, path, folder[0]))
+        run("rm /tmp/{}".format(archive))
+        run("mv {}/{}/web_static/* {}/{}/"
+            .format(path, folder[0], path, folder[0]))
+        run("rm -rf {}/{}/web_static".format(path, folder[0]))
+        run("rm -rf /data/web_static/current")
+        run("ln -sf {}/{} /data/web_static/current"
+            .format(path, folder[0]))
         return True
-    except Exception:
+    except:
         return False
 
