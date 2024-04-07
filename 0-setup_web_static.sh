@@ -1,17 +1,17 @@
 #!/usr/bin/env bash
 # Script sets up web server for deployment of web_static.
 
-sudo apt-get update
-sudo apt-get install nginx
+apt-get update
+apt-get install nginx -y
 sudo ufw allow 'Nginx HTTP'
 
 # make directories
-sudo mkdir -p /data/web_static/shared/
-sudo mkdir -p /data/web_static/releases/test/
+mkdir -p /data/web_static/shared/
+mkdir -p /data/web_static/releases/test/
 
 # make a fake HTML file
-sudo touch /data/web_static/releases/test/index.html
-sudo echo "<html><head></head><body>Hello World!</body></html>" > /data/web_static/releases/test/index.html
+touch /data/web_static/releases/test/index.html
+echo "Hello World!" > /data/web_static/releases/test/index.html
 
 # make a symbolic link, if exist delete and recreate everytime script is run
 link_path="/data/web_static/current"
@@ -26,10 +26,30 @@ fi
 sudo ln -s "$target" "$link_path"
 
 # change owner and group to ubuntu user recursively
-sudo chown -R ubuntu:ubuntu /data/
+sudo chown -R ubuntu /data/
+sudo chgrp -R ubuntu /data/
 
 # update the Nginx configuration
-sudo sed -i '/listen 80 default_server/a location /hbnb_static { alias /data/web_static/current/;}' /etc/nginx/sites-enabled/default
+printf %s "server {
+	listen 80 default_server;
+	listen [::]:80 default_server;
+	add_header X-Served-By $HOSTNAME;
+	root   /var/www/html;
+	index  index.html index.htm;
+
+	location /hbnb_static {
+	alias /data/web_static/current;
+	index index.html index.htm;
+	}
+	location /redirect_me {
+	return 301 http://putech.tech/;
+	}
+	error_page 404 /404.html;
+	location /404 {
+	root /var/www/html;
+	internal;
+	}
+}" > /etc/nginx/sites-available/default
 
 # restart Nginx
 sudo service nginx restart
