@@ -7,12 +7,11 @@ from fabric.api import env
 from fabric.api import run
 from os import path
 
-env.hosts = ['54.160.65.25, 3.90.80.134']
+env.hosts = ['54.160.65.25', '3.90.80.134']
 
 
 def do_deploy(archive_path):
-    """function distributes an archive to my web server"""
-    """
+    """function distributes an archive to my web server
     Args:
         archive_path: Path to be distributed as a string
         Returns: error - False
