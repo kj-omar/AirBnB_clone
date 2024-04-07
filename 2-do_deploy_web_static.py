@@ -39,4 +39,12 @@ def do_deploy(archive_path):
     if run("mv /data/web_static/releases/{}/web_static/* "
             "/data/web_static/releases/{}/".format(peter, peter)).failed is True:
         return False
-
+    if run("rm -rf /data/web_static/releases/{}/web_static".
+            format(peter)).failed is True:
+        return False
+    if run("rm -rf /data/web_static/current").failed is True:
+        return False
+    if run("ln -s /data/web_static/releases/{}/ /data/web_static/current".
+            format(peter)).failed is True:
+        return False
+    return False
