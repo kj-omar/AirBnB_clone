@@ -108,6 +108,7 @@ Usage: update <class_name> <_id>
 ```
 <h3>Alternative Syntax</h3>
 
+
 ###### Example 0: Show all User objects
 Usage: <class_name>.all()
 ```
