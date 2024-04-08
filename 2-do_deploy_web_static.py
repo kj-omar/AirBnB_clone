@@ -1,49 +1,39 @@
 #!/usr/bin/python3
-""" fabric script that distributes an archive to my
-web servers, using do_deploy function"""
+""" Fabric script distributes an archive to my servers 
+    using do_deploy
+"""
 
-from fabric.api import put
 from fabric.api import env
-from fabric.api import run
+from fabric.api import put
+from fabric.api import sudo
+from datetime import datetime
 from os import path
+
 
 env.hosts = ['54.160.65.25', '3.90.80.134']
 
 
 def do_deploy(archive_path):
-    """function distributes an archive to my web server
-    Args:
-        archive_path: Path to be distributed as a string
-        Returns: error - False
-        otherwise - True
+    """ Distributes an archive to the web servers
     """
-    if path.isfile(archive_path) is False:
+    try:
+        if not path.exists(archive_path):
+            return False
+        put(archive_path, '/tmp/')
+        # string slicing
+        fold = archive_path[9:-4]
+        now = '/data/web_static/current'
+        web_folder = '/data/web_static/releases/'
+        # sudo command
+        sudo('mkdir -p {}{}'.format(web_folder, fold))
+        sudo('tar -zxvf /tmp/{0}.tgz -C {1}{0}'.format(fold, web_folder))
+        sudo('mv {0}{1}/web_static/* {0}{1}/'.format(web_folder, fold))
+        # remove unwanted files
+        sudo('rm /tmp/{}.tgz'.format(fold))
+        sudo('rm -rf {0}{1}/web_static'.format(web_folder, fold))
+        sudo('rm ' + now)
+        # Create symbolic link to web_static folder
+        sudo('ln -s {}{} {}'.format(web_folder, fold, now))
+        return True
+    except Exception as e:
         return False
-    folder = archive_path.split("/")[-1]
-    peter = folder.split(".")[0]
-
-    if put(archive_path, "/tmp/{}".format(folder)).failed is True:
-        return False
-    if run('rm -rf /data/web_static/releases/{}/'.
-            format(peter)).failed is True:
-        return False
-    if run('mkdir -p /data/web_static/releases/{}/'.
-            format(peter)).failed is True:
-        return False
-    if run("tar -xzf /tmp/{} -C /datat/web_static/releases/{}/".
-            format(folder, peter)).failed is True:
-        return False
-    if run("rm /tmp/{}".format(folder)).failed is True:
-        return False
-    if run("mv /data/web_static/releases/{}/web_static/* "
-            "/data/web_static/releases/{}/".format(peter, peter)).failed is True:
-        return False
-    if run("rm -rf /data/web_static/releases/{}/web_static".
-            format(peter)).failed is True:
-        return False
-    if run("rm -rf /data/web_static/current").failed is True:
-        return False
-    if run("ln -s /data/web_static/releases/{}/ /data/web_static/current".
-            format(peter)).failed is True:
-        return False
-    return True
