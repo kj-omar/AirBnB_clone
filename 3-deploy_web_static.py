@@ -1,13 +1,16 @@
 #!/usr/bin/python3
-""" Fabric script creates and distributes an archive
-to web servers, using function deploy"""
+""" Fabric script that distributes an archive to your web servers
+"""
 
-from fabric.api import env, put, sudo, local
+from fabric.api import env
+from fabric.api import put
+from fabric.api import local
+from fabric.api import sudo
 from datetime import datetime
 from os import path
 
 
-env.hosts = ['3.90.80.134, 54.160.65.25']
+env.hosts = ['54.160.65.25', '3.90.80.134']
 
 
 def do_pack():
@@ -54,3 +57,4 @@ def deploy():
     """
     archive_name = do_pack()
     return do_deploy(archive_name)
+
