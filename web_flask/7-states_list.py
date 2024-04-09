@@ -17,7 +17,7 @@ def remove_current_session(exception):
 @app.route('/states_list', strict_slashes=False)
 def states_list():
     """Get the list of all states"""
-    states = storage.all(State).values()
+    states = sorted(storage.all(State).values(), key=lambda x: x.name)
     print(type(states))
     return render_template('7-states_list.html', states=states)
 
