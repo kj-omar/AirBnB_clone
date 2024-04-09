@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 """Start a Flask web application"""
 from flask import Flask
-from werkzeug.exceptions import BadRequest
 app = Flask(__name__)
 
 
@@ -18,23 +17,22 @@ def hbnb():
 @app.route('/c/<text>', strict_slashes=False)
 def c_text(text):
     text = text.replace("_", " ")
-    return 'C {}'.format(text)
+    return f'C {text}'
 
 
 @app.route('/python', strict_slashes=False, defaults={'text': 'is_cool'})
 @app.route('/python/<text>', strict_slashes=False)
 def python_text(text):
     text = text.replace("_", " ")
-    return 'Python {}'.format(text)
+    return f'Python {text}'
 
 
-@app.route('/number/<n>', strict_slashes=False)
+@app.route('/number/<int:n>', strict_slashes=False)
 def python_number(n):
     try:
-        n = int(n)
-        return '{} is an integer'.format(n)
-    except ValueError:
-        raise BadRequest('{} must be an integer'.format(n))
+        return f'{n} is a number'
+    except TypeError:
+        return f'{n} must be an integer'
 
 
 if __name__ == '__main__':
