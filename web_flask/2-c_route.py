@@ -16,7 +16,7 @@ def hello_hbnb():
     """Display Hello HBNB!"""
     return 'HBNB'
 
-@app.route('/c/<text>')
+@app.route('/c/<text>', script_slashes=False)
 def profile(text):
     text = text.replace('_', ' ')
     return f'C {text}'
