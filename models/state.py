@@ -19,9 +19,12 @@ else:
         name = ""
 
         @property
-        def get_cities(self):
+        def cities(self):
             from models import storage
             """Return the list of City instances"""
-            cities_list = [items for items in
-                           storage.all(City) if City.state_id == self.id]
+            cities_list = []
+            all_cities = storage.all(City)
+            for city in all_cities.values():
+                if city.state_id == self.id:
+                    cities_list.append(city)
             return cities_list
