@@ -28,7 +28,7 @@ def python_text(text):
     return 'Python {}'.format(text)
 
 
-@app.route('/number/<int:n>', strict_slashes=False)
+@app.route('/number/<n>', strict_slashes=False)
 def python_number(n):
     try:
         n = int(n)
