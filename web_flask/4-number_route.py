@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """Start a Flask web application"""
 from flask import Flask
+from werkzeug.exceptions import BadRequest
 app = Flask(__name__)
 
 
@@ -30,9 +31,10 @@ def python_text(text):
 @app.route('/number/<int:n>', strict_slashes=False)
 def python_number(n):
     try:
-        return '{} is an integer'.format(n)
-    except TypeError:
-        return '{} must be an integer'.format(n)
+        n = int(n)
+        return f'{n} is an integer'
+    except ValueError:
+        raise BadRequest(f'{n} must be an integer')
 
 
 if __name__ == '__main__':
