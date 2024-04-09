@@ -18,7 +18,6 @@ def remove_current_session(exception):
 def states_list():
     """Get the list of all states"""
     states = sorted(storage.all(State).values(), key=lambda x: x.name)
-    print(type(states))
     return render_template('7-states_list.html', states=states)
 
 
