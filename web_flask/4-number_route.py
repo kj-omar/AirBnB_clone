@@ -29,8 +29,10 @@ def python_text(text):
 
 @app.route('/number/<int:n>', strict_slashes=False)
 def python_number(n):
-    if isinstance(n, int):
+    try:
         return f'{n} is an integer'
+    except TypeError:
+        return f'{n} must be an integer'
 
 
 if __name__ == '__main__':
