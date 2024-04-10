@@ -20,9 +20,9 @@ class BaseModel:
         updated_at (sqlalchemy DateTime): The datetime of last update.
     """
 
-    id = Column(String(60), primary_key=True, nullable=False unique=True)
-    created_at = Column(DateTime, nullable=False, default=datetime.utcnow())
-    updated_at = Column(DateTime, nullable=False, default=datetime.utcnow())
+    id = Column(String(60), primary_key=True, nullable=False, unique=True)
+    created_at = Column(DateTime, nullable=False, default=datetime.UTC())
+    updated_at = Column(DateTime, nullable=False, default=datetime.UTC())
 
     def __init__(self, *args, **kwargs):
         """Initialize a new BaseModel.
@@ -42,7 +42,7 @@ class BaseModel:
 
     def save(self):
         """Update updated_at with the current datetime."""
-        self.updated_at = datetime.utcnow()
+        self.updated_at = datetime.UTC()
         models.storage.new(self)
         models.storage.save()
 
