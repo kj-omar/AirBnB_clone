@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 """Start a Flask web application"""
-from os import getenv
 from models import storage
 from models.city import City
 from models.state import State
@@ -18,10 +17,13 @@ def remove_current_session(exception):
 
 @app.route('/cities_by_states', strict_slashes=False)
 def cities_by_states():
-    """Get the list of all cities by states"""
+    """Get the list of all states and cities by states"""
     states = sorted(storage.all(State).values(), key=lambda x: x.name)
     for state in states:
         state.cities = sorted(state.cities, key=lambda y: y.name)
+        state.state_ref = state.id
+        for city in state.cities:
+            city.city_ref = city.id
     return render_template('8-cities_by_states.html', states=states)
 
 
