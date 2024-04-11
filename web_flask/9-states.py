@@ -33,7 +33,7 @@ def states_id_found(id):
         if state.id == id:
             state.cities = sorted(state.cities, key=lambda y: y.name)
             return render_template('9-states.html', state=state)
-    return render_template('9-states.html', message='Not found!')
+    return render_template('9-states.html')
 
 
 if __name__ == '__main__':
