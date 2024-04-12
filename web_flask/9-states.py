@@ -14,13 +14,7 @@ def teardown(exception):
     storage.close()
 
 
-@app.route('/states', strict_slashes=False)
-def states_list():
-    """Get the list of all states"""
-    states = storage.all(State)
-    return render_template('9-states.html', states=states)
-
-
+@app.route('/states', defaults={'id': None}, strict_slashes=False)
 @app.route('/states/<id>', strict_slashes=False)
 def states_id_found(id):
     """Get the list of cities related to the state id"""
@@ -28,6 +22,8 @@ def states_id_found(id):
     for state in states:
         if state.id == id:
             return render_template('9-states.html', state=state)
+    if id is None:
+        return render_template('9-states.html', states=states)
     return render_template('9-states.html')
 
 
