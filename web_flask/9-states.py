@@ -21,9 +21,9 @@ def states_id_found(id):
     states = storage.all(State).values()
     for state in states:
         if state.id == id:
-            return render_template('9-states.html', state=state)
+            return render_template('9-states.html', state=state, id=id)
     if id is None:
-        return render_template('9-states.html', states=states)
+        return render_template('9-states.html', states=states, id=id)
     return render_template('9-states.html')
 
 
