@@ -1,5 +1,7 @@
 #!/usr/bin/python3
 
+"""create server"""
+
 from flask import Flask
 
 app = Flask(__name__)
