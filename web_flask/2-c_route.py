@@ -1,14 +1,13 @@
 #!/usr/bin/python3
 """This module starts a Flask web application."""
-
-
 from flask import Flask
+
 
 app = Flask(__name__)
 
 
 @app.route('/', strict_slashes=False)
-def HelloHBNB():
+def hello_hbnb():
     """display Hello HBNB!"""
     return 'Hello HBNB!'
 
@@ -22,8 +21,7 @@ def hbnb():
 @app.route('/c/<text>', strict_slashes=False)
 def c_text(text):
     """display c and replace underscore _ symbols with a space """
-    return 'C' + text.replace('_', ' ')
-
+    return 'C {}'.format(text.replace('_', ' '))
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
