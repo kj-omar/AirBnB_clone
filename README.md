@@ -1,6 +1,15 @@
 <center> <h1>HBNB - The Console</h1> </center>
 
-This repository contains the initial stage of a student project to build a clone of the AirBnB website. This stage implements a backend interface, or console, to manage program data. Console commands allow the user to create, update, and destroy objects, as well as manage file storage. Using a system of JSON serialization/deserialization, storage is persistent between sessions.
+Client Side AirBnB Clone - MySQL
+Welcome to our repository! Here, we've developed a client-side AirBnB clone with MySQL integration. This project features the seamless integration of MySQL storage and the implementation of SQLAlchemy, an Object Relational Mapper (ORM).
+
+About SQLAlchemy
+SQLAlchemy serves as a powerful ORM that abstracts the complexities of storage. It enables us to interact with Python objects effortlessly, without the need to concern ourselves with the underlying storage mechanism.
+
+Features
+MySQL Integration: Our project seamlessly integrates MySQL as the storage backend.
+ORM Implementation: We utilize SQLAlchemy to interact with the database, simplifying data manipulation and retrieval.
+Client-Side AirBnB Clone: This project mimics the functionality of AirBnB on the client-side, offering a user-friendly interface for browsing accommodations.
 
 ---
 
