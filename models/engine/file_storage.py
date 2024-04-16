@@ -60,3 +60,7 @@ class FileStorage:
         if obj:
             del self.all()[obj.__class__.__name__ + '.' + obj.id]
             self.save()
+
+    def close(self):
+        """Reloads storage dictionary from file"""
+        self.reload()
