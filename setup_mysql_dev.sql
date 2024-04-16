@@ -1,4 +1,4 @@
---- script that prepares a MYSQL server for a project
+-- script that prepares a MYSQL server for a project
 
 CREATE DATABASE IF NOT EXIST hbnb_dev_db;
 CREATE USER IF NOT EXIST 'hbnb_dev'@'localhost' IDENTIFIED BY 'hbnb_dev_pwd';
