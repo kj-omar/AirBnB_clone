@@ -128,13 +128,49 @@ class HBNBCommand(cmd.Cmd):
         if not args:
             print("** class name missing **")
             return
-        elif args not in HBNBCommand.classes:
+        # throw out empty strings that may result from split
+        parts = list(filter(lambda x: x != '', args.split(' ')))
+        class_name = parts[0]
+        if class_name not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
-        new_instance = HBNBCommand.classes[args]()
+        params = parts[1:]
+        new_instance = HBNBCommand.classes[class_name]()
+        if not params:
+            pass
+        else:
+            for param in params:
+                if '=' not in param:
+                    continue
+                param_parts = param.split('=')
+                if not len(param_parts) == 2:  # exactly one =
+                    continue
+                key, value = param_parts
+                if (value.startswith('"') and value[-1] == '"'):  # string
+                    value = value.strip('"')
+                    value = value.replace('_', ' ')  # underscores to spaces
+                    # inner double quotes must be escaped
+                    quotes = value.count('"')
+                    escaped_quotes = value.count('\\"')
+                    if (quotes > 0) and (quotes != escaped_quotes):
+                        continue
+                elif '.' in value:  # possible float
+                    try:
+                        value = float(value)
+                    except ValueError:
+                        continue
+                else:  # integer
+                    try:
+                        value = int(value)
+                    except ValueError:
+                        continue
+                try:
+                    new_instance.__getattribute__(key)
+                    setattr(new_instance, key, value)
+                except AttributeError:
+                    pass
         storage.save()
         print(new_instance.id)
-        storage.save()
 
     def help_create(self):
         """Help information for the create method"""
