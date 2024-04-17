@@ -5,7 +5,7 @@ Module creates a MySQL database engine
 
 from os import getenv
 from sqlalchemy.orm import sessionmaker, scoped_session
-from sqlalchemy import column, create_engine
+from sqlalchemy import Column, create_engine
 from models.base_model import Base
 from models.city import City
 from models.user import User
@@ -50,7 +50,7 @@ class DBStorage:
             for _cls in self.__classes:
                 all_objs = self.__session.query(_cls)
                 for _obj in all_objs:
-                    print(f"Bruh I tried with {_obj.__str__()}")
+                 print(f"Bruh I tried with {_obj.__str__()}")
                     k = f"{_cls}.{_obj.id}"
                     cls_objs_dict[k] = _obj
         else:
@@ -80,11 +80,12 @@ class DBStorage:
         if obj is not None:
             self.__session.delete(obj)
 
-    def reload(self):
-        """
-        Creates all tables in current db
-        """
-        Base.metadata.create_all(self.__engine)
+   def reload(self):
+    """
+    Creates all tables in current db and initializes a new session if needed
+    """
+    Base.metadata.create_all(self.__engine)
+    if self.__session is None or not self.__session.is_active:
         Session = scoped_session(
             sessionmaker(
                 autoflush=False,
@@ -94,3 +95,4 @@ class DBStorage:
             )
         )
         self.__session = Session()
+
