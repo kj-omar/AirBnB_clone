@@ -29,6 +29,17 @@ def states(id):
     for state in states_val:
         if state.id == id:
             return render_template("9-states.html", state=state)
+    return """<!DOCTYPE html>
+<HTML lang="en">
+    <HEAD>
+        <TITLE>HBNB</TITLE>
+    </HEAD>
+    <BODY>
+
+        <H1>Not found!</H1>
+
+    </BODY>
+</HTML>"""
 
     
 
