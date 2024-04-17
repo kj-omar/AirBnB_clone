@@ -6,6 +6,7 @@ from datetime import datetime
 
 class BaseModel:
     """A base class for all hbnb models"""
+
     def __init__(self, *args, **kwargs):
         """Instatntiates a new model"""
         if not kwargs:
@@ -21,6 +22,25 @@ class BaseModel:
                                                      '%Y-%m-%dT%H:%M:%S.%f')
             del kwargs['__class__']
             self.__dict__.update(kwargs)
+
+    def add_attr(self, attr_name, attr_value):
+        """ Takes an attribute name and a value and updates it """
+        try:
+            if attr_value[0] == "\"" and attr_value[-1] == "\"":
+                st = attr_value.strip("\"")
+                argu = ""
+                sp = ""
+                for word in st.split('_'):
+                    word = sp + word
+                    argu += word
+                    sp = " "
+                self.__dict__[attr_name] = argu
+            elif "." in attr_value:
+                self.__dict__[attr_name] = float(attr_value)
+            else:
+                self.__dict__[attr_name] = int(attr_value)
+        except KeyError:
+            self.__dict__[attr_name] = str(attr_value)
 
     def __str__(self):
         """Returns a string representation of the instance"""
