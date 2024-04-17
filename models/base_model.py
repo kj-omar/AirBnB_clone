@@ -5,6 +5,7 @@ import uuid
 
 Base = declarative_base()
 
+
 class BaseModel:
     """
     Base class for all models.
