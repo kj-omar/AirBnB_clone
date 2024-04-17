@@ -30,7 +30,7 @@ class FileStorage:
         '''deletes object from __object'''
         print("befor delete", FileStorage.__objects)
         key = f"{obj.to_dict()['__class__']}.{obj.id}"
-        if key is not None and key in self.__objects.keys():
+        if key is not None and key in self.__objects.keys:
             del FileStorage.__objects[key]
             self.save()
             print()
