@@ -2,16 +2,48 @@
 """This module defines a class to manage file storage for hbnb clone"""
 import json
 
+from models.base_model import BaseModel
+from models.user import User
+from models.place import Place
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.review import Review
+
 
 class FileStorage:
     """This class manages storage of hbnb models in JSON format"""
     __file_path = 'file.json'
     __objects = {}
+    classes = {
+            'User': User,
+            'State': State, 
+            'City': City,
+            'Amenity': Amenity
+            }
 
     def all(self, cls=None):
         """Returns the list of object of one type of class"""
-        print("bbbbbbbbbfffffffffgggg")
-        return FileStorage.__objects[cls]
+        if cls is not None:
+            cls_dic = {}
+            for clas in self.classes:
+                if cls == self.classes[clas]:
+                    cls = clas
+                    for key in self.__objects:
+                        if cls in key:
+                            cls_dic[key] = self.__objects[key]
+            return cls_dic
+        else:
+            return FileStorage.__objects
+
+
+            if isinstance(cls, str):
+                cls = globals().get(cls)
+            if cls and issubclass(cls, BaseModel):
+                cls_dict = {k:v for k,
+                        v in self.__objects.item() if isinstance(v, cls)}
+                return cls_dict
+        return FileStorage.__objects
 
     def new(self, obj):
         """Adds new object to storage dictionary"""
@@ -28,23 +60,14 @@ class FileStorage:
 
     def delete(self, obj=None):
         '''deletes object from __object'''
-        print("befor delete", FileStorage.__objects)
         key = f"{obj.to_dict()['__class__']}.{obj.id}"
-        if key is not None and key in self.__objects.keys:
+        if obj is not None and key in self.__objects:
             del FileStorage.__objects[key]
-            self.save()
-            print()
-            print("after delete", FileStorage.__objects)
+        else:
+            return
 
     def reload(self):
         """Loads storage dictionary from file"""
-        from models.base_model import BaseModel
-        from models.user import User
-        from models.place import Place
-        from models.state import State
-        from models.city import City
-        from models.amenity import Amenity
-        from models.review import Review
 
         classes = {
                     'BaseModel': BaseModel, 'User': User, 'Place': Place,
