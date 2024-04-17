@@ -14,7 +14,7 @@ def tear_down(exception):
 
 
 @app.route('/states_list', strict_slashes=False)
-def list_state(states = storage.all(State)):
+def list_state():
     """states"""
     states = storage.all("State").values()
     states = sorted(states, key=lambda state: state.name)
