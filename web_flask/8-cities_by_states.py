@@ -6,7 +6,7 @@ from flask import Flask, render_template, abort
 from models import storage
 from models.state import State
 
-app = Flask(__name__, template_folder="web_flask/templates")
+app = Flask(__name__)
 
 
 @app.teardown_appcontext
