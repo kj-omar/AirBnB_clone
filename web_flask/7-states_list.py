@@ -1,36 +1,23 @@
 #!/usr/bin/python3
-"""
-This module defines a Flask application that serves a
-"Hello HBNB!" message.
-"""
+"""Start a Flask web application"""
 
-from flask import Flask
-from flask.templating import render_template
+
+from flask import Flask, render_template, abort
 from models import storage
+from models.state import State
 
-app = Flask("__name__", template_folder="web_flask/templates")
-
+app = Flask(__name__)
 
 @app.teardown_appcontext
-def teardown(exception):
-    """
-    Closes the current SQLAlchemy session.
-    """
-    try:
-        storage.close()
-    except exception as e:
-        print(e)
+def tear_down(exception):
+    storage.close()
 
 
-@app.route("/states_list", strict_slashes=False)
-def state_list():
-    """
-    Renders an HTML page that displays a list of all State objects.
-    """
-    states = storage.all("State").values()
-    states = sorted(states, key=lambda state: state.name)
-    return render_template("7-states_list.html", states=states)
+@app.route('/states_list', strict_slashes=False)
+def list_state(states = storage.all(State)):
+    """states"""
+    return render_template("7-states_list.html", states=states.values())
 
 
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)
