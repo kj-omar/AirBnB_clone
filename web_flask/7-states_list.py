@@ -16,8 +16,8 @@ def tear_down(exception):
 @app.route('/states_list', strict_slashes=False)
 def list_state(states = storage.all(State)):
     """states"""
-    states
-    return render_template("7-states_list.html", states=states.values())
+    states = sorted(states, key=lambda state: state.name)
+    return render_template("7-states_list.html", states)
 
 
 if __name__ == '__main__':
