@@ -10,6 +10,7 @@ class City(BaseModel, Base):
     name = ""
 
     __tablename__ = "cities"
+
     name = Column(
         String(length=128),
         nullable=False
