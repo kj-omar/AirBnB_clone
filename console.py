@@ -53,8 +53,6 @@ class HBNBCommand(cmd.Cmd):
                         value = value.replace("_", " ")
                         try:
                             value = eval(value)
-                        except:
-                            pass
                         setattr(new_instance, key, value)
                 except (ValueError, IndexError):
                     pass
