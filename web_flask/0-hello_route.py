@@ -10,7 +10,7 @@ def hello():
     Return a giving string
 
     """
-    return render_template("10-hbnb_filters.html")
+    return "Hello HBNB!"
 
 
 if __name__ == "__main__":
