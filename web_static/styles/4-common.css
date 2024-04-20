@@ -1,13 +1,28 @@
 body {
+<<<<<<< HEAD
+    margin: 0;
+    padding: 0;
+    color: #484848;
+    font-size: 14px;
+    font-family: Circular,"Helvetica Neue",Helvetica,Arial,sans-serif;
+=======
 	margin:0px;
 	padding:0px;
 
 	color: #484848;
 	font-size: 14px;
 	font-family: Circular,"Helvetica Neue",Helvetica,Arial,sans-serif;
+>>>>>>> 8dce1f35a43b2c2bb664ec01f78bfef42b605625
 }
 
 .container {
     max-width: 1000px;
+<<<<<<< HEAD
+    margin-top: 30px;
+    margin-bottom: 30px;
+    margin-left: auto;
+    margin-right: auto;
+=======
     margin: 30px auto;
+>>>>>>> 8dce1f35a43b2c2bb664ec01f78bfef42b605625
 }

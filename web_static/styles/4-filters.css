@@ -1,4 +1,30 @@
 .filters {
+<<<<<<< HEAD
+    background-color: white;
+    height: 70px;
+    width: 100%;
+    border: 1px solid #DDDDDD;
+    border-radius: 4px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+section.filters button{
+    font-size: 18px;
+    color: white;
+    background-color: #FF5A5F;
+    height: 48px;
+    border: 0px;
+    border-radius: 4px;
+    width: 20%;
+    margin-right: 30px;
+    opacity: 1;
+}
+
+section.filters button:hover {
+    opacity: 0.9;
+=======
 	background-color: white;
 	height: 70px;
 	width: 100%;
@@ -24,4 +50,5 @@ button {
 
 button:hover {
 	opacity: 90%;
+>>>>>>> 8dce1f35a43b2c2bb664ec01f78bfef42b605625
 }

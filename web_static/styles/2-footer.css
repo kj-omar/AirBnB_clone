@@ -1,4 +1,16 @@
 footer {
+<<<<<<< HEAD
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: #00FF00;
+    height: 60px;
+}
+
+footer p {
+    text-align: center;
+    margin: 20px;
+=======
 	position: fixed;
 	bottom: 0;
 	background-color: #00FF00;
@@ -6,4 +18,5 @@ footer {
 	width: 100%;
 	text-align: center;
 	line-height: 30px;
+>>>>>>> 8dce1f35a43b2c2bb664ec01f78bfef42b605625
 }
