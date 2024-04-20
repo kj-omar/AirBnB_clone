@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-# Script starts flask application, listening 0.0.0.0:5000.
+""" Script starts flask application, listening 0.0.0.0:5000 """
 
 
 from flask import Flask
@@ -7,7 +7,8 @@ from flask import Flask
 app = Flask(__name__)
 
 @app.route('/', strict_slashes=False)
-def home{}: #view for home
+def home{}:
+    """ my web server home page """
     return 'Hello HBNB!'
 
 if __name__ == "__main__":
