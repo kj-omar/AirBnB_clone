@@ -1,6 +1,6 @@
 #!/usr/bin/python3
-# Starts a flask web application
-# / displays sth and  /hbnb displays also
+"""Starts a flask web application
+ / displays sth and  /hbnb displays also"""
 
 from flask import Flask, render_template
 
@@ -25,6 +25,7 @@ def c_text(text):
     text = text.replace('_', ' ')
     return "c {}".format(text)
 
+
 @app.route('/python/', strict_slashes=False)
 @app.route('/python/<text>', strict_slashes=False)
 def display_python_text(text='is cool'):
@@ -36,6 +37,7 @@ def display_python_text(text='is cool'):
 def is_number(n):
     """Displays 'n is a number if it is true"""
     return "{} is a number".format(n)
+
 
 @app.route("/number_template/<int:n>", strict_slashes=False)
 def number_template(n):
