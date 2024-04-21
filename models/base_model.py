@@ -16,18 +16,19 @@ class BaseModel:
         String(length=60),
         primary_key=True,
         nullable=False
+        default=str(uuid.uuid.uuid4())
     )
 
     created_at = Column(
         DateTime,
         nullable=False,
-        default=datetime.utcnow()
+        default=datetime.now()
     )
 
     updated_at = Column(
         DateTime,
         nullable=False,
-        default=datetime.utcnow()
+        default=datetime.now()
     )
 
     def __init__(self, *args, **kwargs):
@@ -67,15 +68,6 @@ class BaseModel:
 
     def to_dict(self):
         """Convert instance into dict format"""
-        # dictionary.update(self.__dict__)
-        # if dictionary.get('_sa_instance_state') is not None:
-        #     dictionary.pop('_sa_instance_state', None)
-        #     print('Popped')
-        # dictionary.update({'__class__':
-        #                    (str(type(self)).split('.')[-1]).split('\'')[0]})
-        # dictionary['created_at'] = self.created_at.isoformat()
-        # dictionary['updated_at'] = self.updated_at.isoformat()
-
         dictionary = self.__dict__.copy()
         if dictionary.get('_sa_instance_state'):
             dictionary.pop('_sa_instance_state')
@@ -84,3 +76,10 @@ class BaseModel:
         dictionary['created_at'] = self.created_at.isoformat()
         dictionary['updated_at'] = self.updated_at.isoformat()
         return dictionary
+
+    def delete(self):
+        """
+        Deletes current instance
+        """
+        import models
+        models.storage.delete(self)
