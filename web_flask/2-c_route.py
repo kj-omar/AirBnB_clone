@@ -1,6 +1,6 @@
 #!/usr/bin/python3
-# Starts a flask web application
-# / displays sth and  /hbnb displays also
+"""Starts a flask web application
+/ displays sth and  /hbnb displays also"""
 
 from flask import Flask
 
