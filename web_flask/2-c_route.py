@@ -9,14 +9,16 @@ app = Flask(__name__)
 
 
 @app.route('/', strict_slashes=False)
-def hello{}:
-    """A web page displaying"""
-    return 'Hello HBNB!'
+def index():
+    """A web page displaying
+    """
+    return "Hello HBNB!"
 
 
 @app.route('/hbnb', strict_slashes=False)
-def hbnb{}:
-    """hbnb web page, displaying HBNB"""
+def hbnb():
+    """hbnb web page, displaying HBNB
+    """
     return 'HBNB'
 
 
