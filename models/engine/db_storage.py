@@ -13,10 +13,13 @@ from os import getenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 
+
 class DBStorage:
+    """ create database table """
     __engine = None
     __session = None
 
+    
     def __init__(self):
         """ Initialize DBStorage """
         self.__engine = create_engine('mysql+mysqldb://{}:{}@localhost/{}'
@@ -38,7 +41,7 @@ class DBStorage:
                 key = "{}.{}".format(obj.__class__.__name__, obj.id)
                 obj_dict[key] = obj
         else:
-            for cls in [State, City, User, Place, Review, Amenity]:
+            for cls in [State, City]
                 query_result = self.__session.query(cls).all()
                 for obj in query_result:
                     key = "{}.{}".format(obj.__class__.__name__, obj.id)
@@ -75,10 +78,3 @@ class DBStorage:
         """ Close the current session """
         if self.__session:
             self.__session.close()
-
-
-    @property
-    def session(self):
-        """ Getter for session """
-        return self.__session
-
