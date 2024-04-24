@@ -30,7 +30,7 @@ class BaseModel:
     def __init__(self, *args, **kwargs):
         """Instatntiates a new model"""
         if not kwargs:
-            self.id = str(uuid.uuid4())
+            self.id = uuid.uuid4()
             self.created_at = datetime.now()
             self.updated_at = datetime.now()
         else:
@@ -42,7 +42,7 @@ class BaseModel:
             except (KeyError, ValueError):
                 kwargs["updated_at"] = kwargs["created_at"] = datetime.now()
 
-            self.__dict__["id"] = str(uuid.uuid4())
+            self.__dict__["id"] = uuid.uuid4()
             if '__class__' in kwargs.keys():
                 del kwargs['__class__']
             self.__dict__.update(kwargs)

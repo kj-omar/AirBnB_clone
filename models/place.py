@@ -1,10 +1,17 @@
 #!/usr/bin/python3
 """ Place Module for HBNB project """
-from sqlalchemy import Column, Float, ForeignKey, Integer, String
+from sqlalchemy import Column, Float, ForeignKey, Integer, String, Table
 from sqlalchemy.orm import backref, relationship
 from models import storage
 from models.base_model import Base, BaseModel
 from os import getenv
+
+place_amenity = Table(
+    'place_amenity',
+    Base.metadata,
+    Column('place_id', ForeignKey('places.id'), primary_key=True),
+    Column('amenity_id', ForeignKey('amenities.id'), primary_key=True)
+)
 
 
 class Place(BaseModel, Base):
@@ -60,6 +67,7 @@ class Place(BaseModel, Base):
 
     if getenv('HBNB_TYPE_STORAGE') == 'db':
         reviews = relationship('Review', backref=backref('place'), cascade='all, delete')
+        amenities = relationship('Amenity', secondary=place_amenity, viewonly=False)
 
     elif getenv('HBNB_TYPE_STORAGE') == 'file':
         @property
@@ -72,3 +80,26 @@ class Place(BaseModel, Base):
                 if v['place_id'] == self.id:
                     my_reviews.append(v)
             return (my_reviews)
+
+        @property
+        def amenities(self):
+            """Returns list of amenities of a place"""
+            from models.amenity import Amenity
+            my_amenities = []
+            all_amenities = storage.all(Amenity)
+            for _id in self.amenity_ids:
+                k = f"Amenity.{_id}"
+                my_amenities.append(all_amenities[k])
+            return (my_amenities)
+
+        @amenities.setter
+        def amenities(self, obj):
+            """Appends Amenity.id to amenity_ids"""
+            if obj.__class__.__name__ != 'Amenity':
+                pass
+            else:
+                from models.amenity import Amenity
+                all_amenities = storage.all(Amenity)
+                for v in all_amenities.values():
+                    if v['place_id'] == self.id:
+                        self.amenity_ids.append(v.id)

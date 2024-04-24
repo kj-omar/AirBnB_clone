@@ -10,7 +10,8 @@ class User(BaseModel, Base):
     __tablename__ = "users"
     email = Column(
         String(length=128),
-        nullable=False
+        nullable=False,
+        unique=True
     )
     password = Column(
         String(length=128),
@@ -18,11 +19,11 @@ class User(BaseModel, Base):
     )
     first_name = Column(
         String(length=128),
-        nullable=False
+        nullable=True
     )
     last_name = Column(
         String(length=128),
-        nullable=False
+        nullable=True
     )
     places = relationship('Place', backref=backref('user'), cascade='all, delete')
     reviews = relationship('Review', backref=backref('user'), cascade='all, delete')

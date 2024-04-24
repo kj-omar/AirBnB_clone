@@ -20,22 +20,22 @@ class DBStorage:
 
     def __init__(self):
         """Instaniates a DBStorage instance"""
-        user = getenv('HBNB_MYSQL_USER')
-        password = getenv('HBNB_MYSQL_PWD')
-        hostname = getenv('HBNB_MYSQL_HOST')
-        database = getenv('HBNB_MYSQL_DB')
+        # user = getenv('HBNB_MYSQL_USER')
+        # password = getenv('HBNB_MYSQL_PWD')
+        # hostname = getenv('HBNB_MYSQL_HOST')
+        # database = getenv('HBNB_MYSQL_DB')
         _env = getenv('HBNB_ENV')
 
-        self.__engine = create_engine(
-            "mysql+mysqldb://{}:{}@{}/{}"
-            .format(user, password, hostname, database),
-            pool_pre_ping=True, echo=False
-        )
+        # self.__engine = create_engine(
+        #     "mysql+mysqldb://{}:{}@{}/{}"
+        #     .format(user, password, hostname, database),
+        #     pool_pre_ping=True, echo=False
+        # )
 
         if _env == 'test':
             Base.metadata.drop_all(bind=self.__engine)
-        # db = "sqlite:////home/johnian/ALX/AirBnB_clone_v2/models/engine/socialDB.db"
-        # self.__engine = create_engine(db, pool_pre_ping=True)
+        db = "sqlite:///socialDB.db"
+        self.__engine = create_engine(db, pool_pre_ping=True)
 
     def all(self, cls=None):
         """Returns all instances of type"""
@@ -73,8 +73,9 @@ class DBStorage:
 
     def delete(self, obj=None):
         """Deletes obj from current db"""
-        self.__session.delete(obj)
-        self.save()
+        if obj:
+            self.__session.delete(obj)
+            self.save()
 
     def reload(self):
         """
