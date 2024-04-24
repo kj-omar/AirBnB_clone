@@ -8,6 +8,8 @@ Routes:
 from models import storage
 from flask import Flask
 from flask import render_template
+from models.state import state
+from sqlalchemy.orm import scoped_session, sessionmaker
 
 app = Flask(__name__)
 
