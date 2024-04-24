@@ -59,7 +59,7 @@ class Place(BaseModel, Base):
     amenity_ids = []
 
     if getenv('HBNB_TYPE_STORAGE') == 'db':
-        reviews = relationship('Review', backref=backref('place'))
+        reviews = relationship('Review', backref=backref('place'), cascade='all, delete')
 
     elif getenv('HBNB_TYPE_STORAGE') == 'file':
         @property
