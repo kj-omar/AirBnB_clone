@@ -2,7 +2,6 @@
 """ Place Module for HBNB project """
 from sqlalchemy import Column, Float, ForeignKey, Integer, String, Table
 from sqlalchemy.orm import backref, relationship
-from models import storage
 from models.base_model import Base, BaseModel
 from os import getenv
 
@@ -74,6 +73,7 @@ class Place(BaseModel, Base):
         def reviews(self):
             """Returns list of reviews of a place"""
             from models.review import Review
+            from models import storage
             my_reviews = []
             all_reviews = storage.all(Review)
             for v in all_reviews.values():
@@ -84,6 +84,7 @@ class Place(BaseModel, Base):
         @property
         def amenities(self):
             """Returns list of amenities of a place"""
+            from models import storage
             from models.amenity import Amenity
             my_amenities = []
             all_amenities = storage.all(Amenity)
@@ -95,6 +96,7 @@ class Place(BaseModel, Base):
         @amenities.setter
         def amenities(self, obj):
             """Appends Amenity.id to amenity_ids"""
+            from models import storage
             if obj.__class__.__name__ != 'Amenity':
                 pass
             else:

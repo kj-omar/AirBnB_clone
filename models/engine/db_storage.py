@@ -20,22 +20,23 @@ class DBStorage:
 
     def __init__(self):
         """Instaniates a DBStorage instance"""
-        # user = getenv('HBNB_MYSQL_USER')
-        # password = getenv('HBNB_MYSQL_PWD')
-        # hostname = getenv('HBNB_MYSQL_HOST')
-        # database = getenv('HBNB_MYSQL_DB')
+        user = getenv('HBNB_MYSQL_USER')
+        password = getenv('HBNB_MYSQL_PWD')
+        hostname = getenv('HBNB_MYSQL_HOST')
+        database = getenv('HBNB_MYSQL_DB')
         _env = getenv('HBNB_ENV')
 
-        # self.__engine = create_engine(
-        #     "mysql+mysqldb://{}:{}@{}/{}"
-        #     .format(user, password, hostname, database),
-        #     pool_pre_ping=True, echo=False
-        # )
+        self.__engine = create_engine(
+            "mysql+mysqldb://{}:{}@{}/{}"
+            .format(user, password, hostname, database),
+            pool_pre_ping=True, echo=False
+        )
 
         if _env == 'test':
             Base.metadata.drop_all(bind=self.__engine)
-        db = "sqlite:///socialDB.db"
-        self.__engine = create_engine(db, pool_pre_ping=True)
+        # db = "sqlite:///socialDB.db"
+        # self.__engine = create_engine(db, pool_pre_ping=True)
+        self.reload()
 
     def all(self, cls=None):
         """Returns all instances of type"""
@@ -64,18 +65,20 @@ class DBStorage:
         if self.__session is None:
             self.reload()
         self.__session.add(obj)
-        self.save()
+        print('we in new')
+        self.__session.flush()
 
     def save(self):
         """Commits all changes to current db"""
+        if self.__session is None:
+            self.reload()
         self.__session.commit()
-        self.__session.close()
+        print('savin donne')
 
     def delete(self, obj=None):
         """Deletes obj from current db"""
         if obj:
             self.__session.delete(obj)
-            self.save()
 
     def reload(self):
         """
@@ -88,10 +91,11 @@ class DBStorage:
         from models.user import User
         from models.review import Review
         Base.metadata.create_all(self.__engine)
-        Session = scoped_session(
-            sessionmaker(
-                bind=self.__engine,
-                expire_on_commit=False
-            )
-        )
+        # self.__session = scoped_session(
+        #     sessionmaker(
+        #         bind=self.__engine,
+        #         expire_on_commit=False
+        #     )
+        # )()
+        Session = sessionmaker(self.__engine)
         self.__session = Session()
