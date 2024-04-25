@@ -8,17 +8,23 @@ from models.base_model import Base, BaseModel
 
 class State(BaseModel, Base):
     """ State class """
-    __tablename__ = "states"
-
-    name = Column(
-        String(length=128),
-        nullable=False
-    )
-
     if getenv('HBNB_TYPE_STORAGE') == 'db':
-        cities = relationship('City', backref=backref('state'), cascade='all, delete')
+        __tablename__ = "states"
 
-    elif getenv('HBNB_TYPE_STORAGE') == 'file':
+        name = Column(
+            String(length=128),
+            nullable=False
+        )
+
+        cities = relationship(
+            'City',
+            backref=backref('state'),
+            cascade='all, delete'
+        )
+
+    else:
+        name = ""
+
         @property
         def cities(self):
             """

@@ -4,9 +4,9 @@ from os import getenv
 from models.engine.db_storage import DBStorage
 from models.engine.file_storage import FileStorage
 
-if getenv('HBNB_TYPE_STORAGE') == 'file':
-    storage = FileStorage()
-    storage.reload()
-elif getenv('HBNB_TYPE_STORAGE') == 'db':
+if getenv('HBNB_TYPE_STORAGE') == 'db':
     storage = DBStorage()
+    storage.reload()
+else:
+    storage = FileStorage()
     storage.reload()

@@ -49,7 +49,6 @@ class BaseModel:
             if '__class__' in kwargs.keys():
                 del kwargs['__class__']
             self.__dict__.update(kwargs)
-
         storage.new(self)
 
     def __str__(self):
@@ -59,6 +58,10 @@ class BaseModel:
         if dictionary['_sa_instance_state']:
             dictionary.pop('_sa_instance_state')
         return '[{}] ({}) {}'.format(cls, self.id, dictionary)
+
+    def __repr__(self) -> str:
+        """Returns an official string representation"""
+        return (self.__str__())
 
     def save(self):
         """Updates updated_at with current time when instance is changed"""

@@ -1,0 +1,7 @@
+#!/bin/bash
+unset HBNB_MYSQL_USER
+unset HBNB_MYSQL_PWD
+unset HBNB_MYSQL_HOST
+unset HBNB_MYSQL_DB
+unset HBNB_TYPE_STORAGE
+unset HBNB_ENV

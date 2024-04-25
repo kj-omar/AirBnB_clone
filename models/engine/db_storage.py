@@ -1,14 +1,11 @@
 #!/usr/bin/python3
-
+"""
+Module defines mysql db wrapped in sqlalchemy orm
+"""
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 from models.base_model import Base
 from os import getenv
-
-
-"""
-Module defines mysql db wrapped in sqlalchemy orm
-"""
 
 
 class DBStorage:
@@ -36,7 +33,6 @@ class DBStorage:
             Base.metadata.drop_all(bind=self.__engine)
         # db = "sqlite:///socialDB.db"
         # self.__engine = create_engine(db, pool_pre_ping=True)
-        self.reload()
 
     def all(self, cls=None):
         """Returns all instances of type"""
@@ -65,7 +61,6 @@ class DBStorage:
         if self.__session is None:
             self.reload()
         self.__session.add(obj)
-        print('we in new')
         self.__session.flush()
 
     def save(self):
@@ -73,7 +68,6 @@ class DBStorage:
         if self.__session is None:
             self.reload()
         self.__session.commit()
-        print('savin donne')
 
     def delete(self, obj=None):
         """Deletes obj from current db"""
@@ -91,11 +85,9 @@ class DBStorage:
         from models.user import User
         from models.review import Review
         Base.metadata.create_all(self.__engine)
-        # self.__session = scoped_session(
-        #     sessionmaker(
-        #         bind=self.__engine,
-        #         expire_on_commit=False
-        #     )
-        # )()
-        Session = sessionmaker(self.__engine)
-        self.__session = Session()
+        self.__session = scoped_session(
+            sessionmaker(
+                bind=self.__engine,
+                expire_on_commit=False
+            )
+        )

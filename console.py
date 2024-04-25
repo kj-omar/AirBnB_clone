@@ -268,10 +268,11 @@ class HBNBCommand(cmd.Cmd):
             #     if k.split('.')[0] == args:
             #         print_list.append(str(v))
             from models import storage
-            print_list = storage.all(eval(args))
+            for v in storage.all(eval(args)).values():
+                print_list.append(v)
         else:
-            for k, v in storage.all().items():
-                print_list.append(str(v))
+            for v in storage.all().values():
+                print_list.append(v)
 
         print(print_list)
 
