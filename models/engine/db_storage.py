@@ -1,8 +1,7 @@
 #!/usr/bin/python3
 """
-Module defines class for defining mysql storage engine
+Module defines mysql db wrapped in sqlalchemy orm
 """
-
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 from models.base_model import Base
@@ -11,17 +10,13 @@ from os import getenv
 
 class DBStorage:
     """
-    MySQL sqlalchemy mappped class
+    Module defines db to map classes onto mysqldb
     """
-
     __engine = None
     __session = None
 
     def __init__(self):
-        """
-        Instaniates a DBStorage object
-        """
-
+        """Instaniates a DBStorage instance"""
         user = getenv('HBNB_MYSQL_USER')
         password = getenv('HBNB_MYSQL_PWD')
         hostname = getenv('HBNB_MYSQL_HOST')
@@ -31,74 +26,68 @@ class DBStorage:
         self.__engine = create_engine(
             "mysql+mysqldb://{}:{}@{}/{}"
             .format(user, password, hostname, database),
-            pool_pre_ping=True, echo=True
+            pool_pre_ping=True, echo=False
         )
 
         if _env == 'test':
             Base.metadata.drop_all(bind=self.__engine)
+        # db = "sqlite:///socialDB.db"
+        # self.__engine = create_engine(db, pool_pre_ping=True)
 
     def all(self, cls=None):
-        """
-        Returns all objects of type cls in db
-        """
-        from models.city import City
+        """Returns all instances of type"""
         from models.state import State
-        from models.review import Review
-        from models.user import User
-        from models.amenity import Amenity
-        from models.review import Review
+        from models.city import City
         from models.place import Place
-        __models = [User, Place, Amenity, City, Review, State]
-        cls_objs_dict = {}
-        if cls is None:
-            for _cls in __models:
-                all_objs = self.__session.query(_cls)
-                for _obj in all_objs:
-                    key = f"{str(_cls)}.{_obj.id}"
-                    cls_objs_dict[key] = _obj
+        from models.amenity import Amenity
+        from models.user import User
+        from models.review import Review
+        _classes = [State, City, Place, Amenity, User, Review]
+        all_obj = {}
+        if self.__session is None:
+            self.reload()
+        if cls:
+            for obj in self.__session.query(cls):
+                all_obj[obj.__class__.__name__ + "." + obj.id] = obj
         else:
-            all_objs = self.__session.query(cls)
-            for _obj in all_objs:
-                key = f"{str(cls)}.{_obj.id}"
-                cls_objs_dict[key] = _obj
+            for model in _classes:
+                for obj in self.__session.query(model):
+                    all_obj[obj.__class__.__name__ + "." + obj.id] = obj
 
-        return (cls_objs_dict)
+        return (all_obj)
 
     def new(self, obj):
-        """
-        Adds obj to current db session
-        """
-        if obj:
-            self.__session.add(obj)
+        """Adds obj to current db"""
+        if self.__session is None:
+            self.reload()
+        self.__session.add(obj)
+        self.__session.flush()
 
     def save(self):
-        """
-        Commits all changes to current db session
-        """
+        """Commits all changes to current db"""
+        if self.__session is None:
+            self.reload()
         self.__session.commit()
 
     def delete(self, obj=None):
-        """
-        Deletes obj from current db session
-        """
+        """Deletes obj from current db"""
         if obj:
             self.__session.delete(obj)
 
     def reload(self):
         """
-        Creates all table in db
+        Creates all mapped tables into db and a new session
         """
-        from models.city import City
         from models.state import State
-        from models.review import Review
-        from models.user import User
-        from models.amenity import Amenity
-        from models.review import Review
+        from models.city import City
         from models.place import Place
-
+        from models.amenity import Amenity
+        from models.user import User
+        from models.review import Review
         Base.metadata.create_all(self.__engine)
-
-        session = scoped_session(
-            sessionmaker(bind=self.__engine, expire_on_commit=False)
+        self.__session = scoped_session(
+            sessionmaker(
+                bind=self.__engine,
+                expire_on_commit=False
+            )
         )
-        self.__session = session()

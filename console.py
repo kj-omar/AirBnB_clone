@@ -2,14 +2,6 @@
 """ Console Module """
 import cmd
 import sys
-from models.base_model import BaseModel
-from models.__init__ import storage
-from models.user import User
-from models.place import Place
-from models.state import State
-from models.city import City
-from models.amenity import Amenity
-from models.review import Review
 
 
 class HBNBCommand(cmd.Cmd):
@@ -17,6 +9,14 @@ class HBNBCommand(cmd.Cmd):
 
     # determines prompt for interactive/non-interactive modes
     prompt = '(hbnb) ' if sys.__stdin__.isatty() else ''
+    from models.base_model import BaseModel
+    from models import storage
+    from models.user import User
+    from models.place import Place
+    from models.state import State
+    from models.city import City
+    from models.amenity import Amenity
+    from models.review import Review
 
     classes = {
                'BaseModel': BaseModel, 'User': User, 'Place': Place,
@@ -128,6 +128,7 @@ class HBNBCommand(cmd.Cmd):
         # print(f"{args}")
     def do_create(self, args):
         """Create an object of any class with given parameters"""
+        from models import storage
         if not args:
             print("** class name missing **")
             return
@@ -202,7 +203,8 @@ class HBNBCommand(cmd.Cmd):
 
         key = c_name + "." + c_id
         try:
-            print(storage._FileStorage__objects[key])
+            from models import storage
+            print(storage.all()[key])
         except KeyError:
             print("** no instance found **")
 
@@ -234,6 +236,7 @@ class HBNBCommand(cmd.Cmd):
         key = c_name + "." + c_id
 
         try:
+            from models import storage
             del (storage.all()[key])
             storage.save()
         except KeyError:
@@ -246,6 +249,14 @@ class HBNBCommand(cmd.Cmd):
 
     def do_all(self, args):
         """ Shows all objects, or all objects of a class"""
+        from models.base_model import BaseModel
+        from models import storage
+        from models.user import User
+        from models.place import Place
+        from models.state import State
+        from models.city import City
+        from models.amenity import Amenity
+        from models.review import Review
         print_list = []
 
         if args:
@@ -253,12 +264,15 @@ class HBNBCommand(cmd.Cmd):
             if args not in HBNBCommand.classes:
                 print("** class doesn't exist **")
                 return
-            for k, v in storage.all().items():
-                if k.split('.')[0] == args:
-                    print_list.append(str(v))
+            # for k, v in storage.all().items():
+            #     if k.split('.')[0] == args:
+            #         print_list.append(str(v))
+            from models import storage
+            for v in storage.all(eval(args)).values():
+                print_list.append(v)
         else:
             for v in storage.all().values():
-                print_list.append(str(v))
+                print_list.append(v)
 
         print(print_list)
 
@@ -306,6 +320,7 @@ class HBNBCommand(cmd.Cmd):
         key = c_name + "." + c_id
 
         # determine if key is present
+        from models import storage
         if key not in storage.all():
             print("** no instance found **")
             return
