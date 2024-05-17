@@ -9,9 +9,9 @@ from flask import Flask
 app = Flask(__name__)
 
 
-@app.route('/', strict_slashes=False)
+@app.route('/airbnb-onepage/', strict_slashes=False)
 """display Hello HBNB! on this route"""
-def home{}:
+def hello_airbnb{}:
     """my web server home page"""
     return 'Hello HBNB!'
 
