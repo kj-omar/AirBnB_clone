@@ -8,7 +8,6 @@ The second goal of the project is to build a console to manage all this stored d
 <br>b
 | Task | Files | Description |
 | ----- | ----- | ------ |
-| 0: Authors/README File | [AUTHORS](https://github.com/justinmajetich/AirBnB_clone/blob/dev/AUTHORS) | The authors for the project |
 | 1: Pep8 | N/A | All the code in the repository is pep8 compliant|
 | 2: Unit Testing | [/tests](https://github.com/justinmajetich/AirBnB_clone/tree/dev/tests) | All the unit testing files for the program |
 | 3. Make BaseModel | [/models/base_model.py](https://github.com/justinmajetich/AirBnB_clone/blob/dev/models/base_model.py) | The BaseModel class to be inherited by every model class in the project, containing a few useful methods.|
