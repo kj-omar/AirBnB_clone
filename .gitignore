@@ -1,0 +1,10 @@
+# TEST FILES FROM ALX
+test_params_create
+main_delete.py
+.vscode/settings.json
+
+# BYTE COMPLILED FILES
+__pycache__/
+
+# OLD DATA STORAGE FILE
+file.json
