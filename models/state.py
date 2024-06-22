@@ -8,6 +8,7 @@ from os import getenv
 from models import storage_type
 from models import storage
 
+
 class State(BaseModel, Base):
     """ State class """
 

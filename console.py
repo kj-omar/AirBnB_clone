@@ -314,10 +314,9 @@ class HBNBCommand(cmd.Cmd):
         args = args[2].partition(" ")
         if args[0]:
             c_id = args[0]
-        else: 
+        else:
             print("** instance id missing **")
             return
-
 
         key = c_name + "." + c_id
 
@@ -331,7 +330,7 @@ class HBNBCommand(cmd.Cmd):
             for k, v in kwargs.items():
                 args.append(k)
                 args.append(v)
-        else:  
+        else:
             args = args[2]
             if args and args[0] == '"':
                 second_quote = args.find('"', 1)
