@@ -115,40 +115,23 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, args):
         """ Create an object of any class with given parameters """
-        if not args:
+        try:
+            class_name = args.split(" ")[0]
+        except IndexError:
+            pass
+        if not class_name:
             print("** class name missing **")
             return
-
-        # Split the input into class name and parameters
-        args = args.split(' ', 1)
-        class_name = args[0]
-
-        if class_name not in HBNBCommand.classes:
+        elif class_name not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
+        # for - create Place city_id="0101" user_id="0101" name="My_Airbnb"
+        all_list = args.split(" ")
+        new_instance = eval(class_name)()
 
-        # Create a dictionary to hold the parameters
-        params = {}
-        if len(args) > 1:
-            params_str = args[1]
-        # Split parameters
-            params_list = params_str.split(' ')
-            for param in params_list:
-                if '=' in param:
-                    key, value = param.split('=', 1)
-                    if value.startswith('"') and value.endswith('"'):
-                        value = value[1:-1].replace('_', ' ').replace('\\"', '"')
-                    elif '.' in value:
-                        try:
-                            value = float(value)
-                        except ValueError:
-                            continue
-                    else:
-                        try:
-                            value = int(value)
-                        except ValueError:
-                            continue
-                    params[key] = value
+        for i in range(1, len(all_list)):
+            key, value = tuple(all_list[i].split("="))
+
 
     def help_create(self):
         """ Help information for the create method """
