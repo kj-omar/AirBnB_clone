@@ -131,6 +131,13 @@ class HBNBCommand(cmd.Cmd):
 
         for i in range(1, len(all_list)):
             key, value = tuple(all_list[i].split("="))
+            if value.startswith('='):
+                value = value.strip('=').replace("_", " ")
+            else:
+                try:
+                    value = eval(value)
+                except Exception:
+                    print(f"** couldn't eval{value}")
 
 
     def help_create(self):
