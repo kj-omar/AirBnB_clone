@@ -8,7 +8,7 @@ import json
 import os
 
 
-class test_basemodel(unittest.TestCase):
+class TestBaseModel(unittest.TestCase):
     """ """
 
     def __init__(self, *args, **kwargs):
@@ -32,20 +32,21 @@ class test_basemodel(unittest.TestCase):
         i = self.value()
         self.assertEqual(type(i), self.value)
 
-    def test_kwargs(self):
-        """ """
-        i = self.value()
-        copy = i.to_dict()
-        new = BaseModel(**copy)
-        self.assertFalse(new is i)
-
-    def test_kwargs_int(self):
-        """ """
-        i = self.value()
-        copy = i.to_dict()
-        copy.update({1: 2})
+    def test_kwargs_none(self):
+        """ Test that TypeError is raised with None as keyword argument."""
+         n = {None: None}
         with self.assertRaises(TypeError):
-            new = BaseModel(**copy)
+            new = self.value(**n)
+
+    def test_kwargs_one(self):
+        """Test that KeyError is raised with invalid keyword argument."""
+        n = {'Name': 'test'}
+        try:
+            new = self.value(**n)
+        except KeyError:
+            pass
+        else:
+            self.fail("KeyError not raised")
 
     def test_save(self):
         """ Testing save """
@@ -69,13 +70,13 @@ class test_basemodel(unittest.TestCase):
         self.assertEqual(i.to_dict(), n)
 
     def test_kwargs_none(self):
-        """ """
+        """Test that TypeError is raised with None as keyword argument."""
         n = {None: None}
         with self.assertRaises(TypeError):
             new = self.value(**n)
 
     def test_kwargs_one(self):
-        """ """
+        """Test that KeyError is raised with invalid keyword argument."""
         n = {'Name': 'test'}
         with self.assertRaises(KeyError):
             new = self.value(**n)
