@@ -1,4 +1,3 @@
-
 #!/usr/bin/python3
 """This is the place class"""
 from sqlalchemy.ext.declarative import declarative_base
