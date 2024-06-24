@@ -5,10 +5,8 @@ from models.user import User
 
 
 class test_User(test_basemodel):
-    """ """
 
     def __init__(self, *args, **kwargs):
-        """ """
         super().__init__(*args, **kwargs)
         self.name = "User"
         self.value = User
@@ -16,19 +14,23 @@ class test_User(test_basemodel):
     def test_first_name(self):
         """ """
         new = self.value()
+        new.first_name = "random"
         self.assertEqual(type(new.first_name), str)
 
     def test_last_name(self):
         """ """
         new = self.value()
+        new.last_name = "random"
         self.assertEqual(type(new.last_name), str)
 
     def test_email(self):
         """ """
         new = self.value()
+        new.email = "random"
         self.assertEqual(type(new.email), str)
 
     def test_password(self):
         """ """
         new = self.value()
+        new.password = "known"
         self.assertEqual(type(new.password), str)
