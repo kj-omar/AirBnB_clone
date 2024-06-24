@@ -73,7 +73,7 @@ class HBNBCommand(cmd.Cmd):
                 pline = pline[2].strip()  # pline is now str
                 if pline:
                     # check for *args or **kwargs
-                    if pline[0] is '{' and pline[-1] is'}'\
+                    if pline[0] is '{' and pline[-1] is '}'\
                             and type(eval(pline)) is dict:
                         _args = pline
                     else:
@@ -118,15 +118,43 @@ class HBNBCommand(cmd.Cmd):
         if not args:
             print("** class name missing **")
             return
-        elif args not in HBNBCommand.classes:
+
+        new_obj = args.split(" ")
+        cls_name, *params = new_obj
+
+        if cls_name not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
-        new_instance = HBNBCommand.classes[args]()
-        storage.save()
-        print(new_instance.id)
+
+        new_instance = HBNBCommand.classes[cls_name]()
         storage.save()
 
-    def help_create(self):
+        params_dict = {}
+
+        for kv_pair in params:
+            key, value = kv_pair.split("=")
+
+            if value.startswith('"') and value.endswith('"'):
+                value = value.replace('_', ' ')
+                value = value.replace('"', '')
+            elif '.' in value:
+                try:
+                    value = float(value)
+                except ValueError:
+                    continue
+            elif '.' not in value:
+                try:
+                    value = int(value)
+                except ValueError:
+                    continue
+            else:
+                continue
+
+            setattr(new_instance, key, value)
+        storage.save()
+        print(new_instance.id)
+
+    def help_crea(self):
         """ Help information for the create method """
         print("Creates a class of any type")
         print("[Usage]: create <className>\n")
@@ -187,7 +215,7 @@ class HBNBCommand(cmd.Cmd):
         key = c_name + "." + c_id
 
         try:
-            del(storage.all()[key])
+            del (storage.all()[key])
             storage.save()
         except KeyError:
             print("** no instance found **")
@@ -319,6 +347,7 @@ class HBNBCommand(cmd.Cmd):
         """ Help information for the update class """
         print("Updates an object with new information")
         print("Usage: update <className> <id> <attName> <attVal>\n")
+
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
