@@ -1,9 +1,10 @@
 #!/usr/bin/python3
 """ Console Module """
+from ast import Is
 import cmd
 import sys
 from models.base_model import BaseModel
-from models.__init__ import storage
+from models.engine.file_storage import storage
 from models.user import User
 from models.place import Place
 from models.state import State
@@ -73,7 +74,7 @@ class HBNBCommand(cmd.Cmd):
                 pline = pline[2].strip()  # pline is now str
                 if pline:
                     # check for *args or **kwargs
-                    if pline[0] is '{' and pline[-1] is'}'\
+                    if pline[0] == '{' and pline[-1] =='}'\
                             and type(eval(pline)) is dict:
                         _args = pline
                     else:
@@ -115,13 +116,32 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, args):
         """ Create an object of any class"""
-        if not args:
+        xyz = 0
+        list = args.split(" ")
+
+        if not list:
             print("** class name missing **")
             return
-        elif args not in HBNBCommand.classes:
+        elif list[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
-        new_instance = HBNBCommand.classes[args]()
+        new_instance = HBNBCommand.classes[list[0]]()
+        for new in list:
+            if xyz == 0:
+                xyz + - 1
+                continue
+            if "=" in new:
+                x = xyz.split("=")
+                if x[1][0] == '"':
+                    x[1] = x[1].replace('_', ' ')
+                    x[1] = x[1][1:-1]
+                    setattr(new_instance, x[0], x[1])
+                elif '.' in x[1]:
+                    x[1] = float(x[1])
+                    setattr(new_instance, x[0], x[1])
+                elif x[1].lstrip('-').isdigit() is True:
+                    x[1] = int(x[1])
+                    setattr(new_instance, x[0], x[1])
         storage.save()
         print(new_instance.id)
         storage.save()
@@ -272,7 +292,7 @@ class HBNBCommand(cmd.Cmd):
                 args.append(v)
         else:  # isolate args
             args = args[2]
-            if args and args[0] is '\"':  # check for quoted arg
+            if args and args[0] == '\"':  # check for quoted arg
                 second_quote = args.find('\"', 1)
                 att_name = args[1:second_quote]
                 args = args[second_quote + 1:]
@@ -280,10 +300,10 @@ class HBNBCommand(cmd.Cmd):
             args = args.partition(' ')
 
             # if att_name was not quoted arg
-            if not att_name and args[0] is not ' ':
+            if att_name and args[0] != ' ':
                 att_name = args[0]
             # check for quoted val arg
-            if args[2] and args[2][0] is '\"':
+            if args[2] and args[2][0] == '\"':
                 att_val = args[2][1:args[2].find('\"', 1)]
 
             # if att_val was not quoted arg
