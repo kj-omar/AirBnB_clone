@@ -114,40 +114,43 @@ class HBNBCommand(cmd.Cmd):
         pass
 
     def do_create(self, args):
-        """ Create an object of any class"""
-        splits_com = arg.split()
-        if len(splits_com) < 2:
-            print("Usage: create <Class name> <param1> <param2> ...")
-            return
-
-        name_of_class = splits_com[0]
-        params = splits_param[1:]
-        param_parse = {}
-
-        for param in params:
-            try:
-                key, value = param.split('=')
-                if  value.startswith('"') and value.endswith('"'):
-                    value = value[1:-1]
-                    value = value.replace('\\"').replace('_', ' ')
-                if '.' in value:
-                    val_parsed = float(value)
-                elif value.isdigit():
-                   val_parsed = int(value)
-                else:
-                   val_parsed = value
-
-                param_parse[key] = val_parsed
+        """ Create an object of any class with given parameters """
         if not args:
             print("** class name missing **")
             return
-        elif args not in HBNBCommand.classes:
+        
+        # Splitting the arguments by whitespace outside of quotes
+        arg_list = re.findall(r'(?:[^\s,"]|"(?:\\.|[^"])*")+', args)
+        
+        # First element is the class name
+        class_name = arg_list[0]
+        
+        # Checking if class_name exists in registered classes
+        if class_name not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
-        new_instance = HBNBCommand.classes[args]()
-        storage.save()
-        print(new_instance.id)
-        storage.save()
+        
+        # Creating dictionary to store key-value pairs for object instantiation
+        kwargs = {}
+        
+        # Iterating over remaining arguments for parameters
+        for arg in arg_list[1:]:
+            match = re.match(r'^(\w+)="(.*)"$', arg)
+            if match:
+                key = match.group(1).replace("_", " ")
+                value = match.group(2).replace("\\", "").replace("_", " ")
+                kwargs[key] = value
+            else:
+                print(f"Skipping unrecognized parameter: {arg}")
+        
+        # Creating an instance of the class with the provided parameters
+        try:
+            new_instance = HBNBCommand.classes[class_name](**kwargs)
+            new_instance.save()
+            print(new_instance.id)
+        except Exception as e:
+            print(f"Error creating instance: {str(e)}")
+ 
 
     def help_create(self):
         """ Help information for the create method """
