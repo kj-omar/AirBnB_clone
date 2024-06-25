@@ -36,3 +36,21 @@ class Place(BaseModel, Base):
         latitude = 0.0
         longitude = 0.0
         amenity_ids = []
+
+        @property
+        def amenities(self):
+            """Getter attribute amenities for FileStorage"""
+            from models import storage
+            from models.amenity import Amenity
+            amenities_list = []
+            for amenity_id in getattr(self, "amenity_ids", []):
+                amenity = storage.get(Amenity, amenity_id)
+                if amenity:
+                    amenities_list.append(amenity)
+            return amenities_list
+
+        @amenities.setter
+        def amenities(self, obj):
+            """Setter attribute amenities for FileStorage"""
+            if isinstance(obj, Amenity):
+                self.amenity_ids.append(obj.id)
