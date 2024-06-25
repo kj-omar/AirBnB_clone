@@ -115,6 +115,29 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, args):
         """ Create an object of any class"""
+        splits_com = arg.split()
+        if len(splits_com) < 2:
+            print("Usage: create <Class name> <param1> <param2> ...")
+            return
+
+        name_of_class = splits_com[0]
+        params = splits_param[1:]
+        param_parse = {}
+
+        for param in params:
+            try:
+                key, value = param.split('=')
+                if  value.startswith('"') and value.endswith('"'):
+                    value = value[1:-1]
+                    value = value.replace('\\"').replace('_', ' ')
+                if '.' in value:
+                    val_parsed = float(value)
+                elif value.isdigit():
+                   val_parsed = int(value)
+                else:
+                   val_parsed = value
+
+                param_parse[key] = val_parsed
         if not args:
             print("** class name missing **")
             return
