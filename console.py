@@ -119,15 +119,15 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
             return
 
-        args_list = args.split()
-        class_name = args_list[0]
+        arguments = args.split()
+        _class = arguments[0]
 
-        if class_name not in HBNBCommand.classes:
+        if _class not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
 
-        new_instance = eval(class_name)()  # Ensure eval is safe in your context
-        for param in args_list[1:]:
+        new_instance = eval(_class)()
+        for param in arguments[1:]:
             key_value = param.split("=")
             if len(key_value) != 2:
                 continue
@@ -136,7 +136,7 @@ class HBNBCommand(cmd.Cmd):
                 value = value[1:-1].replace("_", " ")
             else:
                 try:
-                    value = eval(value)  # Evaluate number, float, list, etc.
+                    value = eval(value)
                 except Exception as e:
                     print(f"** couldn't evaluate {value} **: {e}")
                     continue
