@@ -2,6 +2,7 @@
 """ Console Module """
 import cmd
 import sys
+import shlex
 from models.base_model import BaseModel
 from models.__init__ import storage
 from models.user import User
@@ -113,29 +114,39 @@ class HBNBCommand(cmd.Cmd):
         """ Overrides the emptyline method of CMD """
         pass
 
-    def do_create(self, args):
-        """ Create an object of any class"""
-        if not args:
+    def parser(self, args):
+        """
+        Split the argument received from command line
+        and saves it in a dictionary
+        """
+        cmd_list = shlex.split(args)
+        obj_name = cmd_list[0]
+        # checks whether the class name has been included
+        if len(cmd_list) == 0:
             print("** class name missing **")
             return
-        elif args not in HBNBCommand.classes:
-            print("** class doesn't exist **") 
+        if obj_name not in HBNBCommand.classes:
+            print("** class doesn't exist **")
             return
-        argument_list = args.split(" ")
-        argument_dict = {}
-        for i in range(1, len(argument_list)):
-            key, val = tuple(argument_list[i].split("="))
-            if val[0] == '"':
-                val = val.strip('"').replace("_"," ")
-            else:
-                val = eval(val)
-            argument_dict[key] = val
-        
-        if argument_dict == {}:
-            obj = eval(argument_list[0])()
-        else:
-            obj = eval(argument_list[0])(**argument_dict)
-            storage.new(obj)
+        obj_instance = HBNBCommand.classes[obj_name]()
+        if len(cmd_list) > 1:
+            obj_properties = {}
+            for prop in cmd_list[1:]:
+                key, value = prop.split("=", 1)
+                if isinstance(value, str):
+                    value = value.replace("_", " ")
+                elif isinstance(value, int):
+                    value = int(value)
+                obj_properties[key] = value.strip('"')
+            for key, val in obj_properties.items():
+                setattr(obj_instance, key, val)
+        return (obj_instance)
+
+    def do_create(self, args):
+        """ Create an object of any class"""
+        obj = self.parser(args)
+        if obj is None:
+            return
         print(obj.id)
         obj.save()
 
@@ -332,6 +343,7 @@ class HBNBCommand(cmd.Cmd):
         """ Help information for the update class """
         print("Updates an object with new information")
         print("Usage: update <className> <id> <attName> <attVal>\n")
+
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
