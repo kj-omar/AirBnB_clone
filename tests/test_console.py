@@ -111,24 +111,21 @@ class TestHBNBCommand(unittest.TestCase):
             self.HBNB.onecmd("all Amenity")
             self.assertIn(am,op.getvalue())
 
-        #def test_create_command_with_kwargs(self):
-        #    """Test create command with kwargs."""
-        #    # Test create command with additional key-value pairs
-        #    with patch("sys.stdout", new=StringIO()) as op:
-        #        call = (f'create Place city_id="0001" name="My_house" number_rooms=4 latitude=37.77 longitude=43.434')  # noqa
-        #        self.HBNB.onecmd(call)
-        #        place =op.getvalue().strip()
-        #     # Test if the created instance and kwargs are in the
-        #     #    output of "all" command
-        #    with patch("sys.stdout", new=StringIO()) as op:
-        #        self.HBNB.onecmd("all Place")
-        #        output =op.getvalue()
-        #        self.assertIn(place, output)
-        #        self.assertIn("'city_id': '0001'", output)
-        #        self.assertIn("'name': 'My house'", output)
-        #        self.assertIn("'number_rooms': 4", output)
-        #        self.assertIn("'latitude': 37.77", output)
-        #        self.assertIn("'longitude': 43.434", output)
+        def test_create_command_with_kwargs(self):
+            """Test create command with kwargs."""
+            with patch("sys.stdout", new=StringIO()) as op:
+                call = (f'create Place city_id="0100" name="Our_House" number_rooms=10 latitude=56.81 longitude=55.739')
+                self.HBNB.onecmd(call)
+                place =op.getvalue().strip()
+            with patch("sys.stdout", new=StringIO()) as op:
+                self.HBNB.onecmd("all Place")
+                output =op.getvalue()
+                self.assertIn(place, output)
+                self.assertIn("'city_id': '0100'", output)
+                self.assertIn("'name': 'Our House'", output)
+                self.assertIn("'number_rooms': 10", output)
+                self.assertIn("'latitude': 56.81", output)
+                self.assertIn("'longitude': 55.739", output)
 
 
 if __name__ == "__main__":
