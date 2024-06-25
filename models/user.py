@@ -5,7 +5,7 @@ from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
 from os import getenv
 
-storage_type = getenv["HBNB_TYPE_STORAGE"]
+storage_type = getenv("HBNB_TYPE_STORAGE")
 
 
 class User(BaseModel, Base):
