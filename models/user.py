@@ -1,7 +1,10 @@
 #!/usr/bin/python3
 """This module defines a class User"""
-from models.base_model import BaseModel, Base, storage_engine
+from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String
+import os
+
+storage_engine = os.environ.get('HBNB_TYPE_STORAGE')
 
 
 class User(BaseModel, Base):
@@ -10,8 +13,8 @@ class User(BaseModel, Base):
         __tablename__ = 'users'
         email = Column(String(128), nullable=False)
         password = Column(String(128), nullable=False)
-        first_name = Column(String(128))
-        last_name = Column(String(128))
+        first_name = Column(String(128), nullable=True)
+        last_name = Column(String(128), nullable=True)
     else:
         email = ''
         password = ''
