@@ -3,8 +3,7 @@
 import uuid
 from datetime import datetime
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, String, DateTime, Integer
-from sqlalchemy import create_enginea
+from sqlalchemy import Column, String, DateTime
 from os import environ
 
 storage_engine = environ.get('HBNB_TYPE_STORAGE')
