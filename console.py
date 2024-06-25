@@ -123,17 +123,19 @@ class HBNBCommand(cmd.Cmd):
                     key, val = arg.split('=')
                     if (hasattr(instance, key)):
                         if val.startswith('"') and val.endswith('"'):
-                            val = val.strip('"')
-                            val = val.replace('\\', '')
-                            val = val.replace('_', ' ')
-                        elif '.' in val:
-                            val = float(val)
-                        else:
-                            val = int(val)
+                            val = val[1:-1].replace('_', ' ')\
+                                .replace('\\"', '"')
+                        try:
+                            if '.' in val:
+                                val = float(val)
+                            else:
+                                val = int(val)
+                        except ValueError:
+                            pass
                         setattr(instance, key, val)
                     else:
                         continue
-                instance.save()
+                storage.save()
                 print(instance.id)
             except Exception as e:
                 raise e
