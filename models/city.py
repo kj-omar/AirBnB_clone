@@ -7,6 +7,7 @@ import os
 
 storage_engine = os.getenv('HBNB_TYPE_STORAGE')
 
+
 class City(BaseModel, Base):
     """ The city class, contains state ID and name """
     __tablename__ = 'cities'
