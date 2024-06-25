@@ -29,63 +29,52 @@ class DBStorage:
         """Instantiate a DBStorage object"""
         HBNB_MYSQL_USER = getenv('HBNB_MYSQL_USER')
         HBNB_MYSQL_PWD = getenv('HBNB_MYSQL_PWD')
-        HBNB_MYSQL_HOST = getenv('HBNB_MYSQL_HOST')
+        HBNB_MYSQL_HOST = getenv('HBNB_MYSQL_HOST', 'localhost')
         HBNB_MYSQL_DB = getenv('HBNB_MYSQL_DB')
         HBNB_ENV = getenv('HBNB_ENV')
-        self.__engine = create_engine('mysql+mysqldb://{}:{}@{}/{}'.
+        self.__engine = create_engine('mysql+mysqldb://{}:{}@{}:3306/{}'.
                                       format(HBNB_MYSQL_USER,
                                              HBNB_MYSQL_PWD,
                                              HBNB_MYSQL_HOST,
-                                             HBNB_MYSQL_DB))
+                                             HBNB_MYSQL_DB), pool_pre_ping=True)
         if HBNB_ENV == "test":
             Base.metadata.drop_all(self.__engine)
-
+    
     def all(self, cls=None):
-        """query on the current database session"""
-        new_dict = {}
-        for clss in classes:
-            if cls is None or cls is classes[clss] or cls is clss:
-                objs = self.__session.query(classes[clss]).all()
-                for obj in objs:
-                    key = obj.__class__.__name__ + '.' + obj.id
-                    new_dict[key] = obj
-        return (new_dict)
+        """returning all the related objects of a specific class"""
+        all_objs = {}
 
+        if cls:
+            for obj in self.__session.query(cls).all():
+                all_objs.update({"{}.{}".format(type(obj).__name__, obj.id): obj})
+        else:
+            for obj in classes.values():
+                for value in self.__session.query(obj).all():
+                    all_objs.update({"{}.{}".format(type(value).__name__, value.id): value})
+
+        return all_objs
     def new(self, obj):
-        """add the object to the current database session"""
+        """Adding new objects to the databases as rows"""
         self.__session.add(obj)
-
+    
     def save(self):
-        """commit all changes of the current database session"""
+        """Commiting the whole process to the database"""
         self.__session.commit()
-
+    
     def delete(self, obj=None):
-        """delete from the current database session obj if not None"""
-        if obj is not None:
-            self.__session.delete(obj)
+        """Deleting a specific object"""
+        if obj:
+            self.__session.query(type(obj).__name__).filter(id = obj.id).delete()
 
     def reload(self):
-        """reloads data from the database"""
+        """Reloading the whole objects and call the metadate 
+        to convert all the process to SQL code
+        """
         Base.metadata.create_all(self.__engine)
-        sess_factory = sessionmaker(bind=self.__engine, expire_on_commit=False)
-        Session = scoped_session(sess_factory)
-        self.__session = Session
+        Session = sessionmaker(bind=self.__engine, expire_on_commit=False)
+        ScopedSession = scoped_session(Session)
+        self.__session = ScopedSession()
 
     def close(self):
-        """call remove() method on the private session attribute"""
-        self.__session.remove()
-
-    def get(self, cls, id):
-        """
-        Function Docs
-        """
-        for element in self.all(cls).values():
-            if id == element.id:
-                return element
-        return
-
-    def count(self, cls=None):
-        """
-        Function Docs
-        """
-        return (len(self.all(cls)))
+        """Closing the session"""
+        self.__session.close()       
