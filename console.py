@@ -123,7 +123,7 @@ class HBNBCommand(cmd.Cmd):
             if len(class_name) == 0:
                 print("** class name missing **")
                 return
-            if class_name and class_name not in self.valid_classes:
+            if class_name and class_name not in self.classes:
                 print("** class doesn't exist **")
                 return
 
