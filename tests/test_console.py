@@ -111,21 +111,21 @@ class TestHBNBCommand(unittest.TestCase):
             self.HBNB.onecmd("all Amenity")
             self.assertIn(am,op.getvalue())
 
-        def test_create_command_with_kwargs(self):
-            """Test create command with kwargs."""
-            with patch("sys.stdout", new=StringIO()) as op:
-                call = (f'create Place city_id="0100" name="Our_House" number_rooms=10 latitude=56.81 longitude=55.739')
-                self.HBNB.onecmd(call)
-                place =op.getvalue().strip()
-            with patch("sys.stdout", new=StringIO()) as op:
-                self.HBNB.onecmd("all Place")
-                output =op.getvalue()
-                self.assertIn(place, output)
-                self.assertIn("'city_id': '0100'", output)
-                self.assertIn("'name': 'Our House'", output)
-                self.assertIn("'number_rooms': 10", output)
-                self.assertIn("'latitude': 56.81", output)
-                self.assertIn("'longitude': 55.739", output)
+    def test_create_command_with_kwargs(self):
+        """Test create command with kwargs."""
+        with patch("sys.stdout", new=StringIO()) as op:
+            call = ('create Place city_id="0100" name="Our_House" number_rooms=10 latitude=56.81 longitude=55.739')
+            self.HBNB.onecmd(call)
+            place =op.getvalue().strip()
+        with patch("sys.stdout", new=StringIO()) as op:
+            self.HBNB.onecmd("all Place")
+            output =op.getvalue()
+            self.assertIn(place, output)
+            self.assertIn("'city_id': '0100'", output)
+            self.assertIn("'name': 'Our House'", output)
+            self.assertIn("'number_rooms': 10", output)
+            self.assertIn("'latitude': 56.81", output)
+            self.assertIn("'longitude': 55.739", output)
 
 
 if __name__ == "__main__":

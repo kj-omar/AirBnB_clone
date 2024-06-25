@@ -94,7 +94,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_quit(self, command):
         """ Method to exit the HBNB console"""
-        return (True)
+        exit()
 
     def help_quit(self):
         """ Prints the help documentation for quit  """
@@ -103,7 +103,7 @@ class HBNBCommand(cmd.Cmd):
     def do_EOF(self, arg):
         """ Handles EOF to exit program """
         print()
-        return (True)
+        exit()
 
     def help_EOF(self):
         """ Prints the help documentation for EOF """
@@ -115,40 +115,37 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, args):
         """ Create an object of any class"""
-        try: 
-            _class = args.split(" ")[0]
-            if len(_class) == 0:
-                print("** class name missing **")
-                return
-            if _class and _class not in HBNBCommand.classes:
-                print("** class doesn't exist **")
-                return
-
-
-            pargs = {}
-            cmds = args.split(" ")
-            for i in range (1, len(cmds)):
-                key = cmds[i].split("=")[0]
-                val = cmds[i].split("=")[1]
-                if val.startswith('"'):
-                    val = val.strip('"').replace("_", " ")
-                else:
-                    try:
-                        val = eval(val)
-                    except (NameError, SyntaxError):
-                        continue
-                pargs[key] = val
-
-            if pargs == {}:
-                new_instance = eval(_class)()
-            else:
-                new_instance = eval(_class)(**pargs)
-            print(new_instance.id)
-            storage.save()
-
-        except ValueError:
-            print(ValueError)
+        if not args:
+            print("** class name missing **")
             return
+
+        args_list = args.split()
+        class_name = args_list[0]
+
+        if class_name not in HBNBCommand.classes:
+            print("** class doesn't exist **")
+            return
+
+        new_instance = eval(class_name)()  # Ensure eval is safe in your context
+        for param in args_list[1:]:
+            key_value = param.split("=")
+            if len(key_value) != 2:
+                continue
+            key, value = key_value
+            if value.startswith('"') and value.endswith('"'):
+                value = value[1:-1].replace("_", " ")
+            else:
+                try:
+                    value = eval(value)  # Evaluate number, float, list, etc.
+                except Exception as e:
+                    print(f"** couldn't evaluate {value} **: {e}")
+                    continue
+
+            setattr(new_instance, key, value)
+
+        storage.new(new_instance)
+        print(new_instance.id)
+        new_instance.save()
 
     def help_create(self):
         """ Help information for the create method """
