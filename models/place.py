@@ -2,6 +2,7 @@
 """ Place Module for HBNB project """
 from models.base_model import BaseModel, Base, storage_engine
 from sqlalchemy import Column, String, Integer, Float, ForeignKey, Table
+from sqlalchemy.orm import relationship
 
 if storage_engine == 'db':
     place_amenity = Table('place_amenity', Base.metadata,
@@ -28,6 +29,7 @@ class Place(BaseModel, Base):
         latitude = Column(Float, nullable=True)
         longitude = Column(Float, nullable=True)
         amenity_ids = []
+        reviews = relationship('Review', backref='place')
     else:
         city_id = ""
         user_id = ""

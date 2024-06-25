@@ -1,9 +1,11 @@
 #!/usr/bin/python3
 """ City Module for HBNB project """
-from models.base_model import BaseModel, Base, storage_engine
+from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String, ForeignKey
 from sqlalchemy.orm import relationship
+import os
 
+storage_engine = os.getenv('HBNB_TYPE_STORAGE')
 
 class City(BaseModel, Base):
     """ The city class, contains state ID and name """
