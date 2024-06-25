@@ -116,29 +116,23 @@ class HBNBCommand(cmd.Cmd):
     def do_create(self, args):
         """ Create an object of any class with given parameters """
         try:
-            class_name = args.split(" ")[0]
-        except IndexError:
-            pass
-        if not class_name:
+            if not args:
+                raise SyntaxError()
+            arg_list = args.split(" ")
+            kw = {}
+            for arg in arg_list[1:]:
+                arg_splited = arg.split("=")
+                arg_splited[1] = eval(arg_splited[1])
+                if type(arg_splited[1]) is str:
+                    arg_splited[1] = arg_splited[1].replace("_", " ").replace('"', '\\"')
+                kw[arg_splited[0]] = arg_splited[1]
+        except SyntaxError:
             print("** class name missing **")
-            return
-        elif class_name not in HBNBCommand.classes:
+        except NameError:
             print("** class doesn't exist **")
-            return
-        # for - create Place city_id="0101" user_id="0101" name="My_Airbnb"
-        all_list = args.split(" ")
-        new_instance = eval(class_name)()
-
-        for i in range(1, len(all_list)):
-            key, value = tuple(all_list[i].split("="))
-            if value.startswith('='):
-                value = value.strip('=').replace("_", " ")
-            else:
-                try:
-                    value = eval(value)
-                except Exception:
-                    print(f"** couldn't eval{value}")
-
+        new_instance = HBNBCommand.classes[arg_list[0]](**kw)
+        new_instance.save()
+        print(new_instance.id)
 
     def help_create(self):
         """ Help information for the create method """
