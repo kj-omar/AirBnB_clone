@@ -13,7 +13,7 @@ if storage_engine == 'db':
                                  primary_key=True, nullable=False))
 
 
-class Place(BaseModel):
+class Place(BaseModel, Base):
     """ A place to stay """
     __tablename__ = 'places'
     if storage_engine == 'db':
