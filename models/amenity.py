@@ -1,28 +1,22 @@
 #!/usr/bin/python3
-""" State Module for HBNB project """
-from models.base_model import BaseModel
-from sqlalchemy import Column, String, Table, ForeignKey
-from sqlalchemy.orm import relationship
+""" Amenity Module for HBNB project """
 from models.base_model import BaseModel, Base
+from sqlalchemy import Column, String, Table
+from sqlalchemy.orm import relationship
+
+# Association table for Many-to-Many relationship between Place and Amenity
+place_amenity = Table(
+    'place_amenity', Base.metadata,
+    Column('place_id', String(60), ForeignKey('places.id'), primary_key=True, nullable=False),
+    Column('amenity_id', String(60), ForeignKey('amenities.id'), primary_key=True, nullable=False)
+)
 
 class Amenity(BaseModel, Base):
-    """Amenity class inherits from BaseModel and Base"""
+    """ Amenity class """
+    __tablename__ = "amenities"
+    
+    name = Column(String(128), nullable=False)
 
-    __tablename__ = 'amenities'  # Table name definition
+    # Relationship with Place using place_amenity table
+    place_amenities = relationship("Place", secondary=place_amenity, back_populates="amenities")
 
-    name = Column(String(128), nullable=False)  # Column definition for name
-
-    # Many-to-Many relationship with Place via place_amenity table
-    place_amenities = relationship("Place", secondary='place_amenity', viewonly=False)
-
-    def __init__(self, *args, **kwargs):
-        """Initialization of Amenity Class"""
-        super().__init__(*args, **kwargs)
-
-    def places(self):
-        """Getter method for places linked with this Amenity"""
-        return self.place_amenities
-
-
-class Amenity(BaseModel):
-    name = ""
