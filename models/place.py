@@ -36,26 +36,3 @@ class Place(BaseModel, Base):
         latitude = 0.0
         longitude = 0.0
         amenity_ids = []
-
-        # Define relationships
-        user = relationship("User", back_populates="places")
-        city = relationship("City", back_populates="places")
-        amenities = relationship("Amenity", secondary=place_amenity, viewonly=False)
-
-        @property
-        def amenities(self):
-            """ Getter attribute for amenities in FileStorage """
-            from models import storage
-            amenities_list = []
-            for amenity_id in self.amenity_ids:
-                key = "Amenity." + amenity_id
-                amenity = storage.all().get(key)
-                if amenity:
-                    amenities_list.append(amenity)
-            return amenities_list
-
-        @amenities.setter
-        def amenities(self, obj):
-            """ Setter attribute for amenities in FileStorage """
-            if isinstance(obj, Amenity):
-                self.amenity_ids.append(obj.id)
