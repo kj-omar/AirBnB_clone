@@ -18,7 +18,6 @@ class FileStorage:
                 if cls == value.__class__:
                     new_dict[key] = value
             return new_dict
-        
 
     def new(self, obj):
         """Adds new object to storage dictionary"""
@@ -53,10 +52,10 @@ class FileStorage:
             with open(FileStorage.__file_path, 'r') as f:
                 temp = json.load(f)
                 for key, val in temp.items():
-                        self.all()[key] = classes[val['__class__']](**val)
+                    self.all()[key] = classes[val['__class__']](**val)
         except FileNotFoundError:
             pass
-        
+
     def delete(self, obj=None):
         """ Deletes an object from __objects """
         if obj is not None:
@@ -65,4 +64,3 @@ class FileStorage:
             self.save()
         else:
             return
-        
