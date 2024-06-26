@@ -59,3 +59,20 @@ class Place(BaseModel, Base):
                 if review.place_id == self.id:
                     review_all.append(review)
             return review_list
+
+        @property
+        def amenities(self):
+            """returns a list of Amenity instances"""
+            from models import storage
+            amenity_list = []
+            amenity_all = storage.all(Amenity)
+            for amenity in amenity_all.values():
+                if amenity.id in self.amenity_ids:
+                    amenity_list.append(amenity)
+            return amenity_list
+
+        @amenities.setter
+        def amenities(self, amenity: Amenity):
+            """appends amenity.id to amenity_ids"""
+            if isinstance(amenity, Amenity):
+                self.amenity_ids.append(amenity.id)
