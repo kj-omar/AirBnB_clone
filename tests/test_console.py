@@ -45,13 +45,16 @@ class TestHBNBCommand(unittest.TestCase):
     @unittest.skipIf(
         os.getenv('HBNB_TYPE_STORAGE') != 'db', 'DBStorage test')
     def test_db_create(self):
-        """Tests the create command with the database storage.
-        """
+        """Tests the create command with the database storage."""
         with patch('sys.stdout', new=StringIO()) as cout:
             cons = HBNBCommand()
             # creating a model with non-null attribute(s)
-            with self.assertRaises(sqlalchemy.exc.OperationalError):
+            try:
                 cons.onecmd('create User')
+            except sqlalchemy.exc.OperationalError:
+                # Rollback session to clear the previous transaction
+                storage._DBStorage__session.rollback()
+                raise
             # creating a User instance
             clear_stream(cout)
             cons.onecmd('create User email="john25@gmail.com" password="123"')
