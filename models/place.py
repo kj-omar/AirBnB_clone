@@ -5,7 +5,7 @@ from sqlalchemy import Column, String, Integer, ForeignKey, Float, Table
 from models.base_model import BaseModel, Base
 from os import getenv
 from models.amenity import Amenity
-from models import storage
+import models
 
 storage_type = getenv("HBNB_TYPE_STORAGE")
 place_amenity = Table("place_amenity", Base.metadata, 
@@ -49,7 +49,7 @@ class Place(BaseModel, Base):
             """getting the id of the amenity needed in the list"""
 
             list_of_ids = []
-            all_amenities = storage.all(Amenity)
+            all_amenities = models.storage.all(Amenity)
 
             for key, value in all_amenities.items():
                 if key in self.amenity_ids:
