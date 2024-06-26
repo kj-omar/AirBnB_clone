@@ -113,34 +113,46 @@ class HBNBCommand(cmd.Cmd):
         """ Overrides the emptyline method of CMD """
         pass
 
-    
     def do_create(self, arg):
-        """Create a new instance of a class with given parameters."""
-        args = arg.split()
-
-        if len(args) < 2:
-            print("** class name missing **")
-            return
-        class_name = args[0]
-        if class_name not in classes:
-            print("** class doesn't exist **")
-            return
-
-        params = {}
-        i = 1
-        while i < len(args):
-            param = args[i]
-            if '=' not in param:
-                i += 1
-                continue
-        
-            key, value = param.split('=', 1)
-        
-            if not value:
-                i += 1
-                continue
-        
-
+        """Creates a new instance of a Model"""
+        if arg:
+            try:
+                args = arg.split()
+                template = models.dummy_classes[args[0]]
+                new_instance = template()
+                try:
+                    for val in args[1:]:
+                        val_split = val.split("=")
+                        if (hasattr(new_instance, val_split[0])):
+                            value = val_split[1]
+                            flag = 0
+                            if (value.startswith('"')):
+                                value = value.strip('"')
+                                value = value.replace("\\", "")
+                                value = value.replace("_", " ")
+                            elif ("." in value):
+                                try:
+                                    value = float(value)
+                                except:
+                                    flag = 1
+                            else:
+                                try:
+                                    value = int(value)
+                                except:
+                                    flag = 1
+                            if (not flag):
+                                setattr(new_instance, val_split[0], value)
+                        else:
+                            continue
+                    new_instance.save()
+                    print(new_instance.id)
+                except:
+                    new_instance.rollback()
+            except:
+                print("** class doesn't exist **")
+                models.storage.rollback()
+        else:
+            print("** class name missing **")    
     
 
     def help_create(self):
