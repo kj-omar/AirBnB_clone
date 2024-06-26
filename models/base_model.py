@@ -82,3 +82,4 @@ class BaseModel:
         """ delete object
         """
         models.storage.delete(self)
+        models.storage.save()
