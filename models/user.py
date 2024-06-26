@@ -1,31 +1,37 @@
 #!/usr/bin/python3
-"""Defines User class module"""
+"""defines a class User module """
 
-from models.base_model import BaseModel
-from models.base_model import Base
-from sqlalchemy import Column
-from sqlalchemy import String
+import os
+import models
+from models.base_model import BaseModel, Base
+from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
+from hashlib import md5
 
 
 class User(BaseModel, Base):
-    """user module class for MySQL database
+    """defines a user by various attributes"""
+    if models.storage_type == 'db':
+        __tablename__ = 'users'
+        email = Column(String(128), nullable=False)
+        password = Column(String(128), nullable=False)
+        first_name = Column(String(128), nullable=True)
+        last_name = Column(String(128), nullable=True)
+        places = relationship("Place", backref="user")
+        reviews = relationship("Review", backref="user")
+    else:
+        email = ""
+        password = ""
+        first_name = ""
+        last_name = ""
 
-    Inherits from SQLAlchemy Base and links to the MySQL table users
+    def __init__(self, *args, **kwargs):
+        """initializes user"""
+        super().__init__(*args, **kwargs)
 
-    Attributes & properties:
-        __tablename__ (str): Name of MySQL table  stores users
-        email: (sqlalchemy String): User's email address
-        password (sqlalchemy String): The user's password
-        first_name (sqlalchemy String): User's first name
-        last_name (sqlalchemy String): User's last name
-        places (sqlalchemy relationship): User-Place relationship
-        reviews (sqlalchemy relationship): User-Review relationship
-    """
-    __tablename__ = "users"
-    email = Column(String(128), nullable=False)
-    password = Column(String(128), nullable=False)
-    first_name = Column(String(128))
-    last_name = Column(String(128))
-    places = relationship("Place", backref="user", cascade="delete")
-    reviews = relationship("Review", backref="user", cascade="delete")
+    def __setattr__(self, name, value):
+        if name == "password":
+            super(User, self).__setattr__(name,
+                                          md5(value.encode()).hexdigest())
+        else:
+            super(User, self).__setattr__(name, value)
