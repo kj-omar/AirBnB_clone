@@ -6,13 +6,12 @@ from sqlalchemy.orm import relationship
 
 
 class Review(BaseModel, Base):
-    """ Review classto store review information """
+    """ Review class to store review information """
     __tablename__ = 'reviews'
     if storage_engine == 'db':
         place_id = Column(String(60), ForeignKey('places.id'), nullable=False)
         user_id = Column(String(60), ForeignKey('users.id'), nullable=False)
         text = Column(String(1024), nullable=False)
-        place = relationship('Place', backref='reviews')
     else:
         place_id = ""
         user_id = ""
