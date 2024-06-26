@@ -6,6 +6,7 @@ import datetime
 from uuid import UUID
 import json
 import os
+import pycodestyle
 
 
 class test_basemodel(unittest.TestCase):
@@ -24,7 +25,7 @@ class test_basemodel(unittest.TestCase):
     def tearDown(self):
         try:
             os.remove('file.json')
-        except:
+        except FileNotFoundError:
             pass
 
     def test_default(self):
@@ -97,3 +98,20 @@ class test_basemodel(unittest.TestCase):
         n = new.to_dict()
         new = BaseModel(**n)
         self.assertFalse(new.created_at == new.updated_at)
+
+
+class TestPEP8(unittest.TestCase):
+    """ This class is for PEP8 validation. """
+    def test_pep8(self):
+        """ PEP8 validation. """
+        style = pycodestyle.StyleGuide(quiet=False)
+        errors = 0
+        files = ['models/base_model.py',
+                 'tests/test_models/test_base_model.py'
+                 ]
+        errors += style.check_files(files).total_errors
+        self.assertEqual(errors, 0, "PEP8 Error(s) found.")
+
+
+if __name__ == '__main__':
+    unittest.main()
