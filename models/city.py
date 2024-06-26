@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """ City Module for HBNB project """
 
+import models
 from models.base_model import BaseModel, Base
 from models.place import Place
 from os import getenv
@@ -17,8 +18,8 @@ class City(BaseModel, Base):
 
         state_id = Column(String(128), nullable=False)
         name = Column(String(60), ForeignKey('states.id'), nullable=False)
-        places = relationship("Place", cascade='all, delete, delete-orphan',
-                            backref="cities")
+        #places = relationship("Place", cascade='all, delete, delete-orphan',
+        #                    backref="cities")
 
     else:
         state_id = ""

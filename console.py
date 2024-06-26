@@ -2,6 +2,7 @@
 """ Console Module """
 import cmd
 import sys
+import models
 from models.base_model import BaseModel
 from models.__init__ import storage
 from models.user import User
@@ -143,9 +144,9 @@ class HBNBCommand(cmd.Cmd):
 
             setattr(new_instance, key, value)
 
-        storage.new(new_instance)
+        models.storage.new(new_instance)
         print(new_instance.id)
-        new_instance.save()
+        models.storage.save()
 
     def help_create(self):
         """ Help information for the create method """
