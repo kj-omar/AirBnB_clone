@@ -48,31 +48,3 @@ class Place(BaseModel, Base):
         latitude = 0.0
         longitude = 0.0
         amenity_ids = []
-
-        @property
-        def amenities(self):
-            """Getter method"""
-            from models import storage
-            amenitiesList = []
-            amenitiesAll = storage.all(Amenity)
-            for amenity in amenitiesAll.values():
-                if amenity.id in self.amenity_ids:
-                    amenitiesList.append(amenity)
-            return amenitiesList
-
-        @property
-        def reviews(self):
-            """Getter document"""
-            from models import storage
-            reviewsList = []
-            reviewsAll = storage.all(Review)
-            for review in reviewsAll.values():
-                if review.place_id in self.id:
-                    reviewsList.append(review)
-            return reviewsList
-
-        @amenities.setter
-        def amenities(self, amenity):
-            """Setter document"""
-            if isinstance(amenity, Amenity):
-                self.amenity_ids.append(amenity.id)
