@@ -129,6 +129,7 @@ class HBNBCommand(cmd.Cmd):
             key, value = key_value
             if value.startswith('"') and value.endswith('"'):
                 value = value.strip('"').replace('_', ' ')
+                value = value.replace("\\", '"')
             else:
                 try:
                     value = int(value)
