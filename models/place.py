@@ -4,6 +4,8 @@ from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String, Integer, Float, ForeignKey, Table
 from sqlalchemy.orm import relationship
 import os
+from models.amenity import Amenity
+from models.review import Review
 
 storage_engine = os.getenv("HBNB_TYPE_STORAGE")
 
@@ -30,7 +32,9 @@ class Place(BaseModel, Base):
         price_by_night = Column(Integer, default=0, nullable=False)
         latitude = Column(Float, nullable=True)
         longitude = Column(Float, nullable=True)
-        amenity_ids = []
+        amenities = relationship("Amenity", secondary=place_amenity,
+                                 viewonly=False,
+                                 back_populates="place_amenities")
         reviews = relationship('Review', backref='place', cascade="all,delete")
     else:
         city_id = ""
@@ -44,3 +48,31 @@ class Place(BaseModel, Base):
         latitude = 0.0
         longitude = 0.0
         amenity_ids = []
+
+        @property
+        def amenities(self):
+            """Getter method"""
+            from models import storage
+            amenitiesList = []
+            amenitiesAll = storage.all(Amenity)
+            for amenity in amenitiesAll.values():
+                if amenity.id in self.amenity_ids:
+                    amenitiesList.append(amenity)
+            return amenitiesList
+
+        @property
+        def reviews(self):
+            """Getter document"""
+            from models import storage
+            reviewsList = []
+            reviewsAll = storage.all(Review)
+            for review in reviewsAll.values():
+                if review.place_id in self.id:
+                    reviewsList.append(review)
+            return reviewsList
+
+        @amenities.setter
+        def amenities(self, amenity):
+            """Setter document"""
+            if isinstance(amenity, Amenity):
+                self.amenity_ids.append(amenity.id)
