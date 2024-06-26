@@ -1,23 +1,19 @@
 #!/usr/bin/python3
-"""file storage class for AirBnB project"""
+"""file storage for AirBnB project"""
 
-import models
-import json
-from models.base_model import BaseModel
 from models.user import User
-from models.state import State
-from models.city import City
-from models.amenity import Amenity
 from models.place import Place
 from models.review import Review
-
-
-classes = {"Amenity": Amenity, "BaseModel": BaseModel, "City": City,
-               "Place": Place, "Review": Review, "State": State, "User": User}
+from models.city import City
+from models.amenity import Amenity
+from models.base_model import BaseModel
+import shlex
+from models.state import State
+import json
 
 
 class FileStorage:
-    """serializes instances to a JSON file and
+    """serializes instances to a JSON and
     deserializes JSON file to instances
     Attributes:
         __file_path: path to the JSON file
@@ -27,27 +23,25 @@ class FileStorage:
     __objects = {}
 
     def all(self, cls=None):
-        """Returns all the objects
-
-        If a class is specified, the method only
-        returns the objects of same type.
-
         """
-
+        Return:
+            returns dictionary of __object
+        """
+        dict = {}
         if cls:
-            st = dict()
-
-            for key, obj in self.__objects.items():
-                if obj.__class__ == cls:
-                    st[key] = obj
-
-            return st
-
-        return self.__objects
+            dictionary = self.__objects
+            for key in dictionary:
+                partition = key.replace('.', ' ')
+                partition = shlex.split(partition)
+                if (partition[0] == cls.__name__):
+                    dict[key] = self.__objects[key]
+            return (dict)
+        else:
+            return self.__objects
 
     def new(self, obj):
-        """sets __object to given obj
-        params:
+        """sets __object given obj
+        Args:
             obj: given object
         """
         if obj:
@@ -55,7 +49,7 @@ class FileStorage:
             self.__objects[key] = obj
 
     def save(self):
-        """serialize the file path to JSON file path
+        """serialize the file path to JSON
         """
         my_dict = {}
         for key, value in self.__objects.items():
@@ -64,7 +58,7 @@ class FileStorage:
             json.dump(my_dict, f)
 
     def reload(self):
-        """serialize the file path to JSON file path
+        """serialize the file path to JSON
         """
         try:
             with open(self.__file_path, 'r', encoding="UTF-8") as f:
@@ -75,16 +69,13 @@ class FileStorage:
             pass
 
     def delete(self, obj=None):
-        """Delete obj from __objects if it's inside
+        """ delete existing element
         """
         if obj:
             key = "{}.{}".format(type(obj).__name__, obj.id)
-
-            if self.__objects[key]:
-                del self.__objects[key]
-                self.save()
+            del self.__objects[key]
 
     def close(self):
-        """Deserialize the JSON file to objects
+        """the calls will reload()
         """
         self.reload()
