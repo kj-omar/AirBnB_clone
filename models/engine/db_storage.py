@@ -3,6 +3,7 @@
 DB storage engine class
 """
 
+import models
 from os import getenv
 from models.amenity import Amenity
 from models.base_model import Base
@@ -47,19 +48,16 @@ class DBStorage:
         """
         Returns dictionary of all objects or objects of type cls
         """
-        if not self.__session:
-            self.reload()
-        obj_dict = {}
-        if type(cls) == str:
-            cls = classes.get(cls, None)
-        if not cls:
-            for cls in classes.values():
-                for objs in self.__session.query(cls):
-                    obj_dict[objs.__class__.__name__ + "." + objs.id] = objs
+        if cls:
+            if isinstance(cls, str):
+                cls = eval(cls)
+            return {obj.id: obj for obj in self.__session.query(cls).all()}
         else:
-            for objs in self.__session.query(cls):
-                obj_dict[objs.__class__.__name__ + "." + objs.id] = objs
-        return(obj_dict)
+            result = {}
+            for cls in Base.__subclasses__():
+                for obj in self.__session.query(cls).all():
+                    result[obj.id] = obj
+            return result
 
     def new(self, obj):
         """ Creates new object in database """
@@ -78,6 +76,8 @@ class DBStorage:
 
     def reload(self):
         """ Recreates objects from the database """
-        Session = sessionmaker(bind=self.__engine, expire_on_commit=False)
+
         Base.metadata.create_all(self.__engine)
-        self.__session = scoped_session(Session)
+        factory = sessionmaker(bind=self.__engine, expire_on_commit=False)
+        Session = scoped_session(factory)
+        self.__session = Session()
