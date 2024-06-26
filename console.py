@@ -115,23 +115,35 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, args):
         """ Create an object of any class"""
-        try:
-            if not args:
-                raise SyntaxError()
-            arg_list = args.split(" ")
-            kw = {}
-            for arg in arg_list[1:]:
-                arg_splited = arg.split("=")
-                arg_splited[1] = eval(arg_splited[1])
-                if type(arg_splited[1]) is str:
-                    arg_splited[1] = arg_splited[1].replace("_", " ").replace('"', '\\"')
-                kw[arg_splited[0]] = arg_splited[1]
-        except SyntaxError:
+        args = args.split()
+        # print(args)
+        if not args:
             print("** class name missing **")
-        except NameError:
+            return
+        elif args[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
-        new_instance = HBNBCommand.classes[arg_list[0]](**kw)
-        new_instance.save()
+            return
+        new_instance = HBNBCommand.classes[args[0]]()
+        for i in range(1, len(args)):
+            if (args[i].count("=") == 1):
+                attribute = args[i].split('=')
+                if type(attribute[0] == str):
+                    if (attribute[1].count('"') == 2):
+                        if (attribute[1].count('_') > 0):
+                            attribute[1] = attribute[1].replace('_', ' ')
+                        new_instance.__dict__.update({
+                            attribute[0]: attribute[1].strip('"')})
+                    elif (attribute[1].replace('.', '', 1).isdigit()
+                            or attribute[1].replace('.', '\
+                                                    ', 1).replace('-', '', 1)):
+                        if attribute[1].isdigit():
+                            new_instance.__dict__.update({
+                                attribute[0]: int(attribute[1])})
+                        else:
+                            new_instance.__dict__.update({
+                                attribute[0]: float(attribute[1])})
+        storage.new(new_instance)
+        storage.save()
         print(new_instance.id)
 
     def help_create(self):
