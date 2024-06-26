@@ -124,7 +124,7 @@ class HBNBCommand(cmd.Cmd):
                     if hasattr(instance, key):
                         if val.startswith('"') and val.endswith('"'):
                             val = val[1:-1].replace('_', ' ')\
-                                .replace('\\"', '"')
+                                .replace('"', '\"')
                         try:
                             if '.' in val:
                                 val = float(val)
