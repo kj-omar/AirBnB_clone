@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 -- a script to create a database --
 CREATE DATABASE IF NOT EXISTS hbnb_dev_db;
 -- create a user in localhost and set password --
