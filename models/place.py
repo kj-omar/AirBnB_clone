@@ -1,12 +1,18 @@
 #!/usr/bin/python3
 """ Place Module for HBNB project """
-from models.base_model import BaseModel
 from sqlalchemy.orm import relationship
-from sqlalchemy import Column, String, Integer, ForeignKey, Float
+from sqlalchemy import Column, String, Integer, ForeignKey, Float, Table
 from models.base_model import BaseModel, Base
 from os import getenv
+from models.amenity import Amenity
+from models import storage
 
 storage_type = getenv("HBNB_TYPE_STORAGE")
+place_amenity = Table("place_amenity", Base.metadata, 
+                      Column("place_id", String(60), ForeignKey("places.id"), 
+                             primary_key=True, nullable=False), 
+                             Column("amenity_id", String(60), ForeignKey("amenities.id"), 
+                                    primary_key=True, nullable=False))
 
 class Place(BaseModel, Base):
     """ A place to stay """
@@ -24,6 +30,7 @@ class Place(BaseModel, Base):
         longitude = Column(Float, nullable=True)
         user = relationship("User", back_populates="places")
         cities = relationship("City", back_populates="places")
+        amenities = relationship("Amenity", secondary="place_amenity", backref="place_amenities", viewonly=False)
     else:
         city_id = ""
         user_id = ""
@@ -36,3 +43,21 @@ class Place(BaseModel, Base):
         latitude = 0.0
         longitude = 0.0
         amenity_ids = []
+
+        @property
+        def amenities(self):
+            """getting the id of the amenity needed in the list"""
+
+            list_of_ids = []
+            all_amenities = storage.all(Amenity)
+
+            for key, value in all_amenities.items():
+                if key in self.amenity_ids:
+                    list_of_ids.append(value)
+            return list_of_ids
+        @amenities.setter
+        def amenities(self, obj=None):
+            """Setter property for the amenity"""
+            if type(obj).__name__ == "Amenity":
+                key = "Amenity.{}".format(obj.id)
+                self.amenity_ids.append(key)
