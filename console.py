@@ -138,19 +138,19 @@ class HBNBCommand(cmd.Cmd):
                    val_parsed = value
 
                 param_parse[key] = val_parsed
-        if not args:
-            print("** class name missing **")
-            return
-        elif args not in HBNBCommand.classes:
-            print("** class doesn't exist **")
-            return
-        new_instance = HBNBCommand.classes[args]()
-        storage.save()
-        print(new_instance.id)
-        storage.save()
+                if not args:
+                    print("** class name missing **")
+                    return
+                elif args not in HBNBCommand.classes:
+                    print("** class doesn't exist **")
+                    return
+                new_instance = HBNBCommand.classes[args]()
+                storage.save()
+                print(new_instance.id)
+                storage.save()
 
     def help_create(self):
-        """ Help information for the create method """
+        """Help information for the create method """
         print("Creates a class of any type")
         print("[Usage]: create <className>\n")
 
@@ -182,38 +182,38 @@ class HBNBCommand(cmd.Cmd):
         except KeyError:
             print("** no instance found **")
 
-    def help_show(self):
-        """ Help information for the show command """
-        print("Shows an individual instance of a class")
-        print("[Usage]: show <className> <objectId>\n")
+        def help_show(self):
+            """ Help information for the show command """
+            print("Shows an individual instance of a class")
+            print("[Usage]: show <className> <objectId>\n")
 
-    def do_destroy(self, args):
-        """ Destroys a specified object """
-        new = args.partition(" ")
-        c_name = new[0]
-        c_id = new[2]
-        if c_id and ' ' in c_id:
-            c_id = c_id.partition(' ')[0]
+        def do_destroy(self, args):
+            """ Destroys a specified object """
+            new = args.partition(" ")
+            c_name = new[0]
+            c_id = new[2]
+            if c_id and ' ' in c_id:
+                c_id = c_id.partition(' ')[0]
 
-        if not c_name:
-            print("** class name missing **")
-            return
+            if not c_name:
+                print("** class name missing **")
+                return
 
-        if c_name not in HBNBCommand.classes:
-            print("** class doesn't exist **")
-            return
+            if c_name not in HBNBCommand.classes:
+                print("** class doesn't exist **")
+                return
 
-        if not c_id:
-            print("** instance id missing **")
-            return
+            if not c_id:
+                print("** instance id missing **")
+                return
 
-        key = c_name + "." + c_id
+            key = c_name + "." + c_id
 
-        try:
-            del(storage.all()[key])
-            storage.save()
-        except KeyError:
-            print("** no instance found **")
+            try:
+                del(storage.all()[key])
+                storage.save()
+            except KeyError:
+                print("** no instance found **")
 
     def help_destroy(self):
         """ Help information for the destroy command """
