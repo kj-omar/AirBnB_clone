@@ -113,26 +113,40 @@ class HBNBCommand(cmd.Cmd):
         """ Overrides the emptyline method of CMD """
         pass
 
-    def do_create(self, args):
-        """ Create an object of any class"""
+    
+    def do_create(self, line):
+        """funtion that  allow for object creation with given parameters:"""
         try:
-            if not args:
+            if not line:
                 raise SyntaxError()
-            parameters = args.split(" ")
-            kw = {}
-            for parameter in parameters[1:]:
-                splited_parameter = arg.split("=")
-                splited_parameter[1] = eval(splited_parameter[1])
-                if type(splited_parameter[1]) is str:
-                    splited_parameter[1] = splited_parameter[1].replace("_", " ").replace('"', '\\"')
-                kw[splited_parameter[0]] = splited_parameter[1]
+            ini_list = line.split(" ")
+
+            kwargs = {}
+            for i in range(1, len(ini_list)):
+                key, value = tuple(ini_list[i].split("="))
+                if value[0] == '"':
+                    value = value.strip('"').replace("_", " ")
+                else:
+                    try:
+                        value = eval(value)
+                    except (SyntaxError, NameError):
+                        continue
+                kwargs[key] = value
+
+            if kwargs == {}:
+                obj = eval(ini_list[0])()
+            else:
+                obj = eval(ini_list[0])(**kwargs)
+                storage.new(obj)
+            print(obj.id)
+            obj.save()
+
         except SyntaxError:
             print("** class name missing **")
         except NameError:
             print("** class doesn't exist **")
-        new_instance = HBNBCommand.classes[arg_list[0]](**kw)
-        new_instance.save()
-        print(new_instance.id)
+
+    
 
     def help_create(self):
         """ Help information for the create method """
