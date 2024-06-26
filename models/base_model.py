@@ -23,10 +23,17 @@ class BaseModel:
             self.__dict__.update(kwargs)
 
     def __str__(self):
-        """Returns a string representation of the instance"""
-        # cls = (str(type(self)).split('.')[-1]).split('\'')[0]
-        cls = self.__class__.__name__
-        return '[{}] ({}) {}'.format(cls, self.id, self.__dict__)
+            """Returns a string representation of the instance.
+
+            Returns:
+                str: A string representation of the instance.
+            """
+            obj_str = "[{}] ({}) {}".format(
+                self.__class__.__name__,
+                self.id,
+                self.__dict__
+            )
+            return obj_str
 
     def save(self):
         """Updates updated_at with current time when instance is changed"""
@@ -40,9 +47,10 @@ class BaseModel:
             Returns:
                 dict: A dictionary representation of the instance.
             """
-            dictionary = {}
-            dictionary.update(self.__dict__)
-            dictionary.update({'__class__': self.__class__.__name__})
-            dictionary['created_at'] = self.created_at.isoformat()
-            dictionary['updated_at'] = self.updated_at.isoformat()
-            return dictionary
+            obj_dict = self.__dict__.copy()
+            obj_dict['__class__'] = self.__class__.__name__
+            
+            for k, v in obj_dict.items():
+                if isinstance(v, datetime):
+                    obj_dict[k] = v.isoformat()
+            return obj_dict
