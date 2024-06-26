@@ -1,9 +1,11 @@
 #!/usr/bin/python3
 """ Place Module for HBNB project """
-from models.base_model import BaseModel, Base, storage_engine
+from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String, Integer, Float, ForeignKey, Table
 from sqlalchemy.orm import relationship
+import os
 
+storage_engine = os.getenv("HBNB_TYPE_STORAGE")
 place_amenity = None
 if storage_engine == 'db':
     place_amenity = Table('place_amenity', Base.metadata,
