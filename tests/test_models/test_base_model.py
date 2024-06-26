@@ -1,11 +1,9 @@
 #!/usr/bin/python3
-""" """
+""" Module for testing Basemodel """
 from datetime import datetime
 import json
 import os
 import unittest
-from uuid import UUID
-
 from models.base_model import BaseModel, Base
 
 

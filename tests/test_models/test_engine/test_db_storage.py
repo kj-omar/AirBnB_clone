@@ -1,12 +1,11 @@
+#!/usr/bin/python3
 """
 Contains the TestDBStorageDocs and TestDBStorage classes
 """
-from datetime import datetime
 import inspect
 import models
 from models.engine import db_storage
 from models.amenity import Amenity
-from models.base_model import BaseModel
 from models.city import City
 from models.place import Place
 from models.review import Review
@@ -44,26 +43,6 @@ test_db_storage.py'])
         self.assertEqual(result.total_errors, 0,
                          "Found code style errors (and warnings).")
 
-
-# class TestFileStorage(unittest.TestCase):
-#     """Test the FileStorage class"""
-#     @unittest.skipIf(storage_t != 'db', "not testing db storage")
-#     def test_all_returns_dict(self):
-#         """Test that all returns a dictionaty"""
-#         self.assertIs(type(models.storage.all()), dict)
-
-#     @unittest.skipIf(storage_t != 'db', "not testing db storage")
-#     def test_all_no_class(self):
-#         """Test that all returns all rows when no class is passed"""
-
-#     @unittest.skipIf(storage_t != 'db', "not testing db storage")
-#     def test_new(self):
-#         """test that new adds an object to the database"""
-
-#     @unittest.skipIf(storage_t != 'db', "not testing db storage")
-#     def test_save(self):
-#         """Test that save properly saves objects to file.json"""
-
 class TestDBStorageDocs(unittest.TestCase):
     """Tests to check the documentation and style of DBStorage class"""
     @classmethod
@@ -92,7 +71,6 @@ class TestDBStorageDocs(unittest.TestCase):
                              "{:s} method needs a docstring".format(func[0]))
             self.assertTrue(len(func[1].__doc__) >= 1,
                             "{:s} method needs a docstring".format(func[0]))
-
 
 class TestFileStorage(unittest.TestCase):
     """Test the FileStorage class"""

@@ -1,7 +1,5 @@
 #!/usr/bin/python3
-""" """
-import os
-
+""" Module for testing  """
 from models.city import City
 from tests.test_models.test_base_model import TestBasemodel
 
