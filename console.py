@@ -131,15 +131,15 @@ class HBNBCommand(cmd.Cmd):
                 if val.startwith('"') and val.endswith('"'):
                     val = val[1:-1].replace('_', ' ')
                     if "." in val:
-                    try:
-                        val = float(val)
-                    except ValueError:
-                        pass
-                else:
-                    try:
-                        val = int(val)
-                    except ValueError:
-                        pass
+                        try:
+                            val = float(val)
+                        except ValueError:
+                            pass
+                    else:
+                        try:
+                            val = int(val)
+                        except ValueError:
+                            pass
                 setattr(new_instance, key, val)
         new_instance.save()
         print(new_instance.id)
