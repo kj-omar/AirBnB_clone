@@ -42,6 +42,7 @@ class TestDBStorageDocs(unittest.TestCase):
 test_db_storage.py'])
         self.assertEqual(result.total_errors, 0,
                          "Found code style errors (and warnings).")
+        
 
 class TestDBStorageDocs(unittest.TestCase):
     """Tests to check the documentation and style of DBStorage class"""
@@ -71,6 +72,7 @@ class TestDBStorageDocs(unittest.TestCase):
                              "{:s} method needs a docstring".format(func[0]))
             self.assertTrue(len(func[1].__doc__) >= 1,
                             "{:s} method needs a docstring".format(func[0]))
+
 
 class TestFileStorage(unittest.TestCase):
     """Test the FileStorage class"""
