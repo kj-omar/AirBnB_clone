@@ -123,23 +123,22 @@ class HBNBCommand(cmd.Cmd):
         if arr[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
-        if len(arr) > 1:
-            kwargs = {}
-            for arg in arr[1:]:
-                key_value = arg.split("=")
-                key, value = key_value
-                if value.startswith('"') and value.endswith('"'):
-                    value = value.strip('"').replace('_', ' ')
-                    value = value.replace("\\", '"')
-                else:
+        kwargs = {}
+        for arg in arr[1:]:
+            key_value = arg.split("=")
+            key, value = key_value
+            if value.startswith('"') and value.endswith('"'):
+                value = value.strip('"').replace('_', ' ')
+                value = value.replace("\\", '"')
+            else:
+                try:
+                    value = int(value)
+                except ValueError:
                     try:
-                        value = int(value)
+                        value = float(value)
                     except ValueError:
-                        try:
-                            value = float(value)
-                        except ValueError:
-                            pass
-                kwargs[key] = value
+                        pass
+            kwargs[key] = value
         new_instance = HBNBCommand.classes[arr[0]]()
         new_instance.__dict__.update(kwargs)
         storage.save()
