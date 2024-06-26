@@ -1,6 +1,8 @@
 #!/usr/bin/python3
 """This is the place class"""
+import shlex
 from sqlalchemy.ext.declarative import declarative_base
+from models.amenity import Amenity
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, Table, String, Integer, Float, ForeignKey
 from sqlalchemy.orm import relationship
@@ -63,7 +65,7 @@ class Place(BaseModel, Base):
             result = []
             for key in var:
                 review = key.replace('.', ' ')
-                review = shlex.split(review)
+                review = shlex.split(review)  #here
                 if (review[0] == 'Review'):
                     lista.append(var[key])
             for elem in lista:
