@@ -1,8 +1,9 @@
 #!/usr/bin/python3
+"""This module select the stroage engine"""
 
-from  os import  getenv
+from os import getenv
 
-if getenv("HBNB_TYPE_STORAGE")== "db":
+if getenv("HBNB_TYPE_STORAGE") == "db":
     from models.engine import db_storage
     storage = db_storage.DBStorage()
 else:
