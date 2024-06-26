@@ -6,7 +6,7 @@ from sqlalchemy.orm import relationship
 
 
 class State(BaseModel):
-    """ State class """
+    """ State class that inherits from BaseModel and Base"""
     __tablename__ = 'states'
     name = Column(String(128), nullable=False)
     cities = relationship("City", backref="state", 
