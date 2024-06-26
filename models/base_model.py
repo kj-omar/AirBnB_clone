@@ -8,8 +8,7 @@ from sqlalchemy import Column, String, DateTime, MetaData
 from sqlalchemy.orm import declarative_base
 
 # Create Base = declarative_base() before the class definition of BaseModel
-mymetadata = MetaData()
-Base = declarative_base(metadata=mymetadata)
+Base = declarative_base()
 
 
 class BaseModel():
