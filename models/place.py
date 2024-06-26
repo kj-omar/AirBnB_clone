@@ -4,6 +4,7 @@ from models.base_model import BaseModel, Base, storage_engine
 from sqlalchemy import Column, String, Integer, Float, ForeignKey, Table
 from sqlalchemy.orm import relationship
 
+place_amenity = None
 if storage_engine == 'db':
     place_amenity = Table('place_amenity', Base.metadata,
                           Column('place_id', String(60),

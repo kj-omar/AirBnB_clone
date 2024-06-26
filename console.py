@@ -114,14 +114,14 @@ class HBNBCommand(cmd.Cmd):
         pass
 
     def do_create(self, args):
-        """ Create an object of any class given pragmaeters """
+        """ Create an object of any class given parameters """
         if args:
             args = args.split()
             instance = HBNBCommand.classes[args[0]]()
             try:
                 for arg in args[1:]:
                     key, val = arg.split('=')
-                    if (hasattr(instance, key)):
+                    if hasattr(instance, key):
                         if val.startswith('"') and val.endswith('"'):
                             val = val[1:-1].replace('_', ' ')\
                                 .replace('\\"', '"')

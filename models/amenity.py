@@ -6,7 +6,7 @@ from sqlalchemy.orm import relationship
 from models.place import place_amenity
 
 
-class Amenity(BaseModel):
+class Amenity(BaseModel, Base):
     """ The Amenity class, contains name """
     __tablename__ = 'amenities'
     if storage_engine == 'db':
