@@ -39,27 +39,26 @@ class DBStorage:
         Return:
             returns a dictionary of __object
         """
-        dic = {}
-        if cls:
-            if type(cls) is str:
-                cls = eval(cls)
-            query = self.__session.query(cls)
-            for elem in query:
-                key = "{}.{}".format(type(elem).__name__, elem.id)
-                dic[key] = elem
+        models = [User, City, Place, Amenity, Review, State]
+        result = {}
+        if cls is None:
+            for model in models:
+                query = self.__session.query(model)
+                for obj in query.all():
+                    key = "{}.{}".format(obj.__class__.__name__, obj.id)
+                    result[key] = obj
         else:
-            lista = [State, City, User, Place, Review, Amenity]
-            for clase in lista:
-                query = self.__session.query(clase)
-                for elem in query:
-                    key = "{}.{}".format(type(elem).__name__, elem.id)
-                    dic[key] = elem
-        return (dic)
+            query = self.__session.query(cls)
+            for obj in query.all():
+                key = "{}.{}".format(obj.__class__.__name__, obj.id)
+                result[key] = obj
+        return result
 
     def new(self, obj):
         """add a new element in the table
         """
-        self.__session.add(obj)
+        if obj:
+            self.__session.add(obj)
 
     def save(self):
         """save changes
@@ -70,7 +69,7 @@ class DBStorage:
         """delete an element in the table
         """
         if obj:
-            self.session.delete(obj)
+            self.__session.delete(obj)
 
     def reload(self):
         """configuration
