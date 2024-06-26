@@ -116,29 +116,30 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, args):
         """ Create an object of any class"""
-        arr = args.split(' ')
-        if not arr[0]:
+        if not args:
             print("** class name missing **")
             return
-        elif arr[0] not in HBNBCommand.classes:
+        arr = args.split(' ')
+        if arr[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
-        kwargs = {}
-        for arg in arr[1:]:
-            key_value = arg.split("=")
-            key, value = key_value
-            if value.startswith('"') and value.endswith('"'):
-                value = value.strip('"').replace('_', ' ')
-                value = value.replace("\\", '"')
-            else:
-                try:
-                    value = int(value)
-                except ValueError:
+        if len(arr) > 1:
+            kwargs = {}
+            for arg in arr[1:]:
+                key_value = arg.split("=")
+                key, value = key_value
+                if value.startswith('"') and value.endswith('"'):
+                    value = value.strip('"').replace('_', ' ')
+                    value = value.replace("\\", '"')
+                else:
                     try:
-                        value = float(value)
+                        value = int(value)
                     except ValueError:
-                        pass
-            kwargs[key] = value
+                        try:
+                            value = float(value)
+                        except ValueError:
+                            pass
+                kwargs[key] = value
         new_instance = HBNBCommand.classes[arr[0]]()
         new_instance.__dict__.update(kwargs)
         storage.save()
