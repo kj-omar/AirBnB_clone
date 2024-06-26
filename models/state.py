@@ -20,18 +20,11 @@ class State(BaseModel, Base):
     if getenv("HBNB_TYPE_STORAGE") != "db":
         @property
         def cities(self):
-            var = models.storage.all()
-            lista = []
-            result = []
-            for key in var:
-                city = key.replace('.', ' ')
-                city = shlex.split(city)
-                if (city[0] == 'City'):
-                    lista.append(var[key])
-            for elem in lista:
-                if (elem.state_id == self.id):
-                    result.append(elem)
-            return (result)
+            city_list = []
+            for city in models.storage.all(City).values():
+                if city.state_id == self.id:
+                    city_list.append(city)
+            return city_list
     else:
         cities = relationship("City", cascade='all, delete, delete-orphan',
                           backref="state")
