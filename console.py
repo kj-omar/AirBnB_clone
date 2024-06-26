@@ -132,9 +132,9 @@ class HBNBCommand(cmd.Cmd):
                                 val = int(val)
                         except ValueError:
                             pass
-                        setattr(instance, key, val)
                     else:
                         continue
+                    setattr(instance, key, val)
                 storage.save()
                 print(instance.id)
             except Exception as e:
