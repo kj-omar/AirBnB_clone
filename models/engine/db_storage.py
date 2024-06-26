@@ -1,42 +1,43 @@
-
-
 #!/usr/bin/python3
-""" new class for sqlAlchemy """
-from os import getenv
-from sqlalchemy.orm import sessionmaker, scoped_session
+"""
+This module define the DBStorage
+"""
+
 from sqlalchemy import create_engine
+from os import getenv
 from models.base_model import Base
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import scoped_session
 from models.state import State
 from models.city import City
 from models.user import User
 from models.place import Place
-from models.review import Review
 from models.amenity import Amenity
+from models.review import Review
 
 
 class DBStorage:
-    """ create tables in environmental"""
+
     __engine = None
     __session = None
 
     def __init__(self):
-        user = getenv("HBNB_MYSQL_USER")
-        passwd = getenv("HBNB_MYSQL_PWD")
-        db = getenv("HBNB_MYSQL_DB")
-        host = getenv("HBNB_MYSQL_HOST")
-        env = getenv("HBNB_ENV")
-
-        self.__engine = create_engine('mysql+mysqldb://{}:{}@{}/{}'
-                                      .format(user, passwd, host, db),
+        """Initializes the DBStorage class."""
+        username = getenv("HBNB_MYSQL_USER")
+        password = getenv("HBNB_MYSQL_PWD")
+        db_name = getenv("HBNB_MYSQL_DB")
+        db_host = getenv("HBNB_MYSQL_HOST")
+        url = f"mysql+mysqldb://{username}:{password}@{db_host}/{db_name}"
+        self.__engine = create_engine(f"mysql+mysqldb:/\
+                                      /{username}:{password}@\
+                                        {db_host}/{db_name}",
                                       pool_pre_ping=True)
-
-        if env == "test":
-            Base.metadata.drop_all(self.__engine)
+        if getenv("HBNB_ENV") == "test":
+            Base.metadata.drop_all(bind=self.__engine)
 
     def all(self, cls=None):
-        """returns a dictionary
-        Return:
-            returns a dictionary of __object
+        """
+        Returns a dictionary of objects from the database.
         """
         models = [User, City, Place, Amenity, Review, State]
         result = {}
@@ -53,32 +54,32 @@ class DBStorage:
                 result[key] = obj
         return result
 
-    def new(self, obj):
-        """add a new element in the table
-        """
-        if obj:
-            self.__session.add(obj)
-
     def save(self):
-        """save changes
+        """
+        Commits changes to the database.
         """
         self.__session.commit()
 
     def delete(self, obj=None):
-        """delete an element in the table
         """
-        if obj:
+        Deletes an object from the database.
+        """
+        if obj is not None:
             self.__session.delete(obj)
 
+    def new(self, obj):
+        """
+        Adds a new object to the session.
+        """
+        if obj is not None:
+            self.__session.add(obj)
+
     def reload(self):
-        """configuration
+        """
+        Creates all tables in the database.
         """
         Base.metadata.create_all(self.__engine)
-        sec = sessionmaker(bind=self.__engine, expire_on_commit=False)
-        Session = scoped_session(sec)
+        session_factory = sessionmaker(bind=self.__engine,
+                                       expire_on_commit=False)
+        Session = scoped_session(session_factory)
         self.__session = Session()
-
-    def close(self):
-        """ calls remove()
-        """
-        self.__session.close()
