@@ -20,6 +20,7 @@ class State(BaseModel, Base):
 
             """
             import models
+            from models import storage
             from models.cities import City
             city_list = []
             for city in models.storage.all(City).values():
