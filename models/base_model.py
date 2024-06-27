@@ -11,6 +11,7 @@ from sqlalchemy import DateTime
 from sqlalchemy import String
 
 Base = declarative_base()
+"""define the SQLAlchemy Base"""
 
 
 class BaseModel:

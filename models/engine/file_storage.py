@@ -19,8 +19,9 @@ class FileStorage:
         __file_path: path to the JSON file
         __objects: objects will be stored
     """
-    __file_path = "file.json"
-    __objects = {}
+
+    __file_path = "file.json" # path to the JSON file
+    __objects = {}  # Dictionary to store objects
 
     def all(self, cls=None):
         """defines a dictionary
