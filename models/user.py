@@ -6,7 +6,17 @@ from sqlalchemy.orm import relationship
 
 
 class User(BaseModel, Base):
-    """This class defines a user by various attributes"""
+    """
+    This class represents a user in the AirBnB application.
+
+    Attributes:
+        email (str): The email address of the user.
+        password (str): The password of the user.
+        first_name (str): The first name of the user.
+        last_name (str): The last name of the user.
+        places (relationship): The places associated with the user.
+        reviews (relationship): The reviews written by the user.
+    """
     __tablename__ = 'users'
 
     email = Column(String(128), nullable=False)
