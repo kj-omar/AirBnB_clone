@@ -27,7 +27,7 @@ class FileStorage:
         Return:
             returns dictionary of __object
         """
-        dict = {}
+       """ dict = {}
         if cls:
             dictionary = self.__objects
             for key in dictionary:
@@ -35,9 +35,11 @@ class FileStorage:
                 partition = shlex.split(partition)
                 if (partition[0] == cls.__name__):
                     dic[key] = self.__objects[key]
-            return (dict)
-        else:
+            return (dict)"""
+        if cls is None:
             return self.__objects
+        else:
+            return {key:obj for key, in self.__object.items() if insistance(obj, cls)}
 
     def new(self, obj):
         """sets __object given obj
