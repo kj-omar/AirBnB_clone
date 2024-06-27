@@ -50,7 +50,14 @@ class DBStorage:
         obj_dict = {}
         for obj in obj_list:
             key = "{}.{}".format(obj.__class__.__name__, obj.id)
-            obj_dict[key] = obj
+            try:
+                if obj.__class__.__name__ == 'State':
+                    del obj._sa_instance_state
+                    obj_dict[key] = obj
+                else:
+                    obj_dict[key] = obj
+            except Exception:
+                pass
         return obj_dict
     
     def new(self, obj): 
