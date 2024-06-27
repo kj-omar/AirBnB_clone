@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """ Console Module """
 import cmd
+from datetime import datetime
 import sys
 from models.base_model import BaseModel
 from models.__init__ import storage
@@ -135,6 +136,10 @@ class HBNBCommand(cmd.Cmd):
             elif value.isdigit():
                 value = int(value)
             kwargs[key] = value
+
+        if 'updated_at' not in kwargs:
+            kwargs['updated_at'] = datetime.now()
+
 
         new_instance = HBNBCommand.classes[class_name](**kwargs)
         print(new_instance.id)
