@@ -3,10 +3,11 @@
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String, ForeignKey
 from sqlalchemy.orm import relationship
+import shlex
 
 
-class State(BaseModel):
-    """ State class """
+class State(BaseModel, Base):
+    """ State class that inherits from BaseModel and Base"""
     __tablename__ = 'states'
     name = Column(String(128), nullable=False)
     cities = relationship("City", backref="state", 
@@ -23,8 +24,15 @@ class State(BaseModel):
         """
         from models import storage
         from models.city import City
-        city_list = []
-        for city in storage.all(City).values():
-            if city.state_id == self.id:
-                city_list.append(city)
-        return city_list
+        var = storage.all()
+        mylist = []
+        result = []
+        for key in var:
+            city = key.replace('.', ' ')
+            city = shlex.split(city)
+            if city[0] == 'City':
+                mylist.append(var[key])
+        for elem in mylist:
+            if elem.state_id == self.id:
+                result.append(elem)
+        return result

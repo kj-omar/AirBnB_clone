@@ -7,7 +7,7 @@ storage for the AirBnB_clone_v2 project
 from os import getenv
 from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy import (create_engine)
-from models.base_model import BaseModel, Base
+from models.base_model import Base
 from models.state import State
 from models.city import City
 from models.user import User
@@ -16,7 +16,7 @@ from models.review import Review
 from models.amenity import Amenity
 
 
-class DBStorage:
+class DBStorage():
     """
     Class to manage database storage
     """
@@ -34,12 +34,8 @@ class DBStorage:
         env = getenv("HBNB_ENV")
 
         self.__engine = create_engine('mysql+mysqldb://{}:{}@{}/{}'
-                                      .format(
-                                          user,
-                                          passwd, 
-                                          host,
-                                          db
-                                          ), pool_pre_ping=True)
+                                      .format(user, passwd, host, db),
+                                      pool_pre_ping=True)
 
         if env == "test":
             Base.metadata.drop_all(self.__engine)
