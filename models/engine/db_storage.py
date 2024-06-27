@@ -26,7 +26,7 @@ class DBStorage:
         host = getenv('HBNB_MYSQL_HOST')
         db_name = getenv('HBNB_MYSQL_DB')
 
-        db_url = "mysql+mysqldb://{}:{}@{}/{}".format(username, password, db_name)
+        db_url = "mysql+mysqldb://{}:{}@{}/{}".format(username, password, host, db_name)
         self.__engine = create_engine(db_url, pool_pre_ping=True) #pool_per_ping checks if the connection is alive
         if getenv('HBNB_ENV') == 'test':
             Base.metadata.drop_all(self.__engine)
