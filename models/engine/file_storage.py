@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""module for file storage for AirBnB"""
+"""file storage for AirBnB project"""
 
 from models.user import User
 from models.place import Place
@@ -8,12 +8,12 @@ from models.city import City
 from models.amenity import Amenity
 from models.base_model import BaseModel
 import shlex
-import json
 from models.state import State
+import json
 
 
 class FileStorage:
-    """class serializes instances to a JSON and
+    """serializes instances to a JSON and
     deserializes JSON file to instances
     Attributes:
         __file_path: path to the JSON file
@@ -24,7 +24,7 @@ class FileStorage:
     __objects = {}  # Dictionary to store objects
 
     def all(self, cls=None):
-        """defines a dictionary
+        """
         Return:
             returns dictionary of __object
         """
@@ -35,14 +35,14 @@ class FileStorage:
                 partition = key.replace('.', ' ')
                 partition = shlex.split(partition)
                 if (partition[0] == cls.__name__):
-                    dic[key] = self.__objects[key]
+                    dict[key] = self.__objects[key]
             return (dict)
         else:
             return self.__objects
 
     def new(self, obj):
         """sets __object given obj
-        params:
+        Args:
             obj: given object
         """
         if obj:
@@ -70,13 +70,13 @@ class FileStorage:
             pass
 
     def delete(self, obj=None):
-        """ delete existing element class name
+        """ delete existing element
         """
         if obj:
             key = "{}.{}".format(type(obj).__name__, obj.id)
             del self.__objects[key]
 
     def close(self):
-        """closes the session with reload() function
+        """the calls will reload()
         """
         self.reload()
