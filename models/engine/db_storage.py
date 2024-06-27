@@ -53,33 +53,33 @@ class DBStorage:
             obj_dict[key] = obj
         return obj_dict
     
-def new(self, obj): 
-    """
-    add the object to the current database session (self.__session)
-    """
-    self.__session.add(obj)
+    def new(self, obj): 
+        """
+        add the object to the current database session (self.__session)
+        """
+        self.__session.add(obj)
 
-def save(self):
-    """
-    commit all changes of the current database session (self.__session)
-    """
+    def save(self):
+        """
+        commit all changes of the current database session (self.__session)
+        """
 
-    self.__session.commit()
+        self.__session.commit()
 
-def delete(self, obj=None):
-    """
-    delete from the current database session obj if not None
-    """
-    self.__session.delete(obj)
+    def delete(self, obj=None):
+        """
+        delete from the current database session obj if not None
+        """
+        self.__session.delete(obj)
 
-def reload(self):
-    """
-    create all tables in the database (feature of SQLAlchemy)
-    (WARNING: all classes who inherit from Base must be imported
-    before calling Base.metadata.create_all(engine))
-    """
-    Base.metadata.create_all(self.__engine)
-    session_factory = sessionmaker(bind=self.__engine, expire_on_commit=False)
-    session =  scoped_session(session_factory)
-    self.__session = Session()
+    def reload(self):
+        """
+        create all tables in the database (feature of SQLAlchemy)
+        (WARNING: all classes who inherit from Base must be imported
+        before calling Base.metadata.create_all(engine))
+        """
+        Base.metadata.create_all(self.__engine)
+        session_factory = sessionmaker(bind=self.__engine, expire_on_commit=False)
+        session =  scoped_session(session_factory)
+        self.__session = Session()
     
