@@ -43,7 +43,6 @@ class DBStorage:
                 'Review': Review
             }
         if cls:
-            # becouse cls is string when we passed it as arg
             filter_query = self.__session.query(cls).all()
             for obj in filter_query:
                 key = f"{obj.__class__.__name__}.{obj.id}"
@@ -54,7 +53,6 @@ class DBStorage:
                 for obj in filter_query:
                     key = f"{obj.__class__.__name__}.{obj.id}"
                     new_dict[key] = obj
-        print(new_dict)
         return new_dict
 
     def new(self, obj):
