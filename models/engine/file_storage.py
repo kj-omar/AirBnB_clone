@@ -4,16 +4,32 @@ import json
 
 
 class FileStorage:
-    """This class manages storage of hbnb models in JSON format"""
+    """This class manages FileStorage of hbnb models in JSON format"""
     __file_path = 'file.json'
     __objects = {}
 
     def all(self, cls=None):
         """Returns a dictionary of models currently in storage"""
+        from models.user import User
+        from models.place import Place
+        from models.review import Review
+        from models.city import City
+        from models.amenity import Amenity
+        from models.state import State
+        new_dict = {}
+        classes = {
+                'User': User,
+                'State': State,
+                'City': City,
+                'Amenity': Amenity,
+                'Place': Place,
+                'Review': Review
+            }
         if cls:
             new_dict = {}
             for key, value in self.__objects.items():
-                if isinstance(value, cls):
+                cls = classes.get(cls)
+                if type(value) == cls:
                     new_dict[key] = value
 
             return new_dict
