@@ -16,9 +16,9 @@ class State(BaseModel):
     else:
         @property
         def cities(self):
-        """
+            """
 
-        """
+            """
             import models
             from models.cities import City
             city_list = []
