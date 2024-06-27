@@ -1,12 +1,13 @@
 #!/usr/bin/python3
-"""This module defines a class to manage file storage for hbnb clone"""
-import json
+"""defines a class to manage file storage for hbnb project"""
+
 import os
+import json
 from importlib import import_module
 
 
 class FileStorage:
-    """This class manages storage of hbnb models in JSON format"""
+    """manages storage of hbnb models in JSON format"""
     __file_path = 'file.json'
     __objects = {}
 
@@ -27,11 +28,11 @@ class FileStorage:
         if cls is None:
             return self.__objects
         else:
-            filtered_dict = {}
+            filter_dict = {}
             for key, value in self.__objects.items():
                 if type(value) is cls:
-                    filtered_dict[key] = value
-            return filtered_dict
+                    filter_dict[key] = value
+            return filter_dict
 
     def delete(self, obj=None):
         """Removes an object from the storage dictionary"""
@@ -49,13 +50,13 @@ class FileStorage:
     def save(self):
         """Saves storage dictionary to file"""
         with open(self.__file_path, 'w') as file:
-            temp = {}
+            tmp = {}
             for key, val in self.__objects.items():
-                temp[key] = val.to_dict()
-            json.dump(temp, file)
+                tmp[key] = val.to_dict()
+            json.dump(tmp, file)
 
     def reload(self):
-        """Loads storage dictionary from file"""
+        """reLoads storage dictionary from file"""
         classes = self.model_classes
         if os.path.isfile(self.__file_path):
             temp = {}
