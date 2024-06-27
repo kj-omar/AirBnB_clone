@@ -1,37 +1,34 @@
 #!/usr/bin/python3
-"""defines a class User module """
-
+"""This module defines a class User"""
 import os
-import models
-from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
-from hashlib import md5
+
+from models.base_model import BaseModel, Base
 
 
 class User(BaseModel, Base):
-    """defines a user by various attributes"""
-    if models.storage_type == 'db':
-        __tablename__ = 'users'
-        email = Column(String(128), nullable=False)
-        password = Column(String(128), nullable=False)
-        first_name = Column(String(128), nullable=True)
-        last_name = Column(String(128), nullable=True)
-        places = relationship("Place", backref="user")
-        reviews = relationship("Review", backref="user")
-    else:
-        email = ""
-        password = ""
-        first_name = ""
-        last_name = ""
-
-    def __init__(self, *args, **kwargs):
-        """initializes user"""
-        super().__init__(*args, **kwargs)
-
-    def __setattr__(self, name, value):
-        if name == "password":
-            super(User, self).__setattr__(name,
-                                          md5(value.encode()).hexdigest())
-        else:
-            super(User, self).__setattr__(name, value)
+    """This class defines a user by various attributes"""
+    __tablename__ = 'users'
+    email = Column(
+        String(128), nullable=False
+    ) if os.getenv('HBNB_TYPE_STORAGE') == 'db' else ''
+    password = Column(
+        String(128), nullable=False
+    ) if os.getenv('HBNB_TYPE_STORAGE') == 'db' else ''
+    first_name = Column(
+        String(128), nullable=True
+    ) if os.getenv('HBNB_TYPE_STORAGE') == 'db' else ''
+    last_name = Column(
+        String(128), nullable=True
+    ) if os.getenv('HBNB_TYPE_STORAGE') == 'db' else ''
+    places = relationship(
+        'Place',
+        cascade="all, delete, delete-orphan",
+        backref='user'
+    ) if os.getenv('HBNB_TYPE_STORAGE') == 'db' else None
+    reviews = relationship(
+        'Review',
+        cascade="all, delete, delete-orphan",
+        backref='user'
+    ) if os.getenv('HBNB_TYPE_STORAGE') == 'db' else None
