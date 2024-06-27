@@ -136,6 +136,10 @@ class HBNBCommand(cmd.Cmd):
                 value = int(value)
             kwargs[key] = value
 
+        if 'updated_at' not in kwargs:
+            kwargs['updated_at'] = datetime.now()
+
+
         new_instance = HBNBCommand.classes[class_name](**kwargs)
         print(new_instance.id)
         storage.save()
