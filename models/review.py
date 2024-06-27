@@ -5,7 +5,14 @@ from sqlalchemy import Column,String, ForeignKey
 
 
 class Review(BaseModel, Base):
-    """ Review class to store review information """
+    """Review class to store review information.
+
+    Attributes:
+        __tablename__ (str): The name of the database table for reviews.
+        text (str): The text content of the review.
+        place_id (str): The ID of the place associated with the review.
+        user_id (str): The ID of the user who wrote the review.
+    """
     __tablename__ = 'reviews'
     text = Column(String(1024), nullable=False)
     place_id = Column(String(60), ForeignKey('places.id'), nullable=False)

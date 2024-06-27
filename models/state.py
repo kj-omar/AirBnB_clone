@@ -14,9 +14,13 @@ class State(BaseModel):
                           )
     @property
     def cities(self):
-        """Getter attribute cities that returns the list of
-        City instances with state_id equals to the current 
-        State.id"""
+        """Getter attribute cities that returns the list of City
+        instances with state_id equals to the current State.id
+        
+        Returns:
+            list: A list of City instances with state_id equals
+            to the current State.id.
+        """
         from models import storage
         from models.city import City
         city_list = []
