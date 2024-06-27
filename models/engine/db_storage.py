@@ -56,7 +56,7 @@ class DBStorage:
         else:
             if type(cls) == str:
                 cls = eval(cls)
-            objs = self.__session.query(cls)
+            objs = self.__session.query(cls).all()
         return {"{}.{}".format(type(o).__name__, o.id): o for o in objs}
 
     def new(self, obj):
@@ -82,4 +82,4 @@ class DBStorage:
 
     def close(self):
         """Close working SQLAlchemy session"""
-        self.__session.close()
+        self.__session.remove()
