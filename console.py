@@ -127,10 +127,10 @@ class HBNBCommand(cmd.Cmd):
             kwargs = {}
             commands = arg.split(" ")
             for i in range(1, len(commands)):
-                
+
                 key = commands[i].split("=")[0]
                 value = commands[i].split("=")[1]
-                #key, value = tuple(commands[i].split("="))
+                # key, value = tuple(commands[i].split("="))
                 if value.startswith('"'):
                     value = value.strip('"').replace("_", " ")
                 else:
@@ -297,7 +297,7 @@ class HBNBCommand(cmd.Cmd):
                 args.append(v)
         else:  # isolate args
             args = args[2]
-            if args and args[0] ==  '\"':  # check for quoted arg
+            if args and args[0] == '\"':  # check for quoted arg
                 second_quote = args.find('\"', 1)
                 att_name = args[1:second_quote]
                 args = args[second_quote + 1:]
@@ -308,7 +308,7 @@ class HBNBCommand(cmd.Cmd):
             if not att_name and args[0] != ' ':
                 att_name = args[0]
             # check for quoted val arg
-            if args[2] and args[2][0] ==  '\"':
+            if args[2] and args[2][0] == '\"':
                 att_val = args[2][1:args[2].find('\"', 1)]
 
             # if att_val was not quoted arg
@@ -344,6 +344,7 @@ class HBNBCommand(cmd.Cmd):
         """ Help information for the update class """
         print("Updates an object with new information")
         print("Usage: update <className> <id> <attName> <attVal>\n")
+
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
