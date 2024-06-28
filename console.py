@@ -73,8 +73,10 @@ class HBNBCommand(cmd.Cmd):
                 pline = pline[2].strip()  # pline is now str
                 if pline:
                     if pline[0] == '{' and pline[-1] == '}'\
-                    if pline[0] == '{' and pline[-1] == '}' and isinstance(eval(pline)) is dict:
+                            if pline[0] == '{' and pline[-1] == '}' and isinstance(eval(pline)) is dict:
+
                         _args = pline
+                    
                     else:
                         _args = pline.replace(',', '')
                         # _args = _args.replace('\"', '')
@@ -152,7 +154,6 @@ class HBNBCommand(cmd.Cmd):
                 models.storage.rollback()
         else:
             print("** class name missing **")    
-    
 
     def help_create(self):
         """ Help information for the create method """
@@ -347,6 +348,7 @@ class HBNBCommand(cmd.Cmd):
         """ Help information for the update class """
         print("Updates an object with new information")
         print("Usage: update <className> <id> <attName> <attVal>\n")
+
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
