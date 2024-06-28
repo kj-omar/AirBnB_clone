@@ -118,45 +118,9 @@ class HBNBCommand(cmd.Cmd):
         """Creates a new instance of a Model"""
         if arg:
             try:
-                args = arg.split()
-                template = models.dummy_classes[args[0]]
-                new_instance = template()
-                try:
-                    for val in args[1:]:
-                        val_split = val.split("=")
-                        if (hasattr(new_instance, val_split[0])):
-                            value = val_split[1]
-                            flag = 0
-                            if (value.startswith('"')):
-                                value = value.strip('"')
-                                value = value.replace("\\", "")
-                                value = value.replace("_", " ")
-                            elif ("." in value):
-                                try:
-                                    value = float(value)
-                                except:
-                                    flag = 1
-                            else:
-                                try:
-                                    value = int(value)
-                                except:
-                                    flag = 1
-                            if (not flag):
-                                setattr(new_instance, val_split[0], value)
-                        else:
-                            continue
-                    new_instance.save()
-                    print(new_instance.id)
-                except:
-                    new_instance.rollback()
-            except:
-                print("** class doesn't exist **")
-                models.storage.rollback()
-        else:
-            print("** class name missing **")    
 
     def help_create(self):
-        """ Help information for the create method """
+        """Help information for the create method """
         print("Creates a class of any type")
         print("[Usage]: create <className>\n")
 
@@ -188,38 +152,38 @@ class HBNBCommand(cmd.Cmd):
         except KeyError:
             print("** no instance found **")
 
-    def help_show(self):
-        """ Help information for the show command """
-        print("Shows an individual instance of a class")
-        print("[Usage]: show <className> <objectId>\n")
+        def help_show(self):
+            """ Help information for the show command """
+            print("Shows an individual instance of a class")
+            print("[Usage]: show <className> <objectId>\n")
 
-    def do_destroy(self, args):
-        """ Destroys a specified object """
-        new = args.partition(" ")
-        c_name = new[0]
-        c_id = new[2]
-        if c_id and ' ' in c_id:
-            c_id = c_id.partition(' ')[0]
+        def do_destroy(self, args):
+            """ Destroys a specified object """
+            new = args.partition(" ")
+            c_name = new[0]
+            c_id = new[2]
+            if c_id and ' ' in c_id:
+                c_id = c_id.partition(' ')[0]
 
-        if not c_name:
-            print("** class name missing **")
-            return
+            if not c_name:
+                print("** class name missing **")
+                return
 
-        if c_name not in HBNBCommand.classes:
-            print("** class doesn't exist **")
-            return
+            if c_name not in HBNBCommand.classes:
+                print("** class doesn't exist **")
+                return
 
-        if not c_id:
-            print("** instance id missing **")
-            return
+            if not c_id:
+                print("** instance id missing **")
+                return
 
-        key = c_name + "." + c_id
+            key = c_name + "." + c_id
 
-        try:
-            del(storage.all()[key])
-            storage.save()
-        except KeyError:
-            print("** no instance found **")
+            try:
+                del(storage.all()[key])
+                storage.save()
+            except KeyError:
+                print("** no instance found **")
 
     def help_destroy(self):
         """ Help information for the destroy command """
