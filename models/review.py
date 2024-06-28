@@ -1,13 +1,23 @@
-from sqlalchemy import Column, String, ForeignKey
+#!/usr/bin/python3
+"""Defines the Review class."""
+from models.base_model import Base
+from models.base_model import BaseModel
+from sqlalchemy import Column
+from sqlalchemy import ForeignKey
+from sqlalchemy import String
 from sqlalchemy.orm import relationship
-from .base_model import BaseModel, Base  # Importing BaseModel and Base from your project
+
 
 class Review(BaseModel, Base):
-    __tablename__ = 'reviews'  # Table name
-    
-    text = Column(String(1024), nullable=False)  # Column for review text (max 1024 characters, not nullable)
-    place_id = Column(String(60), ForeignKey('places.id'), nullable=False)  # Foreign key to places table
-    user_id = Column(String(60), ForeignKey('users.id'), nullable=False)  # Foreign key to users table
-    
-    place = relationship("Place", back_populates="review")
-    user = relationship("User", back_populates="reviews")
+    """Represents a review for a MySQL database.
+    Inherits from SQLAlchemy Base and links to the MySQL table reviews.
+    Attributes:
+        __tablename__ (str): The name of the MySQL table to store Reviews.
+        text (sqlalchemy String): The review description.
+        place_id (sqlalchemy String): The review's place id.
+        user_id (sqlalchemy String): The review's user id.
+    """
+    __tablename__ = "reviews"
+    text = Column(String(1024), nullable=False)
+    place_id = Column(String(60), ForeignKey("places.id"), nullable=False)
+    user_id = Column(String(60), ForeignKey("users.id"), nullable=False)
