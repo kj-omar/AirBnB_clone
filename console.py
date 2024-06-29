@@ -3,11 +3,6 @@
 import cmd
 import sys
 import re
-
-import os
-from datetime import datetime
-import uuid
-
 from models.base_model import BaseModel
 from models.__init__ import storage
 from models.user import User
@@ -16,7 +11,6 @@ from models.state import State
 from models.city import City
 from models.amenity import Amenity
 from models.review import Review
-
 
 class HBNBCommand(cmd.Cmd):
     """ Contains the functionality for the HBNB console """
@@ -77,8 +71,7 @@ class HBNBCommand(cmd.Cmd):
                 pline = pline[2].strip()  # pline is now str
                 if pline:
                     # check for *args or **kwargs
-                    if pline[0] == '{' and pline[-1] == '}' and type(
-                            eval(pline)) is dict:
+                    if pline[0] == '{' and pline[-1] == '}' and type(eval(pline)) is dict:
                         _args = pline
                     else:
                         _args = pline.replace(',', '')
@@ -117,11 +110,7 @@ class HBNBCommand(cmd.Cmd):
         pass
 
     def do_create(self, args):
-
         """ Create an object of any class with given parameters """
-
-        """ Create an object of any class with given parameters"""
-
         ignored_attrs = ('id', 'created_at', 'updated_at', '__class__')
         class_name = ''
         name_pattern = r'(?P<name>(?:[a-zA-Z]|_)(?:[a-zA-Z]|\d|_)*)'
@@ -156,64 +145,18 @@ class HBNBCommand(cmd.Cmd):
         else:
             class_name = args
         if not class_name:
-
-        """Create an object of any class with given parameters."""
-        args = arg.split()
-        if len(args) == 0:
-
             print("** class name missing **")
             return
         if class_name not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
-
         new_instance = HBNBCommand.classes[class_name]()
         for key, value in obj_kwargs.items():
             if key not in ignored_attrs:
                 setattr(new_instance, key, value)
-
-        if os.getenv('HBNB_TYPE_STORAGE') == 'db':
-            if not hasattr(obj_kwargs, 'id'):
-                obj_kwargs['id'] = str(uuid.uuid4())
-            if not hasattr(obj_kwargs, 'created_at'):
-                obj_kwargs['created_at'] = str(datetime.now())
-            if not hasattr(obj_kwargs, 'updated_at'):
-                obj_kwargs['updated_at'] = str(datetime.now())
-            new_instance = HBNBCommand.classes[class_name](**obj_kwargs)
-            new_instance.save()
-            print(new_instance.id)
-        else:
-            new_instance = HBNBCommand.classes[class_name]()
-            for key, value in obj_kwargs.items():
-                if key not in ignored_attrs:
-                    setattr(new_instance, key, value)
-            new_instance.save()
-            print(new_instance.id)
-
-
-        kwargs = {}
-        for param in args[1:]:
-            key, value = param.split("=")
-            if value.startswith('"') and value.endswith('"'):
-                value = value[1:-1].replace('_', ' ').replace('\\"', '"')
-            elif '.' in value:
-                try:
-                    value = float(value)
-                except ValueError:
-                    continue
-            else:
-                try:
-                    value = int(value)
-                except ValueError:
-                    continue
-            kwargs[key] = value
-
-        new_instance = HBNBCommand.classes[class_name](**kwargs)
-
         storage.new(new_instance)
         storage.save()
         print(new_instance.id)
-
 
     def help_create(self):
         """ Help information for the create method """
@@ -276,7 +219,7 @@ class HBNBCommand(cmd.Cmd):
         key = c_name + "." + c_id
 
         try:
-            del (storage.all()[key])
+            del(storage.all()[key])
             storage.save()
         except KeyError:
             print("** no instance found **")
@@ -407,6 +350,6 @@ class HBNBCommand(cmd.Cmd):
         print("Updates an object with new information")
         print("Usage: update <className> <id> <attName> <attVal>\n")
 
-
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
+
