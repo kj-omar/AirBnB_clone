@@ -114,23 +114,29 @@ class HBNBCommand(cmd.Cmd):
         """ Overrides the emptyline method of CMD """
         pass
 
-    def do_create(self, args):
-        """ Create an object of any class"""
-        if not args:
+    def do_create(self, arg):
+        """ Create an object of any class """
+        if not arg:
             print("** class name missing **")
             return
-        args_list = args.split()
+
+        args_list = arg.split()
         class_name = args_list[0]
+
         if class_name not in HBNBCommand.classes:
-            print("** class doesn''t exist **")
+            print("** class doesn't exist **")
             return
+
         kwargs = {}
         for param in args_list[1:]:
             key, value = param.split('=')
+            kwargs[key] = value
+
             if value.startswith('"') and value.endswith('"'):
                 value = value[1:-1]
                 value = value.replace('\\\"', '"')
                 value = value.replace('_', ' ')
+
             if '.' in value:
                 value = float(value)
             elif value.isdigit():
@@ -138,8 +144,13 @@ class HBNBCommand(cmd.Cmd):
             kwargs[key] = value
 
         if 'updated_at' not in kwargs:
-            kwargs['updated_at'] = datetime.now()
-
+            kwargs['updated_at'] = datetime.now().strftime(
+                '%Y-%m-%dT%H:%M:%S.%f'
+                )
+        if 'created_at' not in kwargs:
+            kwargs['created_at'] = datetime.now().strftime(
+                '%Y-%m-%dT%H:%M:%S.%f'
+                )
 
         new_instance = HBNBCommand.classes[class_name](**kwargs)
         print(new_instance.id)
@@ -206,7 +217,7 @@ class HBNBCommand(cmd.Cmd):
         key = c_name + "." + c_id
 
         try:
-            del(storage.all()[key])
+            del (storage.all()[key])
             storage.save()
         except KeyError:
             print("** no instance found **")
@@ -338,6 +349,7 @@ class HBNBCommand(cmd.Cmd):
         """ Help information for the update class """
         print("Updates an object with new information")
         print("Usage: update <className> <id> <attName> <attVal>\n")
+
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
