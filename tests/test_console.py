@@ -13,10 +13,10 @@ class TestHBNBCommand(unittest.TestCase):
         self.console = HBNBCommand()
         self.stdout = sys.stdout
         sys.stdout = StringIO()
-    
+
     def tearDown(self):
         sys.stdout = self.stdout
-    
+
     def test_prompt(self):
         self.assertEqual(self.console.prompt, '(hbnb) ')
 
