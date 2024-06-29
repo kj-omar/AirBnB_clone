@@ -7,7 +7,7 @@ import os
 import sys
 import uuid
 
-from models.base_model import BaseModel
+from models.base_model import BaseModel, Base
 from models import storage
 from models.user import User
 from models.place import Place
