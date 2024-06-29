@@ -22,7 +22,7 @@ class BaseModel:
     created_at = Column(DateTime,
                         nullable=False,
                         default=datetime.now())
-    created_at = Column(DateTime,
+    updated_at = Column(DateTime,
                         nullable=False,
                         default=datetime.now())
 

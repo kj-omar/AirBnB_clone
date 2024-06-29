@@ -15,3 +15,4 @@ class City(BaseModel, Base):
                       ForeignKey('states.id'),
                       nullable=False)
     state = relationship("State", back_populates="cities")
+    places = relationship("Place", back_populates="cities", cascade="all, delete")
