@@ -144,4 +144,4 @@ Usage: <class_name>.update(<_id>, <dictionary>)
 ## Authors and Acknowledgements
 - Elijah Poole [<a href="https://github.com/VengeanceIsHis">@VengeanceIsHis</a>]
 - LJ Thao [<a href="https://github.com/LJThao">@LJThao</a>]
-- All Authors [<a href="(https://github.com/justinmajetich/AirBnB_clone/blob/dev/AUTHORS">@All</a>]
+- All Authors [<a href="https://github.com/VengeanceIsHis/atlas-AirBnB_clone_v2/blob/master/AUTHORS">@All</a>]
