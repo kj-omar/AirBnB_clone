@@ -3,7 +3,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy.ext.declarative import declarative_base
-from models.base_model import BaseModel
+from models.base_model import BaseModel, Base
 from models.user import User
 from models.place import Place
 from models.state import State
@@ -12,7 +12,6 @@ from models.amenity import Amenity
 from models.review import Review
 from os import getenv
 
-Base = declarative_base()
 
 class DBStorage:
     __engine = None
