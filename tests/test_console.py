@@ -4,6 +4,7 @@ from models.base_model import BaseModel
 from models.user import User
 from models import storage
 
+
 class TestConsoleCreateCommand(unittest.TestCase):
     """Tests for the create command with parameters"""
 
@@ -13,7 +14,12 @@ class TestConsoleCreateCommand(unittest.TestCase):
 
     def test_create_with_params(self):
         """Test creating a BaseModel instance with parameters"""
-        self.hbnb.onecmd("create BaseModel name=\"MyModel\" number=1234.56 float_attr=3.14 int_attr=7")
+        string = (
+            f"create BaseModel name=\"MyModel\" number={1234.56} "
+            f"float_attr={3.14} int_attr={7}"
+        )
+
+        self.hbnb.onecmd(string)
         all_objs = storage.all()
         for key, obj in all_objs.items():
             if type(obj).__name__ == "BaseModel" and obj.name == "MyModel":
@@ -35,11 +41,15 @@ class TestConsoleCreateCommand(unittest.TestCase):
             self.fail("User not found or email incorrect")
 
     def test_create_with_underscore(self):
-        """Test creating an instance with an underscore in the attribute name"""
+        """Test creating an instance with
+          an underscore in the attribute name"""
         self.hbnb.onecmd("create BaseModel name=\"My_little_house\"")
         all_objs = storage.all()
         for key, obj in all_objs.items():
-            if type(obj).__name__ == "BaseModel" and obj.name == "My little house":
+            type_n = f"BaseModel"
+            obj_n = f"My little house"
+
+            if type(obj).__name__ == type_n and obj.name == obj_n:
                 break
         else:
             self.fail("BaseModel not found or name incorrect")
@@ -54,6 +64,7 @@ class TestConsoleCreateCommand(unittest.TestCase):
                 break
         else:
             self.fail("BaseModel not found")
+
 
 if __name__ == "__main__":
     unittest.main()
