@@ -22,6 +22,7 @@ classes = {
     "User": User,
 }
 
+
 class DBStorage:
     __engine = None
     __session = None
@@ -57,11 +58,14 @@ class DBStorage:
         self.__session.commit()
 
     def delete(self, obj=None):
-        """Delete obj from __objects if its inside - if obj is equal to None, the method should not do anything"""
+        """Delete obj from __objects if it’s inside - if obj is equal to None,
+          the method should not do anything"""
         if obj is not None:
             self.__session.delete(obj)
 
     def reload(self):
         """Loads storage dictionary from file"""
         Base.metadata.create_all(self.__engine)
-        self.__session = scoped_session(sessionmaker(bind=self.__engine, expire_on_commit=False))
+        self.__session = scoped_session(
+            sessionmaker(bind=self.__engine, expire_on_commit=False)
+        )

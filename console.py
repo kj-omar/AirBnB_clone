@@ -74,7 +74,7 @@ class HBNBCommand(cmd.Cmd):
                 pline = pline[2].strip()  # pline is now str
                 if pline:
                     # check for *args or **kwargs
-                    if pline[0] == '{' and pline[-1] =='}'\
+                    if pline[0] == '{' and pline[-1] == '}'\
                             and type(eval(pline)) is dict:
                         _args = pline
                     else:
@@ -116,7 +116,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, args):
         """ Create an object of any class with given parameters """
-        args_list = shlex.split(args)  # Use shlex to split the arguments properly, handling quoted strings
+        args_list = shlex.split(args)  # Use shlex to split the arguments
         if not args_list:
             print("** class name missing **")
             return
@@ -133,13 +133,15 @@ class HBNBCommand(cmd.Cmd):
                 key, value = arg.split('=')
                 value = value.replace('_', ' ')  # Replace underscores with spaces in values
                 try:
-                    # Try to convert value to float first, then int, if not, keep as string
+                    # Try to convert value to float first,
+                    # then int, if not, keep as string
                     try:
                         value = float(value)
                         if value.is_integer():
                             value = int(value)
                     except ValueError:
-                        value = value.strip('"')  # Remove quotes around string values
+                        value = value.strip('"')
+                        # Remove quotes around string values
                 except ValueError:
                     pass  # Value is a string
 
@@ -211,7 +213,7 @@ class HBNBCommand(cmd.Cmd):
         key = c_name + "." + c_id
 
         try:
-            del(storage.all()[key])
+            del (storage.all()[key])
             storage.save()
         except KeyError:
             print("** no instance found **")
@@ -340,6 +342,7 @@ class HBNBCommand(cmd.Cmd):
         """ Help information for the update class """
         print("Updates an object with new information")
         print("Usage: update <className> <id> <attName> <attVal>\n")
+
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
