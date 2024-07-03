@@ -13,6 +13,15 @@ from models.review import Review
 from os import getenv
 
 
+classes = {
+    "Amenity": Amenity,
+    "City": City,
+    "Place": Place,
+    "Review": Review,
+    "State": State,
+    "User": User,
+}
+
 class DBStorage:
     __engine = None
     __session = None
@@ -30,12 +39,14 @@ class DBStorage:
 
     def all(self, cls=None):
         """Returns a dictionary of models currently in storage"""
-        session = scoped_session(sessionmaker(bind=self.__engine, expire_on_commit=False))
-        if cls is None:
-            objects = session.query(User, Place, State, City, Amenity, Review).all()
-        else:
-            objects = session.query(cls).all()
-        return {obj.id: obj for obj in objects}
+        new_dict = {}
+        for cls2 in classes:
+            if cls is None or cls is classes[cls2]:
+                objs = self.__session.query(classes[cls2]).all()
+                for obj in objs:
+                    key = obj.__class__.__name__ + "." + obj.id
+                    new_dict[key] = obj
+        return new_dict
 
     def new(self, obj):
         """Adds new object to storage dictionary"""
@@ -46,7 +57,7 @@ class DBStorage:
         self.__session.commit()
 
     def delete(self, obj=None):
-        """Delete obj from __objects if it’s inside - if obj is equal to None, the method should not do anything"""
+        """Delete obj from __objects if its inside - if obj is equal to None, the method should not do anything"""
         if obj is not None:
             self.__session.delete(obj)
 
