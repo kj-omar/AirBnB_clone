@@ -6,16 +6,19 @@ from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from datetime import datetime
-import models
+from models import HBNB_TYPE_STORAGE
 
 # for database storage
-if models.HBNB_TYPE_STORAGE == "db":
+if HBNB_TYPE_STORAGE == "db":
     Base = declarative_base()
+# for json file storage
+else:
+    Base = object
 
 class BaseModel:
     """A base class for all hbnb models"""
     # for database storage
-    if models.HBNB_TYPE_STORAGE == "db":
+    if HBNB_TYPE_STORAGE == "db":
         __tablename__ = 'base_models'
         id = Column(String(60), primary_key=True, nullable=False)
         created_at = Column(DateTime, default=datetime.utcnow, nullable=False)

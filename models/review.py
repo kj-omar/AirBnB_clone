@@ -3,12 +3,12 @@
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String, ForeignKey
 from sqlalchemy.orm import relationship
-import models
+from models import HBNB_TYPE_STORAGE
 
 class Review(BaseModel, Base):
     """ Review class to store review information """
     # for database storage
-    if models.HBNB_TYPE_STORAGE == "db":
+    if HBNB_TYPE_STORAGE == "db":
         __tablename__ = 'reviews'
         text = Column(String(1024), nullable=False)
         place_id = Column(String(60), ForeignKey('places.id'), nullable=False)
