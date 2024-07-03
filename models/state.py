@@ -9,11 +9,17 @@ from os import getenv
 
 class State(BaseModel, Base):
     """ State class """
-    __tablename__ = 'states'
-    name = Column(String(128), nullable=False)
-    cities = relationship("City", backref="state", cascade="all, delete")
+    # for database storage
+    if models.HBNB_TYPE_STORAGE == "db":
+        __tablename__ = 'states'
+        name = Column(String(128), nullable=False)
+        cities = relationship("City", backref="state", cascade="all, delete")
+    # for json file storage
+    else:
+        name = ""
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
 
-    if getenv("HBNB_TYPE_STORAGE") != "db":
         @property
         def cities(self):
             """Get a list of all related City objects."""
