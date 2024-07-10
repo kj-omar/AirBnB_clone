@@ -1,9 +1,24 @@
 #!/usr/bin/python3
-""" Fabric script that distributes an archive to your web servers,"""
+""" pack, and deploy to server """
 from fabric.api import *
-from os.path import exists
+from datetime import datetime
+from os.path import exists, isdir
 
 env.hosts = ['54.237.5.6', '100.26.221.163']
+
+
+def do_pack():
+    """ generates .tgz achive """
+    try:
+        date = datetime.now().strftime("%Y%m%d%H%M%S")
+        if not isdir("versions"):
+            local("mkdir versions")
+        file = "versions/web_static_{}.tgz".format(date)
+        local("tar -cvzf {} web_static".format(file))
+        return file
+    except Exception as e:
+        return None
+
 
 def do_deploy(archive_file):
     """ deploy to server """
@@ -23,3 +38,11 @@ def do_deploy(archive_file):
         return True
     except Exception:
         return False
+
+
+def deploy():
+    """ pack and deploy """
+    archive = do_pack()
+    if archive is None:
+        return False
+    return do_deploy(archive)
