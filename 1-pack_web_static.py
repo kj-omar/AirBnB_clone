@@ -12,7 +12,7 @@ def do_pack():
         date = datetime.now().strftime("%Y%m%d%H%M%S")
         if not isdir("versions"):
             local("mkdir versions")
-        file = "versions/web_static_{}".format(date)
+        file = "versions/web_static_{}.tgz".format(date)
         local("tar -cvzf {} web_static".format(file))
         return file
     except Exception as e:
