@@ -1,18 +1,21 @@
 #!/usr/bin/python3
 """ Place Module for HBNB project """
-from models.base_model import BaseModel, Base, storage_engine
+from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String, Integer, Float, ForeignKey, Table
 from sqlalchemy.orm import relationship
+import os
+from models.amenity import Amenity
+from models.review import Review
 
-place_amenity = None
-if storage_engine == 'db':
-    place_amenity = Table('place_amenity', Base.metadata,
-                          Column('place_id', String(60),
-                                 ForeignKey('places.id'),
-                                 primary_key=True, nullable=False),
-                          Column('amenity_id', String(60),
-                                 ForeignKey('amenities.id'),
-                                 primary_key=True, nullable=False))
+storage_engine = os.getenv("HBNB_TYPE_STORAGE")
+
+place_amenity = Table('place_amenity', Base.metadata,
+                      Column('place_id', String(60),
+                             ForeignKey('places.id'),
+                             primary_key=True, nullable=False),
+                      Column('amenity_id', String(60),
+                             ForeignKey('amenities.id'),
+                             primary_key=True, nullable=False))
 
 
 class Place(BaseModel, Base):
@@ -29,8 +32,10 @@ class Place(BaseModel, Base):
         price_by_night = Column(Integer, default=0, nullable=False)
         latitude = Column(Float, nullable=True)
         longitude = Column(Float, nullable=True)
-        amenity_ids = []
-        reviews = relationship('Review', backref='place')
+        amenities = relationship("Amenity", secondary=place_amenity,
+                                 viewonly=False,
+                                 back_populates="place_amenities")
+        reviews = relationship('Review', backref='place', cascade="all,delete")
     else:
         city_id = ""
         user_id = ""
@@ -43,3 +48,31 @@ class Place(BaseModel, Base):
         latitude = 0.0
         longitude = 0.0
         amenity_ids = []
+
+        @property
+        def reviews(self):
+            """ Returns a list of Review instances """
+            from models import storage
+            review_list = []
+            review_all = storage.all(Review)
+            for review in review_all.values():
+                if review.place_id == self.id:
+                    review_all.append(review)
+            return review_list
+
+        @property
+        def amenities(self):
+            """returns a list of Amenity instances"""
+            from models import storage
+            amenity_list = []
+            amenity_all = storage.all(Amenity)
+            for amenity in amenity_all.values():
+                if amenity.id in self.amenity_ids:
+                    amenity_list.append(amenity)
+            return amenity_list
+
+        @amenities.setter
+        def amenities(self, amenity: Amenity):
+            """appends amenity.id to amenity_ids"""
+            if isinstance(amenity, Amenity):
+                self.amenity_ids.append(amenity.id)
