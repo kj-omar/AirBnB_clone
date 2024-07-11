@@ -5,13 +5,13 @@ from os.path import exists
 
 env.hosts = ['54.237.5.6', '100.26.221.163']
 
-def do_deploy(archive_file):
+def do_deploy(archive_path):
     """ deploy to server """
-    if not exists(archive_file):
+    if not exists(archive_path):
         return False
     try:
-        put(archive_file, "/tmp/")
-        file = archive_file.split("/")[-1]
+        put(archive_path, "/tmp/")
+        file = archive_path.split("/")[-1]
         folder = "/data/web_static/releases/" + file.split(".")[0]
         run("mkdir -p {}".format(folder))
         run("tar -xzf /tmp/{} -C {}".format(file, folder))
