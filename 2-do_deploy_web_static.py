@@ -5,7 +5,8 @@ import re
 import os
 from fabric.api import cd, env, put, run, sudo
 
-env.hosts = ["ubuntu@35.153.93.227", "ubuntu@100.26.175.131"]
+env.hosts = ["35.153.93.227", "100.26.175.131"]
+env.user = "ubuntu"
 env.key_filename = "~/.ssh/id_rsa"
 
 
