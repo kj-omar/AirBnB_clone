@@ -5,6 +5,7 @@ from os.path import exists
 
 env.hosts = ['54.237.5.6', '100.26.221.163']
 
+
 def do_deploy(archive_path):
     """ deploy to server """
     if not exists(archive_path):
