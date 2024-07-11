@@ -2,7 +2,8 @@
 """Fabric Script for code deployment"""
 
 import re
-from fabric.api import cd, env, put, run, sudo
+from datetime import datetime
+from fabric.api import cd, env, put, local, run, sudo
 from os import path
 
 env.hosts = ["35.153.93.227", "100.26.175.131"]
@@ -60,6 +61,7 @@ def do_deploy(archive_path):
         run("sudo rm -rf /data/web_static/current")
         run(f"sudo ln -s /data/web_static/releases/{directory}/ "
             "/data/web_static/current")
+        print("New version deployed!")
 
         return (True)
     except Exception as e:
