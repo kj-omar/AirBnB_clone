@@ -11,7 +11,7 @@ env.key_filename = "~/.ssh/id_rsa"
 def do_deploy(archive_path):
     """Deploys web_static"""
 
-    if archive_path is None:
+    if not archive_path:
         return(False)
     try:
         # Upload file
@@ -40,6 +40,6 @@ def do_deploy(archive_path):
 
         return (True)
     except Exception as e:
-        print(f"{e}")
+        #print(f"{e}")
         return (False)
 
