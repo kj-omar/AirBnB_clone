@@ -2,8 +2,8 @@
 """Fabric Script for code deployment"""
 
 import re
-import os
 from fabric.api import cd, env, put, run, sudo
+from os import path
 
 env.hosts = ["35.153.93.227", "100.26.175.131"]
 env.user = "ubuntu"
