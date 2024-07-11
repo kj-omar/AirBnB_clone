@@ -10,35 +10,32 @@ env.key_filename = "~/.ssh/id_rsa"
 def do_deploy(archive_path):
     """Deploys web_static"""
 
-    if archive_path is None:
-        return(False)
-    # Upload file
-    put(archive_path, '/tmp/')
+    try:
+        if archive_path is None:
+            return(False)
+        # Upload file
+        put(archive_path, '/tmp/')
 
-    # Find filename and directory name from archive_path
-    pattern = r'([^/]+)\.tgz$'
-    directory = re.search(pattern, archive_path).group(1)
-    filename = f"{directory}.tgz"
+        # Find filename and directory name from archive_path
+        pattern = r'([^/]+)\.tgz$'
+        directory = re.search(pattern, archive_path).group(1)
+        filename = f"{directory}.tgz"
 
-    # Decompressing archive
-    run(f"mkdir -p /data/web_static/releases/{directory}/")
-    run(f"tar -xzf /tmp/{filename} -C /data/web_static/releases/{directory}/")
+        # Decompressing archive
+        run(f"mkdir -p /data/web_static/releases/{directory}/")
+        run(f"tar -xzf /tmp/{filename} -C "
+            f"/data/web_static/releases/{directory}/")
 
-    # Deleting archive
-    run(f"rm /tmp/{filename}")
+        # Deleting archive
+        run(f"rm /tmp/{filename}")
 
-    # Deploying new version
-    run(f"mv /data/web_static/releases/{directory}/web_static/* "
-        f"/data/web_static/releases/{directory}/")
-    run(f"rm -rf /data/web_static/releases/{directory}/web_static")
-    run("rm -rf /data/web_static/current")
-    run(f"ln -s /data/web_static/releases/{directory}/ "
-        "/data/web_static/current")
-
-
-def do_pack():
-    """Creates a .tgz file"""
-    time = datetime.now().strftime("%Y%m%d%H%M%S")
-    name = f"web_static_{time}.tgz"
-    local("mkdir -p ./versions")
-    local(f"tar -czvf ./versions/{name} ./web_static")
+        # Deploying new version
+        run(f"mv /data/web_static/releases/{directory}/web_static/* "
+            f"/data/web_static/releases/{directory}/")
+        run(f"rm -rf /data/web_static/releases/{directory}/web_static")
+        run("rm -rf /data/web_static/current")
+        run(f"ln -s /data/web_static/releases/{directory}/ "
+            "/data/web_static/current")
+    except:
+        return (False)
+    return (True)
