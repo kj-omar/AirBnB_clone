@@ -20,13 +20,13 @@ def do_pack():
         return None
 
 
-def do_deploy(archive_file):
+def do_deploy(archive_path):
     """ deploy to server """
-    if not exists(archive_file):
+    if not exists(archive_path):
         return False
     try:
-        put(archive_file, "/tmp/")
-        file = archive_file.split("/")[-1]
+        put(archive_path, "/tmp/")
+        file = archive_path.split("/")[-1]
         folder = "/data/web_static/releases/" + file.split(".")[0]
         run("mkdir -p {}".format(folder))
         run("tar -xzf /tmp/{} -C {}".format(file, folder))
@@ -42,7 +42,7 @@ def do_deploy(archive_file):
 
 def deploy():
     """ pack and deploy """
-    archive = do_pack()
-    if archive is None:
+    archive_path = do_pack()
+    if archive_path is None:
         return False
-    return do_deploy(archive)
+    return do_deploy(archive_path)
