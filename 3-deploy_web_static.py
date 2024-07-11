@@ -8,22 +8,28 @@ from os import path
 env.hosts = ["35.153.93.227", "100.26.175.131"]
 env.user = "ubuntu"
 env.key_filename = "~/.ssh/id_rsa"
-d_name = None
+
 
 def deploy():
     """Creates and deploys to servers"""
-    do_pack()
-    if (d_name)
-    do_deploy(d_name)
+    path_string = do_pack()
+    if not (path.exists(path_string)):
+        return (False)
+    value = do_deploy(path_string)
+    return (value)
 
 
 def do_pack():
     """Creates a .tgz file"""
     time = datetime.now().strftime("%Y%m%d%H%M%S")
     name = f"web_static_{time}.tgz"
-    d_name = f"versions/{name}"
+    zip_path = f"versions/{name}"
     local("mkdir -p ./versions")
     local(f"tar -czvf ./versions/{name} ./web_static")
+    if not (path.exists(zip_path)):
+        return (False)
+    return (zip_path)
+
 
 def do_deploy(archive_path):
     """Deploys web_static"""
