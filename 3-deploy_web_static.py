@@ -2,19 +2,35 @@
 """Fabric Script for code deployment"""
 
 import re
-import os
 from fabric.api import cd, env, put, run, sudo
+from os import path
 
-env.hosts = ["ubuntu@35.153.93.227", "ubuntu@100.26.175.131"]
+env.hosts = ["35.153.93.227", "100.26.175.131"]
+env.user = "ubuntu"
 env.key_filename = "~/.ssh/id_rsa"
+d_name = None
 
+def deploy():
+    """Creates and deploys to servers"""
+    do_pack()
+    if (d_name)
+    do_deploy(d_name)
+
+
+def do_pack():
+    """Creates a .tgz file"""
+    time = datetime.now().strftime("%Y%m%d%H%M%S")
+    name = f"web_static_{time}.tgz"
+    d_name = f"versions/{name}"
+    local("mkdir -p ./versions")
+    local(f"tar -czvf ./versions/{name} ./web_static")
 
 def do_deploy(archive_path):
     """Deploys web_static"""
 
-    if not (path.exists(archive_path)):
-        return (False)
     try:
+        if not (path.exists(archive_path)):
+            return (False)
         # Upload file
         put(archive_path, '/tmp/')
 

@@ -25,19 +25,19 @@ def do_deploy(archive_path):
         filename = f"{directory}.tgz"
 
         # Decompressing archive
-        run(f"mkdir -p /data/web_static/releases/{directory}/")
-        run(f"tar -xzf /tmp/{filename} -C "
+        run(f"sudo mkdir -p /data/web_static/releases/{directory}/")
+        run(f"sudo tar -xzf /tmp/{filename} -C "
             f"/data/web_static/releases/{directory}/")
 
         # Deleting archive
-        run(f"rm /tmp/{filename}")
+        run(f"sudo rm /tmp/{filename}")
 
         # Deploying new version
-        run(f"mv /data/web_static/releases/{directory}/web_static/* "
+        run(f"sudo mv /data/web_static/releases/{directory}/web_static/* "
             f"/data/web_static/releases/{directory}/")
-        run(f"rm -rf /data/web_static/releases/{directory}/web_static")
-        run("rm -rf /data/web_static/current")
-        run(f"ln -s /data/web_static/releases/{directory}/ "
+        run(f"sudo rm -rf /data/web_static/releases/{directory}/web_static")
+        run("sudo rm -rf /data/web_static/current")
+        run(f"sudo ln -s /data/web_static/releases/{directory}/ "
             "/data/web_static/current")
 
         return (True)
