@@ -2,7 +2,7 @@
 """ Fabric script that generates a .tgz archive from the contents of the web_static
 """
 import os
-from fabric.api import run, env, put
+from fabric.api import env, run, put, sudo
 import datetime
 
 env.hosts = ['100.26.152.53', '35.174.208.133']
