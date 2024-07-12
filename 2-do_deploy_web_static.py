@@ -1,47 +1,27 @@
 #!/usr/bin/python3
 """Fabric Script for code deployment"""
 
-import re
-from fabric.api import cd, env, put, run, sudo
-from os import path
-
+from fabric.api import put, run, env
+from os.path import exists
 env.hosts = ["35.153.93.227", "100.26.175.131"]
-env.user = "ubuntu"
-env.key_filename = "~/.ssh/id_rsa"
 
 
 def do_deploy(archive_path):
-    """Deploys web_static"""
-
-    if not (path.exists(archive_path)):
-        return (False)
+    """distributes an archive to the web servers"""
+    if exists(archive_path) is False:
+        return False
     try:
-        # Upload file
+        file_n = archive_path.split("/")[-1]
+        no_ext = file_n.split(".")[0]
+        path = "/data/web_static/releases/"
         put(archive_path, '/tmp/')
-
-        # Find filename and directory name from archive_path
-        pattern = r'([^/]+)\.tgz$'
-        directory = re.search(pattern, archive_path).group(1)
-        filename = f"{directory}.tgz"
-
-        # Decompressing archive
-        run(f"sudo mkdir -p /data/web_static/releases/{directory}/")
-        run(f"sudo tar -xzf /tmp/{filename} -C "
-            f"/data/web_static/releases/{directory}/")
-
-        # Deleting archive
-        run(f"sudo rm /tmp/{filename}")
-
-        # Deploying new version
-        run(f"sudo mv /data/web_static/releases/{directory}/web_static/* "
-            f"/data/web_static/releases/{directory}/")
-        run(f"sudo rm -rf /data/web_static/releases/{directory}/web_static")
-        run("sudo rm -rf /data/web_static/current")
-        run(f"sudo ln -s /data/web_static/releases/{directory}/ "
-            "/data/web_static/current")
-        print("New version deployed!")
-
-        return (True)
-    except Exception as e:
-        # print(f"{e}")
-        return (False)
+        run('mkdir -p {}{}/'.format(path, no_ext))
+        run('tar -xzf /tmp/{} -C {}{}/'.format(file_n, path, no_ext))
+        run('rm /tmp/{}'.format(file_n))
+        run('mv {0}{1}/web_static/* {0}{1}/'.format(path, no_ext))
+        run('rm -rf {}{}/web_static'.format(path, no_ext))
+        run('rm -rf /data/web_static/current')
+        run('ln -s {}{}/ /data/web_static/current'.format(path, no_ext))
+        return True
+    except:
+        return False
