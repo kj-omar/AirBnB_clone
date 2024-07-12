@@ -12,7 +12,7 @@ def do_pack():
     if os.path.exists('./versions'):
         os.mkdir('./versions')
     archive_name = "web_static_{}.tgz".format(time_stamp)
-    local("tar -czf versions/{} web_static".format(archive_name))
+    local("tar -cvzf versions/{} web_static".format(archive_name))
     print("Packing web_static to versions/{}.tgz".format(archive_name))
     if os.path.getsize("versions/{}".format(archive_name)):
         size = os.path.getsize("versions/{}.tgz".format(archive_name))
