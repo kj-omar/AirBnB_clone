@@ -43,5 +43,5 @@ def do_deploy(archive_path):
 
         return (True)
     except Exception as e:
-        print(f"{e}")
+        # print(f"{e}")
         return (False)

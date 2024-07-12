@@ -20,5 +20,5 @@ def do_pack():
         if not (path.exists(zip_path)):
             return (False)
         return (zip_path)
-    except:
+    except Exception as e:
         return (None)
