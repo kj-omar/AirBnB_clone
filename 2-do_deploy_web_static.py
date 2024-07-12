@@ -25,19 +25,19 @@ def do_deploy(archive_path):
         filename = f"{directory}.tgz"
 
         # Decompressing archive
-        local(f"sudo mkdir -p /data/web_static/releases/{directory}/")
-        local(f"sudo tar -xzf /tmp/{filename} -C "
+        run(f"sudo mkdir -p /data/web_static/releases/{directory}/")
+        run(f"sudo tar -xzf /tmp/{filename} -C "
             f"/data/web_static/releases/{directory}/")
 
         # Deleting archive
-        local(f"sudo rm /tmp/{filename}")
+        run(f"sudo rm /tmp/{filename}")
 
         # Deploying new version
-        local(f"sudo mv /data/web_static/releases/{directory}/web_static/* "
+        run(f"sudo mv /data/web_static/releases/{directory}/web_static/* "
             f"/data/web_static/releases/{directory}/")
-        local(f"sudo rm -rf /data/web_static/releases/{directory}/web_static")
-        local("sudo rm -rf /data/web_static/current")
-        local(f"sudo ln -s /data/web_static/releases/{directory}/ "
+        run(f"sudo rm -rf /data/web_static/releases/{directory}/web_static")
+        run("sudo rm -rf /data/web_static/current")
+        run(f"sudo ln -s /data/web_static/releases/{directory}/ "
             "/data/web_static/current")
         print("New version deployed!")
 
