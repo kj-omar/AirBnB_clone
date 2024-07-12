@@ -9,8 +9,17 @@ from fabric.api import local
 
 
 def do_pack():
-    """Creates a .tgz file"""
+    """Creates a .tgz file
     time = datetime.now().strftime("%Y%m%d%H%M%S")
     name = f"web_static_{time}.tgz"
     local("mkdir -p ./versions")
     local(f"tar -czvf ./versions/{name} ./web_static")
+    """
+    time = datetime.now().strftime("%Y%m%d%H%M%S")
+    name = f"web_static_{time}.tgz"
+    zip_path = f"versions/{name}"
+    local("mkdir -p ./versions")
+    local(f"tar -czvf ./versions/{name} ./web_static")
+    if not (path.exists(zip_path)):
+        return (False)
+    return (zip_path)
