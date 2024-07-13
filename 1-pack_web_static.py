@@ -4,6 +4,7 @@ from datetime import datetime
 from fabric.api import local
 import os.path
 
+
 def do_pack():
     """Create a tar gzipped archive of the directory web_static."""
     date = datetime.utcnow()
