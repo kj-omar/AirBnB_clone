@@ -19,6 +19,7 @@ def do_pack():
         size = os.path.getsize("versions/{}.tgz".format(archive_name))
         print("web_static packed: versions/{}.tgz -> {}Bytes".format(
                archive_name, size))
-        return archive_name
+        full_path = "versions/{}.tgz".format(archive_name)
+        return full_path
     else:
         return None
