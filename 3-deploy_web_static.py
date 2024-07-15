@@ -6,7 +6,7 @@ import os
 from fabric.api import local, env, put, sudo, runs_once, run
 import datetime
 
-hosts = ['100.26.152.53', '35.174.208.133']
+env.hosts = ['100.26.152.53', '35.174.208.133']
 
 
 @runs_once
@@ -58,8 +58,6 @@ def deploy():
     """ function handle full deployment """
     path = do_pack()
     if path is not None:
-        for host in hosts:
-            env.host_string = host
-            result = do_deploy(path)
+        result = do_deploy(path)
         return result
     return False
