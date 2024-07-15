@@ -8,7 +8,6 @@ import datetime
 
 env.hosts = ['100.26.152.53', '35.174.208.133']
 
-
 @runs_once
 def do_pack():
     """ function to create  .tgz archive """
