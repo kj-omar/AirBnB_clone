@@ -144,11 +144,7 @@ class HBNBCommand(cmd.Cmd):
             kwargs[key] = value
         new_instance = HBNBCommand.classes[arr[0]]()
         new_instance.__dict__.update(kwargs)
-        if os.getenv('HBNB_TYPE_STORAGE') == 'db':
-            storage = DBStorage()
-            storage.reload()
-        else:
-            storage = FileStorage()
+        storage.reload()
         storage.new(new_instance)
         storage.save()
         print(new_instance.id)
@@ -233,13 +229,22 @@ class HBNBCommand(cmd.Cmd):
             if args not in HBNBCommand.classes:
                 print("** class doesn't exist **")
                 return
+            # args is in string format
             cls = HBNBCommand.classes.get(args)
+            wanted_dic = {}
             for k, v in storage.all(cls).items():
                 if k.split('.')[0] == args:
-                    print_list.append(str(v))
+                    _dict = BaseModel.to_dict(v)
+                    obj = cls()
+                    obj.__dict__ = _dict
+                    print_list.append(str(obj))
         else:
-            for k, v in storage.all().items():
-                print_list.append(str(v))
+            for _, v in storage.all().items():
+                    _dict = BaseModel.to_dict(v)
+                    obj = cls()
+                    obj.__dict__ = _dict
+                    print_list.append(str(obj))
+
         print("[{}]".format(", ".join(print_list)))
         # print(print_list)
 
