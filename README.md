@@ -154,3 +154,61 @@ Usage: <class_name>.update(<_id>, <dictionary>)
 (hbnb) ["[User] (98bea5de-9cb0-4d78-8a9d-c4de03521c30) {'updated_at': datetime.datetime(2020, 2, 19, 21, 47, 29, 134362), 'name': 'Fred the Frog', 'age': 9, 'id': '98bea5de-9cb0-4d78-8a9d-c4de03521c30', 'created_at': datetime.datetime(2020, 2, 19, 21, 47, 29, 134343)}"]
 ```
 <br>
+
+# 0x03. AirBnB clone - Deploy static
+-------------------------------------
+- DevOps
+- Python
+- SysAdmin
+- Scripting
+- CI/CD
+
+Absolutely, here's a breakdown of the tasks you'll be completing to deploy your web_static files with Fabric:
+
+## Tasks:
+
+1. **Preparing my web servers** (Bash Script):
+   - This script ensures your web servers are set up for deployment.
+   - Steps:
+      - Install Nginx (if not already installed).
+      - Create necessary folders: `/data`, `/data/web_static`,  `/data/web_static/releases`, `/data/web_static/shared`,  `/data/web_static/current`.
+      - Create a sample HTML file (`/data/web_static/releases/test/index.html`).
+      - Create a symbolic link (`/data/web_static/current`) pointing to the test folder.
+      - Set ownership of `/data` to the `ubuntu` user and group (recursively).
+      - Update Nginx configuration to serve content from `/data/web_static/current` to the URL path `/hbnb_static` (using an alias directive).
+      - Restart Nginx.
+
+2. **Compress before sending** (Fabric Script):
+   - This script creates a `.tgz` archive of your `web_static` folder content.
+   - Function: `do_pack()`
+     - Adds all files from `web_static` to the archive.
+     - Stores the archive in the `versions` folder (creating it if needed).
+     - Uses timestamps in the archive filename (e.g., `web_static_20240725175123.tgz`).
+     - Returns the archive path if successful, otherwise `None`.
+
+3. **Deploy archive!** (Fabric Script):
+   - This script distributes the archive to your web servers and deploys it.
+   - Function: `do_deploy(archive_path)`
+     - Checks if the archive exists at the given path.
+     - Uploads the archive to `/tmp/` on the web servers.
+     - Extracts the archive to `/data/web_static/releases/<archive filename without extension>`.
+     - Deletes the uploaded archive from the server.
+     - Deletes the existing `/data/web_static/current` symbolic link.
+     - Creates a new symbolic link pointing to the extracted release directory.
+     - Runs these commands on both web servers using `env.hosts`.
+     - Returns `True` if successful, otherwise `False`.
+
+4. **Full deployment** (Fabric Script):
+   - This script combines the functionalities of packing and deploying.
+   - Function: `deploy()`
+     - Calls `do_pack()` to create an archive and stores the path.
+     - Returns `False` if no archive is created.
+     - Calls `do_deploy(archive_path)` with the created archive path.
+     - Returns the result of `do_deploy`.
+
+**Remember:**
+
+- Use `#!/usr/bin/env bash` for the Bash script and `#!/usr/bin/python3` for the Fabric scripts.
+- Ensure proper indentation (PEP 8) and documentation for functions and classes.
+- The Fabric scripts should use `env.hosts` to run commands on both servers.
+- Test your scripts locally before deploying to your web servers.
