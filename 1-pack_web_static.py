@@ -1,9 +1,14 @@
+#!/usr/bin/python3
+"""Comment wihtout any fuckin reason"""
 from datetime import datetime
 from fabric.api import *
 """Importing the libraries in the file of the functions"""
 
 @task
 def do_pack():
+    """
+    This function can do hard things
+    """
     # Create the versions directory if it doesn't exist
     mkdir = "mkdir -p versions"
     now = datetime.now()
