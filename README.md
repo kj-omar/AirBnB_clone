@@ -155,6 +155,7 @@ Usage: <class_name>.update(<_id>, <dictionary>)
 ```
 <br>
 
+
 # 0x03. AirBnB clone - Deploy static
 -------------------------------------
 - DevOps
@@ -163,7 +164,53 @@ Usage: <class_name>.update(<_id>, <dictionary>)
 - Scripting
 - CI/CD
 
-Absolutely, here's a breakdown of the tasks you'll be completing to deploy your web_static files with Fabric:
+## Background
+
+**Deploying web applications** is a critical aspect of software development. It involves transferring code from a development environment to a production server where it can be accessed by users. This process often requires careful configuration, automation, and monitoring to ensure optimal performance and reliability.
+
+**Fabric** is a Python library designed to streamline SSH-based tasks, making it an ideal tool for deploying applications to remote servers. It provides a high-level interface for executing commands, transferring files, and managing remote systems efficiently.
+
+## More Information
+Install Fabric for Python 3 - version 1.14.post1
+
+```
+$ pip3 uninstall Fabric
+$ sudo apt-get install libffi-dev
+$ sudo apt-get install libssl-dev
+$ sudo apt-get install build-essential
+$ sudo apt-get install python3.4-dev
+$ sudo apt-get install libpython3-dev
+$ pip3 install pyparsing
+$ pip3 install appdirs
+$ pip3 install setuptools==40.1.0
+$ pip3 install cryptography==2.8
+$ pip3 install bcrypt==3.1.7
+$ pip3 install PyNaCl==1.3.0
+$ pip3 install Fabric3==1.14.post1
+```
+
+## Requirements
+
+### General Requirements
+* Basic understanding of Python programming.
+* Familiarity with SSH and remote server administration.
+* A development environment with Python3 and Fabric installed.
+* Access to one or more servers for deployment.
+
+### Project Requirements
+* Create a Fabric script to package web static files into a `.tgz` archive.
+* Develop a Fabric script to deploy the archive to remote servers.
+* Implement a Fabric script to manage old versions of the deployed application.
+* Follow Python PEP 8 style guidelines.
+* Write clear and concise documentation for all scripts.
+
+### Technical Specifications
+* **Python version:** Python 3.4.0 or later.
+* **Fabric version:** Fabric 3 version 1.14.post1.
+* **Server environment:** Ubuntu 20.04 LTS.
+* **Nginx:** Web server for serving static content.
+
+By successfully completing this project, i gained hands-on experience with deploying web applications using Fabric, improving my understanding of deployment automation, and developing essential skills for managing remote systems.
 
 ## Tasks:
 
