@@ -60,6 +60,7 @@ def do_pack():
     
 @task
 def deploy():
+    """Fucntion to be done"""
     path = do_pack()
     if path is None:
         return False
