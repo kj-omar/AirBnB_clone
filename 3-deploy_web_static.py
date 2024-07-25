@@ -14,18 +14,18 @@ def do_deploy(archive_path):
         if not exists(archive_path):
             return False
         put(local_path=archive_path, remote_path="/tmp/")
-        ext = basename(archive_path)
-        no_ext, ext = splitext(ext)
+        file_with_extention = basename(archive_path)
+        no_ext, ext = splitext(file_with_extention)
         web_server_ext = "/data/web_static/releases/"
         # List of commands to be executed in the hosts side
         commands = [f"rm -rf {web_server_ext}{no_ext}/",
                     f"mkdir -p {web_server_ext}{no_ext}/",
-                    f"tar -xzf /tmp/{no_ext}{ext} -C {web_server_ext}{no_ext}/",
-                    f"rm /tmp/{no_ext}{ext}",
+                    f"tar -xzf /tmp/{file_with_extention} -C {web_server_ext}{no_ext}/",
+                    f"rm /tmp/{file_with_extention}",
                     f"mv {web_server_ext}{no_ext}/web_static/* {web_server_ext}{no_ext}/",
                     f"rm -rf {web_server_ext}{no_ext}/web_static",
                     f"rm -rf /data/web_static/current",
-                    f"ln -sf {web_server_ext}{no_ext}/ /data/web_static/current"]
+                    f"ln -s {web_server_ext}{no_ext}/ /data/web_static/current"]
         for command in commands:
             run(command)
         print("New version deployed!")
@@ -34,7 +34,7 @@ def do_deploy(archive_path):
         return False
 
 
-@task
+@runs_once
 def do_pack():
     """
     This function can do hard things
