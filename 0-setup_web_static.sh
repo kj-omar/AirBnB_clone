@@ -2,6 +2,7 @@
 # making the deploying bash file
 
 # ensuring that the nginx is installed on the server
+trap 'exit 0' ERR
 if ! command -v nginx &> /dev/null; then
     apt-get update -y
     apt-get install nginx -y
