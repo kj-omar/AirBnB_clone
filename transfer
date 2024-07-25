@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# making a new script
+
+# checking the input
+if [[ $# -lt 4 ]]; 
+then
+	echo "Usage: $0 PATH_TO_FILE IP USERNAME PATH_TO_SSH_KEY"
+	exit 1
+fi
+
+file_path=$1
+name=$3
+server_ip=$2
+ssh_key=$4
+
+# the script
+scp -o StrictHostKeyChecking=no -i "$ssh_key" "$file_path" "$name@$server_ip:~/"

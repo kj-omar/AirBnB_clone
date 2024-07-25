@@ -34,7 +34,7 @@ class TestBaseModel(unittest.TestCase):
 
     def test_kwargs_none(self):
         """ Test that TypeError is raised with None as keyword argument."""
-         n = {None: None}
+        n = {None: None}
         with self.assertRaises(TypeError):
             new = self.value(**n)
 
