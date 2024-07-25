@@ -11,10 +11,9 @@ env.hosts = ["54.87.203.83", "54.144.147.110"]
 @task
 def do_deploy(archive_path):
     """Function to deploy the web servers"""
-    try:
-        if not exists(archive_path):
+    if not exists(archive_path):
             return False
-        put(local_path=archive_path, remote_path="/tmp/")
+    try:
         ext = basename(archive_path)
         no_ext, ext = splitext(ext)
         web_server_ext = "/data/web_static/releases/"
@@ -26,7 +25,7 @@ def do_deploy(archive_path):
                     f"mv {web_server_ext}{no_ext}/web_static/* {web_server_ext}{no_ext}/",
                     f"rm -rf {web_server_ext}{no_ext}/web_static",
                     f"rm -rf /data/web_static/current",
-                    f"ln -sf {web_server_ext}{no_ext}/ /data/web_static/current"]
+                    f"ln -s {web_server_ext}{no_ext}/ /data/web_static/current"]
         for command in commands:
             run(command)
         print("New version deployed!")
