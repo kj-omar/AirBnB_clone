@@ -9,6 +9,7 @@ import os
 
 env.hosts = ["18.210.10.4", "100.26.212.138"]
 env.user = "ubuntu"
+env.key_filename = "~/.ssh/school"
 
 
 def do_pack():
@@ -29,8 +30,12 @@ def do_pack():
 
 def do_deploy(archive_path):
     """
-        Distribute archive to your web servers.
-        Prototype: def do_deploy(archive_path):
+        Distributes an archive to web servers.
+        
+        Args:
+            archive_path (str): The path of the archive to be deployed.
+        Returns:
+            bool: True if all operations succeed, otherwise False.
     """
     if os.path.exists(archive_path):
         archived_file = archive_path[9:]
