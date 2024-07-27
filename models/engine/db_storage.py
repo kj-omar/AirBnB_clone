@@ -75,3 +75,8 @@ class DBStorage:
         SessionFactory = scoped_session(sessionmaker(bind=self.__engine,
                                       expire_on_commit=False))
         self.__session = SessionFactory()
+
+    def close(self):
+        """close method ro manage resources"""
+        if self.__session:
+            self.__session.remove()

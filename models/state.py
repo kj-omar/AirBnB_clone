@@ -17,7 +17,7 @@ class State(BaseModel, Base):
     if not os.getenv('HBNB_TYPE_STORAGE') == 'db':
         @property
         def cities(self):
-            """ getter attribut for FileStorage r/n
+            """ getter attribut for FileStorage linked
             between State and City """
             list_city = []
             for _, value in storage.__objects.items():
