@@ -96,6 +96,7 @@ class DBStorage():
 
     def close(self):
         """
-        Close the current database session
+        Call close() method
+        Closes the current database session
         """
         self.__session.close()
