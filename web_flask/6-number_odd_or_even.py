@@ -39,10 +39,20 @@ def is_num(n):
 
 
 @app.route("/number_template/<int:n>", strict_slashes=False)
-def is_num_page(n):
+def is_num_page(n=None):
     """Displays an HTML page if n is an integer"""
     if isinstance(n, int):
         return render_template('5-number.html', n=n)
+
+
+@app.route("/number_odd_or_even/<int:n>", strict_slashes=False)
+def is_num_type(n=None):
+    """
+    Displays an HTML page if n is an integer and odd if
+    it is odd or even if it is even.
+    """
+    if isinstance(n, int):
+        return render_template('6-number_odd_or_even.html', n=n)
 
 
 if __name__ == "__main__":
