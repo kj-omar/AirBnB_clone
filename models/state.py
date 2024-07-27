@@ -11,3 +11,15 @@ class State(BaseModel, Base):
         name = Column(String(128), nullable=False)
     else:
         name = ""
+
+    if storage_engine != 'db':
+        @property
+        def cities(self):
+            """ Getter attribute that returns the list of City instances """
+            from models import storage
+            from models.city import City
+            cities_list = []
+            for city in storage.all(City).values():
+                if city.state_id == self.id:
+                    cities_list.append(city)
+            return cities_list
