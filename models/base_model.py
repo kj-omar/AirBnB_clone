@@ -34,10 +34,12 @@ class BaseModel:
             self.created_at = datetime.now()
             self.updated_at = datetime.now()
         else:
-            kwargs['updated_at'] = datetime.strptime(kwargs['updated_at'],
-                                                     '%Y-%m-%dT%H:%M:%S.%f')
-            kwargs['created_at'] = datetime.strptime(kwargs['created_at'],
-                                                     '%Y-%m-%dT%H:%M:%S.%f')
+            if 'update_at' in kwargs:
+                kwargs['updated_at'] = datetime.strptime(kwargs['updated_at'],
+                                                        '%Y-%m-%dT%H:%M:%S.%f')
+            if 'created_at' in kwargs:
+                kwargs['created_at'] = datetime.strptime(kwargs['created_at'],
+                                                        '%Y-%m-%dT%H:%M:%S.%f')
             if '__class__' in kwargs:
                 del kwargs['__class__']
             for key, value in kwargs.items():
@@ -67,7 +69,7 @@ class BaseModel:
 
         if '_sa_instance_state' in dictionary:
             del dictionary['_sa_instance_state']
-        del dictionary['__class__']
+        # del dictionary['__class__']
         return dictionary
 
     def delete(self):
