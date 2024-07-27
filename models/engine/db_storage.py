@@ -72,11 +72,10 @@ class DBStorage:
         """ create tables in the Database """
         from models.base_model import Base
         Base.metadata.create_all(self.__engine)
-        SessionFactory = scoped_session(sessionmaker(bind=self.__engine,
-                                      expire_on_commit=False))
-        self.__session = SessionFactory()
+        self.__session = sessionmaker(bind=self.__engine,
+                                      expire_on_commit=False)
+        self.__session = scoped_session(self.__session)
 
     def close(self):
         """close method ro manage resources"""
-        if self.__session:
-            self.__session.remove()
+        self.__session.remove()
