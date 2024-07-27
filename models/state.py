@@ -12,7 +12,8 @@ class State(BaseModel, Base):
     if os.getenv('HBNB_TYPE_STORAGE') == 'db':
         name = Column(String(128), nullable=False)
         cities = relationship(
-            "City", cascade="all, delete, delete-orphan", backref="states", lazy="joined")
+            "City", cascade="all, delete, delete-orphan",
+            backref="states", lazy="joined")
     else:
         name = ""
 
@@ -32,4 +33,4 @@ class State(BaseModel, Base):
             for city in city_dict.values():
                 if city.state_id == self.id:
                     city_list.append(city)
-            return 
+            return city_list
