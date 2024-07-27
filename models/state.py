@@ -1,38 +1,35 @@
 #!/usr/bin/python3
 """ State Module for HBNB project """
+import os
 from models.base_model import BaseModel, Base
-from sqlalchemy import Column, String, ForeignKey
+from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
-import shlex
 
 
 class State(BaseModel, Base):
-    """ State class that inherits from BaseModel and Base"""
+    """ State class """
     __tablename__ = 'states'
-    name = Column(String(128), nullable=False)
-    cities = relationship("City", backref="state", 
-                          cascade="all, delete, delete-orphan"
-                          )
-    @property
-    def cities(self):
-        """Getter attribute cities that returns the list of City
-        instances with state_id equals to the current State.id
-        
-        Returns:
-            list: A list of City instances with state_id equals
-            to the current State.id.
-        """
-        from models import storage
+    if os.getenv('HBNB_TYPE_STORAGE') == 'db':
+        name = Column(String(128), nullable=False)
+        cities = relationship(
+            "City", cascade="all, delete, delete-orphan", backref="states", lazy="joined")
+    else:
+        name = ""
+
+    def __init__(self, *args, **kwargs):
+        """Instantiates a new model"""
         from models.city import City
-        var = storage.all()
-        mylist = []
-        result = []
-        for key in var:
-            city = key.replace('.', ' ')
-            city = shlex.split(city)
-            if city[0] == 'City':
-                mylist.append(var[key])
-        for elem in mylist:
-            if elem.state_id == self.id:
-                result.append(elem)
-        return result
+        super().__init__(*args, **kwargs)
+
+    if os.getenv('HBNB_TYPE_STORAGE') != 'db':
+        @property
+        def cities(self):
+            """Get cities for FileStorage"""
+            from models.city import City
+            from models import storage
+            city_dict = storage.all(City)
+            city_list = []
+            for city in city_dict.values():
+                if city.state_id == self.id:
+                    city_list.append(city)
+            return city_list
