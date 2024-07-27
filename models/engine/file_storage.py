@@ -20,14 +20,10 @@ class FileStorage:
             dict: A dictionary containing the models currently in storage.
             The keys are the model IDs, and the values are the model instances.
         """
-        if cls is None:
-            return FileStorage.__objects
-        else:
-            filtered_objects = {}
-            for key, value in FileStorage.__objects.items():
-                if value.__class__.__name__ == cls.__name__:
-                    filtered_objects[key] = value
-            return filtered_objects
+        if cls is not None:
+            return {k: v for k, v in FileStorage.__objects.items()
+                    if isinstance(v, cls)}
+        return FileStorage.__objects
 
     def new(self, obj):
         """Adds new object to storage dictionary"""
