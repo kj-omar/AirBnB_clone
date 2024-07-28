@@ -43,6 +43,8 @@ class DBStorage:
                 'Review': Review
             }
         if cls:
+            if type(cls) == str:
+                cls = classes.get(cls)
             filter_query = self.__session.query(cls).all()
             for obj in filter_query:
                 key = f"{obj.__class__.__name__}.{obj.id}"
