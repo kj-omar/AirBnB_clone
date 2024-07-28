@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """ State Module for HBNB project """
 
+import models
 from os import getenv
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, Integer, String
@@ -21,24 +22,20 @@ class State(BaseModel, Base):
         cities = relationship("City", cascade='all, delete, delete-orphan',
                               backref="state")
 
+    else:
+        name = ""
+
         @property
         def cities(self):
             """
+            getter attribute for city objects.
             """
-            variable = models.storage.all()
-            temp_list = []
-            result = []
-            for key in variable:
-                city = key.replace('.', ' ')
-                city = shlex.split(city)
-                if (city[0] == 'City'):
-                    temp_list.append(variable[key])
-            for element in temp_list:
-                if (element.state_id == self.id):
-                    result.append(element)
-                return(result)
-    else:
-        name = ""
+            reloaded_list = models.storage.all("City").values()
+            cities_list = []
+            for city in reloaded_list:
+                if city.state_id == self.id:
+                    cities_list.append(city)
+            return cities_list
 
     def __init__(self, *args, **kwargs):
         """initializes state object"""
