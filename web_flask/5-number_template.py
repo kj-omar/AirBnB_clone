@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """Doc Model"""
-from flask import Flask
+from flask import Flask, render_template
 from markupsafe import escape
 
 
@@ -29,6 +29,16 @@ def c_is(text):
 def python_is(text="is cool"):
     """Saying Hello to the world"""
     return f"Python {text.replace('_', ' ')}"
+
+@app.route('/number/<int:n>', strict_slashes=False)
+def numbers_only(n):
+    """Saying Hello to the world"""
+    return f"{escape(n)} is a number"
+
+@app.route('/number_template/<int:n>', strict_slashes=False)
+def render_page(n):
+    """Saying Hello to the world"""
+    return render_template('5-number.html', n=n)
 
 
 if __name__ =='__main__':

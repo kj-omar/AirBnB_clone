@@ -30,6 +30,12 @@ def python_is(text="is cool"):
     """Saying Hello to the world"""
     return f"Python {text.replace('_', ' ')}"
 
+@app.route('/number/<int:n>', strict_slashes=False)
+def numbers_only(n):
+    """Saying Hello to the world"""
+    return f"{escape(n)} is a number"
+
+
 
 if __name__ =='__main__':
     app.run(port='5000', host='0.0.0.0')
