@@ -12,11 +12,7 @@ app = Flask(__name__)
 def State():
     """ state route """
     new_dict = storage.all("State")
-    print(new_dict)
     states = list(new_dict.values())
-    print(states)
-
-
     return render_template("7-states_list.html", states=states)
 
 
