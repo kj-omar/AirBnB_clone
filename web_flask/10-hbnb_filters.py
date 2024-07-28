@@ -15,7 +15,7 @@ def filters():
     """Renders 10-hbhb_filters.html"""
     states = storage.all(State).values()
     amenities = storage.all(Amenity).values()
-    return render_template('10-hbhb_filters.html',
+    return render_template('10-hbnb_filters.html',
                            states=states, amenities=amenities)
 
 
