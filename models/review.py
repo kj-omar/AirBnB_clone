@@ -1,10 +1,19 @@
 #!/usr/bin/python3
-""" Review module for the HBNB project """
+""" Place Module for HBNB project """
 from models.base_model import BaseModel
+from sqlalchemy import Column, String, ForeignKey
 
 
 class Review(BaseModel):
-    """ Review classto store review information """
-    place_id = ""
+    """ A place to stay """
+    city_id = ""
     user_id = ""
-    text = ""
+    name = ""
+    description = ""
+    number_rooms = 0
+    number_bathrooms = 0
+    max_guest = 0
+    price_by_night = 0
+    latitude = 0.0
+    longitude = 0.0
+    amenity_ids = []
