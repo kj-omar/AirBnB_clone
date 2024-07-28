@@ -10,7 +10,6 @@ class FileStorage:
 
     def all(self, cls=None):
         """Returns a dictionary of models currently in storage"""
-        #return FileStorage.__objects
         if not cls:
             return self.__objects
         elif type(cls) == str:
