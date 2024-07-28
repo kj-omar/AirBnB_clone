@@ -31,3 +31,11 @@ class State(BaseModel, Base):
                 if city.state_id == self.id:
                     list_of_city.append(city)
             return list_of_city
+
+     def cities(self):
+        """Return a list of City objects linked to the current State"""
+        if isinstance(storage, DBStorage):
+            return [city for city in storage.all(City).values() if city.state_id == self.id]
+        else:
+            all_cities = storage.all(City).values()
+            return [city for city in all_cities if city.state_id == self.id]
