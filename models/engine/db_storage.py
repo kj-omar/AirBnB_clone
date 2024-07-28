@@ -27,7 +27,6 @@ class DBStorage:
 
     def all(self, cls=None):
         """ query on current db session """
-        print("ere all new")
         from models.user import User
         from models.place import Place
         from models.review import Review
