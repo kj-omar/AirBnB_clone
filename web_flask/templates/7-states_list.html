@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<HTML lang="en">
+    <HEAD>
+        <TITLE>HBNB</TITLE>
+    </HEAD>
+    <BODY>
+        <H1>States</H1>
+        <ul>
+            {% for _, state_obj in _dict.items() %}
+                <li>{{ state_obj.id }}: <B>{{ state_obj.name }}</B></li>
+            {% endfor %}
+        </ul>
+    </BODY>
+</HTML>

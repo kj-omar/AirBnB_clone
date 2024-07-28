@@ -50,8 +50,7 @@ class BaseModel:
         """Returns a string representation of the instance"""
         cls = (str(type(self)).split('.')[-1]).split('\'')[0]
 
-        filtered_dict = {key: value for key, value in self.__dict__.items() if key not in ['_sa_instance_state', 'cities']}
-        
+        filtered_dict = {key: value for key, value in self.__dict__.items() if key not in ['_sa_instance_state', 'cities', '__class__']}   
         return '[{}] ({}) {}'.format(cls, self.id, filtered_dict)
 
     def save(self):
