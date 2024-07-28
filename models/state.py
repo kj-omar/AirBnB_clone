@@ -39,3 +39,7 @@ class State(BaseModel, Base):
                 return(result)
     else:
         name = ""
+
+    def __init__(self, *args, **kwargs):
+        """initializes state object"""
+        super().__init__(*args, **kwargs)
