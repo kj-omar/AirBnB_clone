@@ -27,11 +27,8 @@ print("New city: {} in the state: {}".format(city_2_1, state_2))
 city_2_1.save()
 
 
-"""
- Verification
-"""
-print("")
 all_states = storage.all(State)
+print(all_states)
 for state_id, state in all_states.items():
     for city in state.cities:
         print("Find the city {} in the state {}".format(city, state))

@@ -27,11 +27,9 @@ class FileStorage:
             }
         if cls:
             new_dict = {}
-            for key, value in self.__objects.items():
-                cls = classes.get(cls)
+            for key, value in self.__objects.items():  
                 if type(value) == cls:
                     new_dict[key] = value
-
             return new_dict
         else:
             return FileStorage.__objects
@@ -72,6 +70,7 @@ class FileStorage:
                     self.all()[key] = classes[val['__class__']](**val)
         except FileNotFoundError:
             pass
+        print(self.__objects)
 
     def delete(self, obj=None):
         """ delete object """
