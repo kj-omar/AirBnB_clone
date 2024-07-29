@@ -15,7 +15,7 @@ class State(BaseModel, Base):
     if getenv("HBNB_TYPE_STORAGE") == "db":
         cities = relationship("City", back_populates="states", cascade="all, delete")
     else:
-        @property
+        @getattr
         def cities(self):
             """
             This funciton returns the cities that have the same state_id
