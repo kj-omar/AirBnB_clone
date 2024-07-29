@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+"""Models imported"""
 from sqlalchemy import Column, String, ForeignKey
 from sqlalchemy.orm import relationship, backref
 from models.base_model import BaseModel, Base
