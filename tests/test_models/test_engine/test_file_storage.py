@@ -4,6 +4,7 @@ import unittest
 from models.base_model import BaseModel
 from models import storage
 import os
+import pycodestyle
 
 
 class test_fileStorage(unittest.TestCase):
@@ -107,3 +108,11 @@ class test_fileStorage(unittest.TestCase):
         from models.engine.file_storage import FileStorage
         print(type(storage))
         self.assertEqual(type(storage), FileStorage)
+
+class TestPEP8(unittest.TestCase):
+    """ PEP8 validation """
+    def test_pep8(self):
+        """ Test that we conform to PEP8 """
+        pep8style = pycodestyle.StyleGuide(quiet=True)
+        result = pep8style.check_files(['models/engine/file_storage.py'])
+        self.assertEqual(result.total_errors, 0, f"PEP8 violations found: {result.total_errors}")

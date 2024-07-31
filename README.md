@@ -1,6 +1,20 @@
+# 0x02. AirBnB clone - MySQL
+
+## More Information
+### Comments for your SQL file:
+```
+$ cat my_script.sql
+-- first 3 students in the Batch ID=3
+-- because Batch 3 is the best!
+SELECT id, name FROM students WHERE batch_id = 3 ORDER BY created_at DESC LIMIT 3;
+$
+```
+
 <center> <h1>HBNB - The Console</h1> </center>
 
-This repository contains the initial stage of a student project to build a clone of the AirBnB website. This stage implements a backend interface, or console, to manage program data. Console commands allow the user to create, update, and destroy objects, as well as manage file storage. Using a system of JSON serialization/deserialization, storage is persistent between sessions.
+This repository contains the Second stage of the Project to build a clone of the AirBnB website. This stage implements a backend interface, or console, to manage program data.
+Also adds on to use MYSQL for File storage in addition to the Serialization and Deserilization.
+
 
 ---
 
@@ -140,3 +154,108 @@ Usage: <class_name>.update(<_id>, <dictionary>)
 (hbnb) ["[User] (98bea5de-9cb0-4d78-8a9d-c4de03521c30) {'updated_at': datetime.datetime(2020, 2, 19, 21, 47, 29, 134362), 'name': 'Fred the Frog', 'age': 9, 'id': '98bea5de-9cb0-4d78-8a9d-c4de03521c30', 'created_at': datetime.datetime(2020, 2, 19, 21, 47, 29, 134343)}"]
 ```
 <br>
+
+
+# 0x03. AirBnB clone - Deploy static
+-------------------------------------
+- DevOps
+- Python
+- SysAdmin
+- Scripting
+- CI/CD
+
+## Background
+
+**Deploying web applications** is a critical aspect of software development. It involves transferring code from a development environment to a production server where it can be accessed by users. This process often requires careful configuration, automation, and monitoring to ensure optimal performance and reliability.
+
+**Fabric** is a Python library designed to streamline SSH-based tasks, making it an ideal tool for deploying applications to remote servers. It provides a high-level interface for executing commands, transferring files, and managing remote systems efficiently.
+
+## More Information
+Install Fabric for Python 3 - version 1.14.post1
+
+```
+$ pip3 uninstall Fabric
+$ sudo apt-get install libffi-dev
+$ sudo apt-get install libssl-dev
+$ sudo apt-get install build-essential
+$ sudo apt-get install python3.4-dev
+$ sudo apt-get install libpython3-dev
+$ pip3 install pyparsing
+$ pip3 install appdirs
+$ pip3 install setuptools==40.1.0
+$ pip3 install cryptography==2.8
+$ pip3 install bcrypt==3.1.7
+$ pip3 install PyNaCl==1.3.0
+$ pip3 install Fabric3==1.14.post1
+```
+
+## Requirements
+
+### General Requirements
+* Basic understanding of Python programming.
+* Familiarity with SSH and remote server administration.
+* A development environment with Python3 and Fabric installed.
+* Access to one or more servers for deployment.
+
+### Project Requirements
+* Create a Fabric script to package web static files into a `.tgz` archive.
+* Develop a Fabric script to deploy the archive to remote servers.
+* Implement a Fabric script to manage old versions of the deployed application.
+* Follow Python PEP 8 style guidelines.
+* Write clear and concise documentation for all scripts.
+
+### Technical Specifications
+* **Python version:** Python 3.4.0 or later.
+* **Fabric version:** Fabric 3 version 1.14.post1.
+* **Server environment:** Ubuntu 20.04 LTS.
+* **Nginx:** Web server for serving static content.
+
+By successfully completing this project, i gained hands-on experience with deploying web applications using Fabric, improving my understanding of deployment automation, and developing essential skills for managing remote systems.
+
+## Tasks:
+
+1. **Preparing my web servers** (Bash Script):
+   - This script ensures your web servers are set up for deployment.
+   - Steps:
+      - Install Nginx (if not already installed).
+      - Create necessary folders: `/data`, `/data/web_static`,  `/data/web_static/releases`, `/data/web_static/shared`,  `/data/web_static/current`.
+      - Create a sample HTML file (`/data/web_static/releases/test/index.html`).
+      - Create a symbolic link (`/data/web_static/current`) pointing to the test folder.
+      - Set ownership of `/data` to the `ubuntu` user and group (recursively).
+      - Update Nginx configuration to serve content from `/data/web_static/current` to the URL path `/hbnb_static` (using an alias directive).
+      - Restart Nginx.
+
+2. **Compress before sending** (Fabric Script):
+   - This script creates a `.tgz` archive of your `web_static` folder content.
+   - Function: `do_pack()`
+     - Adds all files from `web_static` to the archive.
+     - Stores the archive in the `versions` folder (creating it if needed).
+     - Uses timestamps in the archive filename (e.g., `web_static_20240725175123.tgz`).
+     - Returns the archive path if successful, otherwise `None`.
+
+3. **Deploy archive!** (Fabric Script):
+   - This script distributes the archive to your web servers and deploys it.
+   - Function: `do_deploy(archive_path)`
+     - Checks if the archive exists at the given path.
+     - Uploads the archive to `/tmp/` on the web servers.
+     - Extracts the archive to `/data/web_static/releases/<archive filename without extension>`.
+     - Deletes the uploaded archive from the server.
+     - Deletes the existing `/data/web_static/current` symbolic link.
+     - Creates a new symbolic link pointing to the extracted release directory.
+     - Runs these commands on both web servers using `env.hosts`.
+     - Returns `True` if successful, otherwise `False`.
+
+4. **Full deployment** (Fabric Script):
+   - This script combines the functionalities of packing and deploying.
+   - Function: `deploy()`
+     - Calls `do_pack()` to create an archive and stores the path.
+     - Returns `False` if no archive is created.
+     - Calls `do_deploy(archive_path)` with the created archive path.
+     - Returns the result of `do_deploy`.
+
+**Remember:**
+
+- Use `#!/usr/bin/env bash` for the Bash script and `#!/usr/bin/python3` for the Fabric scripts.
+- Ensure proper indentation (PEP 8) and documentation for functions and classes.
+- The Fabric scripts should use `env.hosts` to run commands on both servers.
+- Test your scripts locally before deploying to your web servers.
