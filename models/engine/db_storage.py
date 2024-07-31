@@ -18,11 +18,17 @@ class DBStorage:
         pwd = os.getenv('HBNB_MYSQL_PWD')
         host = os.getenv('HBNB_MYSQL_HOST')
         db = os.getenv('HBNB_MYSQL_DB')
+        print(user)
+        print(pwd)
+        print(host)
+        print(db)
         self.__engine = create_engine(
             'mysql+mysqldb://{}:{}@{}:3306/{}'.format(
                 user, pwd, host, db),
             pool_pre_ping=True
         )
+        print(self.__engine)
+
         if os.getenv('HBNB_ENV') == 'test':
             metadata = MetaData()
             metadata.reflect(bind=self.__engine)
