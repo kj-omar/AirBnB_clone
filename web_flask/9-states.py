@@ -1,5 +1,7 @@
 #!/usr/bin/python3
+
 """
+
 This module starts a Flask web application to manage and display information about states.
 
 The application listens on 0.0.0.0, port 5000, and includes the following routes:
@@ -13,6 +15,7 @@ Routes:
 
 The application uses the `storage` object from the `models` module to interact with the data.
 The SQLAlchemy session is closed after each request to ensure clean resource management.
+
 """
 
 from models import storage
