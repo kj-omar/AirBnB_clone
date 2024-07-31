@@ -27,8 +27,16 @@ class FileStorage:
         """
         Return:
             returns dictionary of __object
+<<<<<<< HEAD
         """  
         if cls == None:
+=======
+        """
+        if cls is None:
+                    dict[key] = self.__objects[key]
+            return (dict)
+        else:
+>>>>>>> f31265433182a0073dd162e9322355a81a1ec119
             return self.__objects
         else:
             return {key:obj for key, obj in self.__objects.items() if isinstance(obj, cls)}
