@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """Module for State class"""
 
+
 from os import getenv
 import models
 from models.base_model import Base

@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """Define DBStorage engine. module"""
 
+
 from models.base_model import Base
 from os import getenv
 from models.base_model import BaseModel
@@ -82,8 +83,4 @@ class DBStorage:
 
     def close(self):
         """Close working SQLAlchemy session"""
-<<<<<<< HEAD
-        self.__session.close()
-=======
         self.__session.remove()
->>>>>>> clone
