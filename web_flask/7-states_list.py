@@ -13,7 +13,8 @@ app = Flask(__name__)
 
 @app.route("/states_list", strict_slashes=False)
 def states_list():
-    """The function that Displays an HTML page with a list of all State objects in DBStorage.
+    """The function that Displays an HTML page
+    with a list of all State objects in DBStorage.
     States are sorted by name.
     """
     states = storage.all("State")
