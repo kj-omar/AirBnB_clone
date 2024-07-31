@@ -19,7 +19,6 @@ def States():
 @app.route('/states/<id>', strict_slashes=False)
 def State_city(id):
     """ state_city route """
-
     new_dict = storage.all("State")
     states = list(new_dict.values())
     state = next((state for state in states if state.id == id), None)
