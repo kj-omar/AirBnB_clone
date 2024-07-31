@@ -18,8 +18,10 @@ class DBStorage:
         pwd = os.getenv('HBNB_MYSQL_PWD')
         host = os.getenv('HBNB_MYSQL_HOST')
         db = os.getenv('HBNB_MYSQL_DB')
-        self.__engine = create_engine(f'mysql+mysqldb://{user}:{pwd}@{host}:3306/{db}',
-                                      pool_pre_ping=True)
+        self.__engine = create_engine(
+            f'mysql+mysqldb://{user}:{pwd}@{host}:3306/{db}',
+            pool_pre_ping=True
+        )
         if os.getenv('HBNB_ENV') == 'test':
             metadata = MetaData()
             metadata.reflect(bind=self.__engine)
@@ -43,7 +45,7 @@ class DBStorage:
                 'Review': Review
             }
         if cls:
-            if type(cls) == str:
+            if type(cls) is str:
                 cls = classes.get(cls)
             filter_query = self.__session.query(cls).all()
             for obj in filter_query:

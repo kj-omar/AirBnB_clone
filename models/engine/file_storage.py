@@ -27,8 +27,8 @@ class FileStorage:
             }
         if cls:
             new_dict = {}
-            for key, value in self.__objects.items():  
-                if type(value) == cls:
+            for key, value in self.__objects.items():
+                if type(value) is cls:
                     new_dict[key] = value
             return new_dict
         else:
