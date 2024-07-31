@@ -10,8 +10,7 @@ import os
 if os.getenv('HBNB_TYPE_STORAGE') == 'db' :
     Base = declarative_base()
 else:
-    class Base:
-        pass
+    Base = object
 
 
 class BaseModel:
