@@ -10,6 +10,7 @@ import os
 
 class State(BaseModel, Base):
     """ State class """
+    print(type(Base))
     if os.getenv('HBNB_TYPE_STORAGE') == 'db':
         __tablename__ = "states"
         name = Column(String(128),
