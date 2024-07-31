@@ -7,18 +7,23 @@ from models.state import State
 from flask import Flask, abort, render_template
 app = Flask(__name__)
 
-@app.route("/states/", defaults={'id': 0})
+
+@app.route("/states", strict_slashes=False)
+def States():
+    """ state route """
+    new_dict = storage.all("State")
+    states = list(new_dict.values())
+    return render_template("9-states.html", states=states)
+
+
 @app.route('/states/<id>', strict_slashes=False)
 def State_city(id):
-    """ state route """
-    try:
-        id = int(id)
-    except ValueError:
-        abort(404)
+    """ state_city route """
 
     new_dict = storage.all("State")
     states = list(new_dict.values())
-    return render_template("9-states.html", states=states, id=id)
+    state = next((state for state in states if state.id == id), None)
+    return render_template("9-states.html", states=[state], id=id)
 
 
 @app.teardown_appcontext
