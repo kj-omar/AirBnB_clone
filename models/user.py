@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 """defines a class User module """
 
-import os
-import models
+
+from os import getenv
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
@@ -11,15 +11,15 @@ from hashlib import md5
 
 class User(BaseModel, Base):
     """defines a user by various attributes"""
-    if models.storage_type == 'db':
-        __tablename__ = 'users'
-        email = Column(String(128), nullable=False)
-        password = Column(String(128), nullable=False)
-        first_name = Column(String(128), nullable=True)
-        last_name = Column(String(128), nullable=True)
-        places = relationship("Place", backref="user")
-        reviews = relationship("Review", backref="user")
-    else:
+    __tablename__ = 'users'
+    email = Column(String(128), nullable=False)
+    password = Column(String(128), nullable=False)
+    first_name = Column(String(128), nullable=True)
+    last_name = Column(String(128), nullable=True)
+    places = relationship("Place", backref="user")
+    reviews = relationship("Review", backref="user")
+
+    if getenv("HBNB_TYPE_STORAGE") != 'db':
         email = ""
         password = ""
         first_name = ""
