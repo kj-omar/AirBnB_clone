@@ -17,6 +17,7 @@ import os
 
 class TestDBStorage(unittest.TestCase):
     """ unite test for db_storage.py"""
+
     def test_docstrings(self):
         """test docstrings"""
         self.assertIsNotNone(DBStorage.__doc__)
@@ -89,3 +90,26 @@ class TestDBStorage(unittest.TestCase):
         storage.reload()
         obj = storage.all()
         self.assertEqual(len(obj), obj_len + 1)
+
+    def test_get(self):
+        """ test get method """
+        storage = DBStorage()
+        storage.reload()
+        new_obj = State()
+        new_obj.name = "California"
+        storage.new(new_obj)
+        storage.save()
+        obj = storage.get(State, new_obj.id)
+        self.assertEqual(obj, new_obj)
+
+    def test_count(self):
+        """ test count method """
+        storage = DBStorage()
+        storage.reload()
+        obj_len = storage.count()
+        new_obj = State()
+        new_obj.name = "California"
+        storage.new(new_obj)
+        storage.save()
+        count = storage.count()
+        self.assertEqual(count, obj_len + 1)
