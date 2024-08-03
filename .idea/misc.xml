@@ -3,5 +3,5 @@
   <component name="Black">
     <option name="sdkName" value="python-orm" />
   </component>
-  <component name="ProjectRootManager" version="2" project-jdk-name="python-orm" project-jdk-type="Python SDK" />
+  <component name="ProjectRootManager" version="2" project-jdk-name="python-web" project-jdk-type="Python SDK" />
 </project>
