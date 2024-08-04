@@ -22,5 +22,6 @@ class TestConsole(unittest.TestCase):
         sys.stdout = self.backup
 
     def test_create(self):
-        HBNBCommand().onecmd('create User email="user@example.com" password="pwd"')
+        HBNBCommand().onecmd(
+            'create User email="user@example.com" password="pwd"')
         self.assertIn('User', storage.all().keys())
